@@ -26,15 +26,15 @@ const CreatePost = () => {
     }
 
     return (
-        <AuthGuard>
-        <main className="min-h-screen bg-slateGray flex items-center justify-center text-white px-5">
+        
+        <main className="min-h-screen bg-blancoHueso dark:bg-slateGray flex items-center justify-center text-white px-5">
 
-        <form onSubmit={handlePost} className="bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
+        <form onSubmit={handlePost} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid  flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
 
-            <h1 className="text-4xl">CREATE A POST</h1>
+            <h1 className="text-4xl text-darkVoid dark:text-blancoHueso">CREATE A POST</h1>
 
             <div className="mb-4">
-                <label className="block text-blancoHueso text-sm font-bold mb-2" >
+                <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2" >
                     Title
                 </label>
                 <input
@@ -47,7 +47,7 @@ const CreatePost = () => {
                 />
             </div>
             <div className="mb-4">
-                <label className="block text-blancoHueso text-sm font-bold mb-2" >
+                <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2" >
                     Description
                 </label>
                 <textarea
@@ -59,7 +59,7 @@ const CreatePost = () => {
                 />
             </div>
             <div className="mb-4">
-                <label className="block text-blancoHueso text-sm font-bold mb-2" >
+                <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2" >
                     Media
                 </label>
                 <input
@@ -71,11 +71,11 @@ const CreatePost = () => {
                 />
             </div>
             <div className="flex justify-end">
-                <button type="button" className="px-2 focus:bg-dustyGray focus:rounded" onClick={()=>{setIsPublic(true)}}>
+                <button type="button" className=" text-darkVoid dark:text-blancoHueso px-2 focus:bg-dustyGray focus:rounded" onClick={()=>{setIsPublic(true)}}>
                     <h2>Public</h2>
                 </button>
 
-                <button type="button" className="px-2 focus:bg-dustyGray focus:rounded" onClick={()=>{setIsPublic(false)}}>
+                <button type="button" className="text-darkVoid dark:text-blancoHueso px-2 focus:bg-dustyGray focus:rounded" onClick={()=>{setIsPublic(false)}}>
                     <h2>Private</h2>
                 </button>
             </div>
@@ -89,7 +89,7 @@ const CreatePost = () => {
             </div>
         </form>
     </main>
-    </AuthGuard>
+    
     
     );
 }
