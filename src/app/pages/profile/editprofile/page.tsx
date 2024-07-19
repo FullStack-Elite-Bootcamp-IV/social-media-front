@@ -5,7 +5,7 @@ import { useAuth } from "../../../context/authContext";
 import AuthGuard from "@/app/components/Guards/AuthGuard";
 
 const EditProfile = () => {
-  const { loginToken, register } = useAuth();
+  const { loginToken, register, handleDarkMode } = useAuth();
 
   const [fullname, setFullName] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
@@ -14,10 +14,11 @@ const EditProfile = () => {
   const [gender, setGender] = useState("");
   const [workplace, setWorkPlace] = useState("");
   const [location, setLocation] = useState("");
+  const setHandlerDarkMode = () => {
+    handleDarkMode();
+  };
 
-  useEffect(() => {
-    console.log(loginToken);
-  }, []);
+  useEffect(() => {}, []);
 
   const handleUpdate = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,17 +38,21 @@ const EditProfile = () => {
 
   return (
     <AuthGuard>
-      <main className="bg-black w-80vh p-8 h-screen">
+      <main className="dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
         <form className="space-y-4" onSubmit={handleUpdate}>
-          <h1 className="text-2xl dark:text-black text-white mb-6 text-left">
+          <button className="bg-red-500" onClick={setHandlerDarkMode}>
+            {" "}
+            t
+          </button>
+          <h1 className="text-2xl dark:text-white text-black mb-6 text-left">
             Update Information
           </h1>
           <div className="flex justify-start flex-col">
-            <label className="mb-1 dark:text-black text-white">
+            <label className="mb-1 text-black dark:text-white">
               Profile Picture
             </label>
             <input
-              className="dark:text-black dark:bg-lightGray text-white bg-slateGray p-1 rounded-lg"
+              className="dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg"
               type="file"
               accept="image/png, image/jpeg"
               value={profilePicture}
@@ -55,7 +60,7 @@ const EditProfile = () => {
             />
           </div>
           <div className="flex flex-col">
-            <label className="mb-1 dark:text-black text-white">Fullname</label>
+            <label className="mb-1 text-black dark:text-white">Fullname</label>
             <input
               className="dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white"
               type="text"
