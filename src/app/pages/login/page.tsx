@@ -31,7 +31,7 @@ const Login = () => {
 
 
     return (
-        <main className="flex bg-slateGray w-full min-h-screen">
+        <main className="flex bg-darkVoid sm:bg-slateGray w-full min-h-screen">
             <div  className="contenedor-login bg-darkVoid w-96 rounded-3xl pt-5 pb-5 pl-5 pr-5 m-auto">
             <h1 className="text-center  text-blancoHueso text-4xl">nexo</h1>
             <form id="loginForm" onSubmit={handleLogin} className="flex flex-col  mt-4 mx-4">
