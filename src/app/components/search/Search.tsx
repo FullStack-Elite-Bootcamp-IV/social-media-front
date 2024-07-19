@@ -5,13 +5,14 @@ import { FormEvent } from "react";
 
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState("");
-
+   
     const handleSearch = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    };
+        console.log(searchTerm)
+      };
 
     return (
-        <div className="flex items-center bg-blancoHueso border border-dustyGray rounded-full p-2 shadow-md">
+        <div className="flex items-center bg-blancoHueso border border-dustyGray rounded-full p-2 shadow-md m-2">
             <form onSubmit={handleSearch} className="flex items-center w-full">
                 <div className="flex items-center justify-center">
                     <svg className="w-6 h-6 text-ligthPurple" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
