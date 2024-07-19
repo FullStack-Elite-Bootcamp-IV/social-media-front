@@ -49,9 +49,6 @@ const Login = () => {
       <h1> Login </h1>
       <p> Roboto </p>
       <button onClick={handleSetDarkMode}>modo vista</button>
-      <div className=" bg-liquidLava dark:bg-cyan-900" >
-        hola
-      </div>
     </main>
   );
 };
