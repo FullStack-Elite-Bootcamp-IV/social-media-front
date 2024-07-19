@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useState, ReactNode, FC } from "react"
+import { useContext, useState, ReactNode,  useLayoutEffect , FC } from "react"
 import { createContext } from "react"
 import Cookies from "js-cookie"
 
@@ -8,6 +8,8 @@ interface AuthContextProps {
     loginToken: string | null;
     login: (email: string, password: string) => Promise<void>;
     register: (email: string, password: string) => Promise<void>;
+    darkMode: boolean | null;
+    handleDarkMode : () => void|null;
 }
 
 const AuthContext = createContext<AuthContextProps | null>(null);
@@ -17,8 +19,9 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [loginToken, setloginToken] = useState<any>("Hola")
-    const login = async (email: string, password: string) => {
+    const [ darkMode  , setdarkMode ] = useState(true);
+    const [loginToken, setloginToken] = useState<any>("Hola");
+    const login = async (email: string, password: string  ) => {
         const data = {
             email: email,
             password: password
@@ -39,9 +42,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.error(err)
         }
     }
+    const handleDarkMode = () =>{
+        
+        setdarkMode(!darkMode)
+        window.localStorage.setItem("darkMode" , darkMode.toString() )
+        console.log(darkMode)
+    }
+    
+    useLayoutEffect(() => {
+        const stringToBoolean = (str:string|null) :boolean => str === 'true';
+        const state = window.localStorage.getItem("darkMode")
+
+        if (state == "true") {
+        document.documentElement.classList.add('dark');
+        } else {
+        document.documentElement.classList.remove('dark');
+        }
+    }, [darkMode]);
 
     return (
-        <AuthContext.Provider value={{ loginToken, login, register}}>
+        <AuthContext.Provider value={{ loginToken, login, register , darkMode , handleDarkMode }}>
             {children}
         </AuthContext.Provider>
     )

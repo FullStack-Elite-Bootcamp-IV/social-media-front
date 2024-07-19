@@ -14,6 +14,7 @@ const Notification = () => {
         <main className="bg-black">
             <h1>Notification</h1>
             <p>Roboto</p>
+            <div className="bg-lime-400 dark:bg-red-400">hola</div>
         </main>
     );
 }
