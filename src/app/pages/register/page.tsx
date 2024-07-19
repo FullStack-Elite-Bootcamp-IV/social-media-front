@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useAuth } from "../../context/authContext";
-import AuthGuard from "@/app/components/Guards/AuthGuard";
 
 const Register = () => {
     return (

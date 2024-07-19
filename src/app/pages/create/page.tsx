@@ -26,6 +26,7 @@ const CreatePost = () => {
     }
 
     return (
+        <AuthGuard>
         <main className="min-h-screen bg-slateGray flex items-center justify-center text-white px-5">
 
         <form onSubmit={handlePost} className="bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
@@ -88,6 +89,7 @@ const CreatePost = () => {
             </div>
         </form>
     </main>
+    </AuthGuard>
     
     );
 }
