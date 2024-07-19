@@ -31,9 +31,9 @@ const Login = () => {
 
 
     return (
-        <main className="bg-black">
+        <main className="bg-liquidLava">
             <form id="loginForm" onSubmit={handleLogin}>
-                <input type="email" id="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)}></input>
+                <input className="bg-liquidLava" type="email" id="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)}></input>
                 <input type="password" id="password" placeholder="Password" required onChange={(e) => setPassword(e.target.value)}></input>
                 <button type="submit">
                     Login
