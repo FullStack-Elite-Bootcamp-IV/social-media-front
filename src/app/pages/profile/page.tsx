@@ -1,21 +1,24 @@
-'use client'
+'use client';
 
-import { useEffect } from "react";
-import { useAuth } from "../../context/authContext";
+import AuthGuard from '@/app/components/Guards/AuthGuard';
+import { useAuth } from '@/app/context/authContext';
 
-const Profile = () => {
-    const { loginToken, register } = useAuth();
-
-    useEffect(() => {
-        console.log(loginToken);
-    }, []);
-
+const Profile: React.FC = () => {
+    const {logout} = useAuth()
+    const handleLogout = () => {
+        logout();
+    }
     return (
-        <main className="bg-black">
-            <h1>Profile</h1>
-            <p>Roboto</p>
-        </main>
+        <AuthGuard>
+            <main className="bg-white">
+                <button onClick={handleLogout}>
+                    logout
+                </button>
+                <h1>Profile</h1>
+                <p>Roboto</p>
+            </main>
+        </AuthGuard>
     );
-}
+};
 
 export default Profile;
