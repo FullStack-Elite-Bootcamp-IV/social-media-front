@@ -35,27 +35,28 @@ const EditProfile = () => {
   };
 
   return (
-    <main className="bg-black w-80vh p-8 h-screen">
+    <main className="dark:bg-blancoHueso bg-black p-8 h-screen overflow-auto">
       <form className="space-y-4" onSubmit={handleUpdate}>
-        <div className="flex justify-between">
-          <h1 className="text-2xl text-white mb-6 text-left">
-            Update Information
-          </h1>
-          <div className="flex justify-end">
-            <label className="mb-1 text-white">Profile Picture</label>
-            <input
-              className=""
-              type="file"
-              accept="image/png, image/jpeg"
-              value={profilePicture}
-              onChange={(e) => setProfilePicture(e.target.value)}
-            />
-          </div>
+        <h1 className="text-2xl dark:text-black text-white mb-6 text-left">
+          Update Information
+        </h1>
+        <div className="flex justify-start flex-col">
+          <label className="mb-1 dark:text-black text-white">
+            Profile Picture
+          </label>
+          <input
+            className="dark:text-black dark:bg-lightGray text-white bg-slateGray p-1 rounded-lg"
+            type="file"
+            accept="image/png, image/jpeg"
+            placeholder=""
+            value={profilePicture}
+            onChange={(e) => setProfilePicture(e.target.value)}
+          />
         </div>
         <div className="flex flex-col">
-          <label className="mb-1 text-white">Fullname</label>
+          <label className="mb-1 dark:text-black text-white">Fullname</label>
           <input
-            className="bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="flex-start dark:bg-lightGray dark:text-black bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 text-white"
             type="text"
             placeholder="Enter a fullname"
             value={fullname}
@@ -63,41 +64,44 @@ const EditProfile = () => {
           />
         </div>
         <div className="flex flex-col">
-          <label className="mb-1 text-white">Gender</label>
+          <label className="mb-1 text-white dark:text-black">Gender</label>
           <div className="flex items-center space-x-4">
-            <label className="flex items-center text-white">
+            <label className="flex items-center text-white dark:text-black">
               <input
                 type="radio"
                 name="gender"
                 value="Men"
-                className="mr-2 text-white"
+                className="mr-2 text-white dark:text-black"
+                onChange={(e) => setGender(e.target.value)}
               />
               Men
             </label>
-            <label className="flex items-center text-white">
+            <label className="flex items-center text-white dark:text-black">
               <input
                 type="radio"
                 name="gender"
                 value="Woman"
-                className="mr-2"
+                className="mr-2 text-white dark:text-black"
+                onChange={(e) => setGender(e.target.value)}
               />
               Woman
             </label>
-            <label className="flex items-center text-white">
+            <label className="flex items-center text-white dark:text-black">
               <input
                 type="radio"
                 name="gender"
                 value="Other"
-                className="mr-2"
+                className="mr-2 text-white dark:text-black"
+                onChange={(e) => setGender(e.target.value)}
               />
               Other
             </label>
           </div>
         </div>
         <div className="flex flex-col">
-          <label className="mb-1 text-white">Description</label>
+          <label className="mb-1 text-white dark:text-black">Description</label>
           <input
-            className="bg-slateGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="bg-slateGray dark:bg-lightGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 text-white dark:text-black"
             type="text"
             placeholder="Enter a description"
             value={description}
@@ -105,9 +109,9 @@ const EditProfile = () => {
           />
         </div>
         <div className="flex flex-col">
-          <label className="mb-1 text-white">Location</label>
+          <label className="mb-1 text-white dark:text-black">Location</label>
           <input
-            className="bg-slateGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="bg-slateGray dark:bg-lightGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 text-white dark:text-black"
             type="text"
             placeholder="Enter a location"
             value={location}
@@ -115,9 +119,9 @@ const EditProfile = () => {
           />
         </div>
         <div className="flex flex-col">
-          <label className="mb-1 text-white">Workplace</label>
+          <label className="mb-1 text-white dark:text-black">Workplace</ label>
           <input
-            className="bg-slateGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="bg-slateGray dark:bg-lightGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 text-white dark:text-black"
             type="text"
             placeholder="Enter a workplace"
             value={workplace}
@@ -127,7 +131,7 @@ const EditProfile = () => {
         <div className="flex flex-col">
           <label className="mb-1 text-white">Personal Website</label>
           <input
-            className="bg-slateGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="bg-slateGray dark:bg-lightGray rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-600 text-white dark:text-black"
             type="text"
             placeholder="Enter a link"
             value={website}

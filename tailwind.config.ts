@@ -19,7 +19,8 @@ const config: Config = {
         'darkVoid': '#151419', 
         'blancoHueso': '#FBFBFB', 
         'dustyGray': '#878787', 
-        'slateGray': '#262626', 
+        'slateGray': '#262626',
+        'lightGray': '#CACACA' 
       },
     },
   },
