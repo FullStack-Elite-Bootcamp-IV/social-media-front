@@ -1,20 +1,15 @@
 'use client'
 
-import { useEffect } from "react";
-import { useAuth } from "../../context/authContext";
+import AuthGuard from "@/app/components/Guards/AuthGuard";
 
 const Create = () => {
-    const { loginToken, register } = useAuth();
-
-    useEffect(() => {
-        console.log(loginToken);
-    }, []);
-
     return (
-        <main className="bg-black">
+        <AuthGuard>
+        <main className="bg-white">
             <h1>Create Post</h1>
             <p>Roboto</p>
         </main>
+        </AuthGuard>
     );
 }
 

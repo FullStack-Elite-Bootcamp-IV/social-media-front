@@ -2,19 +2,16 @@
 
 import { useEffect } from "react";
 import { useAuth } from "../../../context/authContext";
+import AuthGuard from "@/app/components/Guards/AuthGuard";
 
 const EditProfile = () => {
-    const { loginToken, register } = useAuth();
-
-    useEffect(() => {
-        console.log(loginToken);
-    }, []);
-
     return (
-        <main className="bg-black">
+        <AuthGuard>
+        <main className="bg-white">
             <h1>Edit profile</h1>
             <p>Roboto</p>
         </main>
+        </AuthGuard>
     );
 }
 

@@ -31,6 +31,7 @@ const Login = () => {
 
 
     return (
+        
         <main className="bg-liquidLava">
             <form id="loginForm" onSubmit={handleLogin}>
                 <input className="bg-liquidLava" type="email" id="email" placeholder="Email" required onChange={(e) => setEmail(e.target.value)}></input>
