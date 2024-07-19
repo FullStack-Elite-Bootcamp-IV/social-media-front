@@ -1,5 +1,6 @@
 'use client'
 
+import AuthGuard from "@/app/components/Guards/AuthGuard";
 import { FormEvent, useState } from "react";
 import { useAuth } from "../../context/authContext";
 import Cookies from "js-cookie";

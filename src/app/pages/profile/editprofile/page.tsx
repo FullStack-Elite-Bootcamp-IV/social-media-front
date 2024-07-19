@@ -2,8 +2,10 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../../../context/authContext";
+import AuthGuard from "@/app/components/Guards/AuthGuard";
 
 const EditProfile = () => {
+
   const { loginToken, register } = useAuth();
 
   const [fullname, setFullName] = useState("");
@@ -35,6 +37,7 @@ const EditProfile = () => {
   };
 
   return (
+    <AuthGuard>
     <main className="bg-black w-80vh p-8 h-screen">
       <form className="space-y-4" onSubmit={handleUpdate}>
         <div className="flex justify-between">
@@ -144,6 +147,7 @@ const EditProfile = () => {
         </div>
       </form>
     </main>
+    </AuthGuard>
   );
 };
 
