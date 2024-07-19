@@ -40,10 +40,6 @@ const EditProfile = () => {
     <AuthGuard>
       <main className="dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
         <form className="space-y-4" onSubmit={handleUpdate}>
-          <button className="bg-red-500" onClick={setHandlerDarkMode}>
-            {" "}
-            t
-          </button>
           <h1 className="text-2xl dark:text-white text-black mb-6 text-left">
             Update Information
           </h1>
