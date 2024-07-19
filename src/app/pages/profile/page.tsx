@@ -11,10 +11,10 @@ const Profile = () => {
     }, []);
 
     return (
-        <div className="bg-black">
+        <main className="bg-black">
             <h1>Profile</h1>
             <p>Roboto</p>
-        </div>
+        </main>
     );
 }
 

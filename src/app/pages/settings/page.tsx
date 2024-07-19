@@ -10,10 +10,10 @@ const Settings = () => {
     }, [loginToken]);
 
     return (
-        <div className="bg-black text-white">
+        <main className="bg-black text-white">
             <h1>Settings</h1>
             <p>Roboto</p>
-        </div>
+        </main>
     );
 }
 

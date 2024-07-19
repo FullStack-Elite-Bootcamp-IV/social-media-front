@@ -11,10 +11,10 @@ const Create = () => {
     }, []);
 
     return (
-        <div className="bg-black">
+        <main className="bg-black">
             <h1>Create Post</h1>
             <p>Roboto</p>
-        </div>
+        </main>
     );
 }
 

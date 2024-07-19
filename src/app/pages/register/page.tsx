@@ -11,10 +11,10 @@ const Register = () => {
     }, []);
 
     return (
-        <div className="bg-black">
+        <main className="bg-black">
             <h1>Register</h1>
             <p>Roboto</p>
-        </div>
+        </main>
     );
 }
 
