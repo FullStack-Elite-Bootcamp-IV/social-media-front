@@ -146,7 +146,7 @@ const EditProfile = () => {
           <div className="flex justify-end mt-6">
             <button
               type="submit"
-              className=" bg-liquidLava hover:bg-ligthPurple text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+              className=" bg-liquidLava hover:bg-purple-400 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
             >
               Update
             </button>
