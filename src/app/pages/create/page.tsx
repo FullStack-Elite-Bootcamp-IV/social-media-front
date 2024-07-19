@@ -12,8 +12,7 @@ const Create = () => {
 
     return (
         <main className="bg-black">
-            <h1>Create Post</h1>
-            <p>Roboto</p>
+            hola
         </main>
     );
 }
