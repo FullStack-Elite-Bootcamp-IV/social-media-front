@@ -12,8 +12,8 @@ const Profile = () => {
     console.log(loginToken);
   }, []);
 
-  let id: number = 0;
-  let datos: any = [
+  let id = 0;
+  let datos = [
     {
       imagePerfil: "https://www.clarin.com/2021/07/28/BqTG5Eqhd_360x240__1.jpg",
       imagenPortada:
@@ -37,62 +37,79 @@ const Profile = () => {
   return (
     <main className="bg-darkVoid flex">
       <Navbar />
-      <div className="contenedorP flex-1 ml-0 p-2 pt-16 md:ml-64 md:pt-4 sm:p-16 ">
-        <section
-          className="bg-cover bg-center bg-no-repeat relative mb-36"
-          style={{
-            backgroundImage: `url(${datos[id].imagenPortada})`,
-            backgroundSize: "cover", // Ajusta la imagen al tamaño del contenedor
-            backgroundPosition: "center", // Centra la imagen dentro del contenedor
-            height: "40vh", // Altura deseada para el footer (puedes ajustar según tus necesidades)
-          }}
-        >
-          <section></section>
-          <div className="absolute top-14 left-16">
-            <img
-              className="rounded-full xl:w-96 xl:h-96 border-2 "
-              src={datos[id].imagePerfil}
-              alt="imagen"
-            />
-            <h3 className="text-3xl text-blancoHueso mx-auto  mt-3  absolute left-24 Ro">
-              {datos[id].username}
-            </h3>
+      <div className="ml-[0px] w-[100vw] md:ml-[200px]  md:w-[100vw] lg:ml-[220px] lg:w-[100vw] xl:ml-[254px] xl:w-[100vw] 2xl:ml-[254px] 2xl:w-[100vw]  min-h-screen p-0 mt-0 md:bg-darkVoid">
+        <section className="seccion-cabecera h-[50vh] pos relative">
+          <div
+            className="imagen-portada bg-cover bg-center bg-no-repeat relative mb-36 mt-0 flex"
+            style={{
+              backgroundImage: `url(${datos[id].imagenPortada})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              height: "40vh",
+            }}
+          >
+            <div className="contedor-usuario text-center absolute  transform -translate-y-1/2  -translate-x-1/2 flex text-blancoHueso left-20  top-80 sm:left-40  sm:top-80  md:left-52  md:top-80 lg:left-60 lg:top-72 xl:top-64">
+              <div>
+              <img
+                className="rounded-full border-2 w-52 h-52 ml-4  sm:w-64 sm:h-64 md:w-64 md:h-64   lg:w-80 lg:h-80 xl:w-96 xl:h-96 "
+                src={datos[id].imagePerfil}
+                alt="imagen"
+              />
+              <h3 className="text-3xl mt-3">{datos[id].username}</h3>
+              </div>
+            
+            </div>
           </div>
         </section>
-        <div className="mt-6">
-          <button className="text-blancoHueso text-3xl ml-36 flex items-center">
-            <FaPencilAlt className="mr-2" />
-            Edit profile
-          </button>
+        <section>
+        <div className="info-seguidores mt-11 text-blancoHueso flex w-[70vw] flex-col sm:flex-row  sm:justify-around mx-auto sm:ml-5 xl:justify-around xl:ml-5  ">
+             <div className="mr-4">
+              <p>{datos[id].post}</p>
+              <p>post</p>
+             </div>
+             <div className="mr-4">
+              <p>{datos[id].followers}</p>
+              <p>followers</p>
+             </div>
+             <div className="mr-4">
+              <p>{datos[id].followed}</p>
+              <p>followed</p>
+          </div>
+
+            </div>
+        <div className=" div-boton mt-28 sm:mt-6 sm:text-left justify-center mx-auto">
+          <button className="text-blancoHueso text-3xl ml-1  flex items-center mt-10 sm:ml-12 md:ml-36">
+            <FaPencilAlt className="mr-2"/>Edit profile</button>
         </div>
-        <section className="mt-6 ml-36 text-blancoHueso flex flex-row w-[80%] mx-auto justify-between text-xl">
-          <div>
-            <p className="">Name</p>
-            <p>{datos[id].name}</p>
-          </div>
-          <div>
-            <p className="">Age</p>
-            <p>{datos[id].age}</p>
-          </div>
-          <div>
-            <p className="">Genre</p>
-            <p>{datos[id].genre}</p>
-          </div>
+        <section className="info-usuario mt-6 ml-5 text-blancoHueso flex flex-col  mx-auto justify-between text-lg sm:flex-row md:ml-36 lg:ml-36 lg:w-[70%] xl:ml-36 xl:w-[80%]">
+                        <div>
+                            <p className="">Name</p>
+                            <p>{datos[id].name}</p>
+                        </div>
+                        <div>
+                            <p className="">Age</p>
+                            <p>{datos[id].age}</p>
+                        </div>
+                        <div>
+                            <p className="">Genre</p>
+                            <p>{datos[id].genre}</p>
+                        </div>
+                    </section>
+                    <section className="cont-posts mt-8 grid sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-4  lg:grid-cols-4 lg:gap-4">
+                        {
+                            datos[id].posts.map((post:any) =>{
+                               return <img src={post} alt="post" />
+                            })
+                        }
+
+                    </section>
+
+
         </section>
-        <section className="mt-8 grid grid-cols-4 gap-4">
-          {datos[id].posts.map((post: any) => {
-            return <img src={post} alt="post" />;
-          })}
-        </section>
+
       </div>
     </main>
   );
 };
 
 export default Profile;
-
-
-
-
-
-
