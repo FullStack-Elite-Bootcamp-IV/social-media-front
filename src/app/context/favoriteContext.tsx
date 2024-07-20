@@ -1,4 +1,4 @@
-'use client'
+/*'use client'
 
 import { useContext, useState, createContext, ReactNode } from "react";
 import { useRouter } from "next/navigation";
@@ -64,4 +64,4 @@ export const useFavorite = (): FavoriteContextProps => {
         throw new Error("useFavorite must be used within a FavoriteProvider");
     }
     return context;
-};
+};*/

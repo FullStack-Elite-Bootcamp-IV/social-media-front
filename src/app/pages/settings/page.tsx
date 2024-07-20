@@ -2,10 +2,11 @@
 import { useState } from "react";
 import { FormEvent } from "react";
 import { useAuth } from "../../context/authContext";
+import Navbar from "../../components/navbar/Navbar"
 export default function SettingsForm() {  
   const [name, setName] = useState('');
   const [password, setPasword] = useState('');
-  const { loginToken, register, login ,darkMode , handleDarkMode } = useAuth();
+  const { darkMode , handleDarkMode } = useAuth();
 
   const setHandleDarkMode = () => {
    handleDarkMode()
@@ -21,7 +22,10 @@ export default function SettingsForm() {
     console.log(formData);
   }
   return (
+  <div>
+    <Navbar />
     <div className='dark:bg-darkVoid dark:text-blancoHueso bg-blancoHueso text-darkVoid h-screen flex items-center justify-center'>
+
       <div className='dark:bg-slateGray bg-blancoHueso p-8 rounded-lg shadow-lg w-full max-w-md'>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">SETTINGS</h1>
@@ -68,6 +72,7 @@ export default function SettingsForm() {
           </button>
         </form>
       </div>
+    </div>
     </div>
   );
 }

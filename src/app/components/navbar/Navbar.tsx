@@ -13,16 +13,12 @@ import NotificationModal from "../notification/NotificationModal";
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-
-  // State to handle the notification modal
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
 
-  // Function to toggle the menu
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
   };
 
-  // Function to handle the resize of the window and set the state of the menu
   const handleResize = () => {
     if (window.innerWidth > 768) {
       setIsOpen(true);
@@ -51,7 +47,6 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  // Function to open/close the notification modal
   const handleNotifToggle = () => {
     setIsNotifModalOpen(!isNotifModalOpen);
   };
