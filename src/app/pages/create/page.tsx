@@ -1,60 +1,48 @@
-'use client'
+'use client';
 
 import AuthGuard from "@/app/components/Guards/AuthGuard";
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "../../context/authContext";
 import Navbar from "../../components/navbar/Navbar";
 import React from 'react';
 import { z } from 'zod';
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { postSchema } from "../../validations/createPostSchema";
 
 
-const postSchema = z.object({
-  title: z.string().min(5, { message: 'Title must be at least 5 characters long' }),
-  description: z.string().min(3, { message: 'Description must be at least 3 characters long' }),
-  media: z.instanceof(File).optional(),
-  isPublic: z.boolean(),
-});
+type Inputs={
+    title: string;
+    description: string;
+    media: File | null;
+    isPublic: boolean;
+}
 
 const CreatePost = () => {
   const { loginToken } = useAuth();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [media, setMedia] = useState<File | null>(null);
-  const [isPublic, setIsPublic] = useState(true);
-  const [errors, setErrors] = useState<any>({}); 
+  const [isPublic, setIsPublic] = useState(false);
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<Inputs>(
+    { resolver: zodResolver(postSchema) }
+  );
 
-  const handlePost = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    try {
-      postSchema.parse({
-        title,
-        description,
-        media,
-        isPublic
-      });
-
-      
-      console.log({ title, description, media, isPublic });
-      setErrors({}); 
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        const fieldErrors: any = {};
-        err.errors.forEach((error) => {
-          fieldErrors[error.path[0]] = error.message;
-        });
-        setErrors(fieldErrors);
-      } else {
-        console.error('Create post error:', err);
-      }
-    }
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(data);
   }
+
+
+ 
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    console.log("Selected file:", file);
+    setValue("media", file as any);
+  };
 
   return (
     <AuthGuard>
       <Navbar />
       <main className="min-h-screen bg-blancoHueso dark:bg-slateGray flex items-center justify-center text-white px-5">
-        <form onSubmit={handlePost} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
+        <form onSubmit={handleSubmit(onSubmit)} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
           <h1 className="text-4xl text-darkVoid dark:text-blancoHueso">CREATE A POST</h1>
           <div className="mb-4">
             <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2">
@@ -64,11 +52,10 @@ const CreatePost = () => {
               type="text"
               id="title"
               placeholder="Enter a title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              {...register("title")}
               className={`shadow appearance-none rounded w-full py-2 px-3 text-darkVoid bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid ${errors.title ? 'border-red-500' : ''}`}
             />
-            {errors.title && <p className="text-red-500 text-xs italic">{errors.title}</p>}
+            {errors.title && <p className="text-red-500 text-xs italic">{errors.title?.message}</p>}
           </div>
           <div className="mb-4">
             <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2">
@@ -77,11 +64,10 @@ const CreatePost = () => {
             <textarea
               id="description"
               placeholder="Enter a description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              {...register("description")}
               className={`shadow appearance-none rounded w-full py-2 px-3 text-darkVoid bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid ${errors.description ? 'border-red-500' : ''}`}
             />
-            {errors.description && <p className="text-red-500 text-xs italic">{errors.description}</p>}
+            {errors.description && <p className="text-red-500 text-xs italic">{errors.description?.message}</p>}
           </div>
           <div className="mb-4">
             <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2">
@@ -91,10 +77,10 @@ const CreatePost = () => {
               type="file"
               id="media"
               title="Upload a media file"
-              onChange={(e) => setMedia(e.target.files ? e.target.files[0] : null)}
+              onChange={handleFileChange}
               className={`shadow appearance-none rounded w-full py-2 px-3 text-darkVoid bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid ${errors.media ? 'border-red-500' : ''}`}
             />
-            {errors.media && <p className="text-red-500 text-xs italic">{errors.media}</p>}
+            {errors.media && <p className="text-red-500 text-xs italic">{errors.media?.message}</p>}
           </div>
           <div className="flex justify-end">
             <button
@@ -112,6 +98,7 @@ const CreatePost = () => {
               <h2>Private</h2>
             </button>
           </div>
+          <input type="hidden" value={isPublic.toString()} {...register("isPublic")} />
           <div className="flex items-center justify-end md:justify-end">
             <button
               type="submit"
@@ -124,6 +111,7 @@ const CreatePost = () => {
       </main>
     </AuthGuard>
   );
-}
+};
 
 export default CreatePost;
+
