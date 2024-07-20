@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
 
   return (
     <AuthGuard>
-      <main className="flex">
+      <main className="flex  dark:bg-darkVoid">
         <Navbar />
         <div className="app flex-1 ml-64 p-4">
           {posts.map((post, index) => (

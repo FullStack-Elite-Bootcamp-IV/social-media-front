@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Comments from '../comments/Comments';
+import AuthGuard from "@/app/components/Guards/AuthGuard";
 
 interface PostProps {
   userid: string;
@@ -22,6 +23,7 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
   };
 
   return (
+    <AuthGuard>
     <div className="border border-gray-700 p-4 m-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
@@ -63,6 +65,7 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
 
       {showComments && <Comments />}
     </div>
+    </AuthGuard>
   );
 };
 

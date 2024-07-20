@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { FormEvent } from "react";
 import { useAuth } from "../../context/authContext";
+import Navbar from "../../components/navbar/Navbar"
 export default function SettingsForm() {  
   const [name, setName] = useState('');
   const [password, setPasword] = useState('');
@@ -22,6 +23,7 @@ export default function SettingsForm() {
   }
   return (
     <div className='dark:bg-darkVoid dark:text-blancoHueso bg-blancoHueso text-darkVoid h-screen flex items-center justify-center'>
+       <Navbar />
       <div className='dark:bg-slateGray bg-blancoHueso p-8 rounded-lg shadow-lg w-full max-w-md'>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">SETTINGS</h1>

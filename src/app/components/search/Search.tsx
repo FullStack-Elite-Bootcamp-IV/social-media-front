@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { FormEvent } from "react";
 
+
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState("");
    
@@ -12,7 +13,9 @@ const SearchBar = () => {
       };
 
     return (
+        
         <div className="flex items-center bg-blancoHueso border border-dustyGray rounded-full p-2 shadow-md m-2">
+            
             <form onSubmit={handleSearch} className="flex items-center w-full">
                 <div className="flex items-center justify-center">
                     <svg className="w-6 h-6 text-ligthPurple" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -24,7 +27,7 @@ const SearchBar = () => {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Buscar En Nexo" 
-                    className="ml-2 w-full bg-transparent outline-none text-lg text-center"
+                    className="ml-2 w-full bg-transparent outline-none text-lg text-center text-slateGray"
                 />
                 <div className="flex items-center justify-center">
                     <button type="submit" className="w-6 h-6 text-ligthPurple focus:outline-none">
