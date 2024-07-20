@@ -1,12 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../context/authContext";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/app/components/navbar/Navbar";
+import Link from 'next/link';
+import UserList from "@/app/components/userlist/Userlist";
+import { open } from "fs/promises";
+//import {UserList} from "../../components/userlist/Userlist"
 
 const Profile = () => {
   const { loginToken, register } = useAuth();
+  const [isOpenFollowers, setIsOpenFollowers]= useState(false)
+  const [isOpenFollowed, setIsOpenFollowed]= useState(false)
+
+  const openFollowersList:any =()=>{
+    setIsOpenFollowers(!isOpenFollowers)
+  }
+  const openFollowedList:any =()=>{
+    setIsOpenFollowed(!isOpenFollowed)
+  }
+  
 
   useEffect(() => {
     console.log(loginToken);
@@ -69,11 +83,13 @@ const Profile = () => {
              </div>
              <div className="mr-4">
               <p>{datos[id].followers}</p>
-              <p>followers</p>
-             </div>
+              <button onClick={openFollowedList}>followers</button>
+              {isOpenFollowed && < UserList title="Followers List"/>}
+            </div>
              <div className="mr-4">
               <p>{datos[id].followed}</p>
-              <p>followed</p>
+              <button onClick={openFollowersList}>followed</button>
+              {isOpenFollowers && <UserList title="Followeds List"/>}
           </div>
 
             </div>
