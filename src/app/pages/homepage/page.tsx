@@ -127,7 +127,7 @@ const setPrivatesPost = () =>
   return (
     <AuthGuard>
       <Navbar />
-      <div className='items-center justify-center flex  ' >
+      <div className='items-center justify-center flex pt-20 md:pt-4 md:ml-64 gap-4 py-2 flex-wrap' >
        <button onClick={setLikeds} className='dark:text-blancoHueso text-darkVoid  hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'> Me gusta</button>
        <button onClick={setFavorites} className='dark:text-blancoHueso text-darkVoid  hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Favoritos</button>
        <button onClick={setPrivatesPost} className='dark:text-blancoHueso text-darkVoid  hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Privados</button>
