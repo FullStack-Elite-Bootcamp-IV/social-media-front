@@ -1,4 +1,4 @@
-'use client'
+/*'use client'
 
 import { useContext, useState, ReactNode, createContext, FC, useLayoutEffect } from "react";
 import Cookies from "js-cookie";
@@ -154,3 +154,4 @@ export const usePost = (): PostContextProps => {
     }
     return context;
 }
+*/
