@@ -1,6 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import Post from '@/app/components/post/Post';
+import AuthGuard from "@/app/components/Guards/AuthGuard";
+import Navbar from '@/app/components/navbar/Navbar';
 
 interface PostData {
   userid: string;
@@ -38,21 +40,26 @@ const HomePage: React.FC = () => {
   ]);
 
   return (
-    <div className="app">
-      {posts.map((post, index) => (
-        <Post
-          key={index}
-          userid={post.userid}
-          title={post.title}
-          description={post.description}
-          media={post.media}
-          likes={post.likes}
-          updateDate={post.updateDate}
-          comments={post.comments}
-          favorites={post.favorites}
-        />
-      ))}
-    </div>
+    <AuthGuard>
+      <main className="flex">
+        <Navbar />
+        <div className="app flex-1 ml-64 p-4">
+          {posts.map((post, index) => (
+            <Post
+              key={index}
+              userid={post.userid}
+              title={post.title}
+              description={post.description}
+              media={post.media}
+              likes={post.likes}
+              updateDate={post.updateDate}
+              comments={post.comments}
+              favorites={post.favorites}
+            />
+          ))}
+        </div>
+      </main>
+    </AuthGuard>
   );
 }
 
