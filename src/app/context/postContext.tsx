@@ -1,186 +1,156 @@
 'use client'
 
-import { useContext, useState, ReactNode, createContext, FC } from "react";
+import { useContext, useState, ReactNode, createContext, FC, useLayoutEffect } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 
-interface UserContextProps {
-    createPost: (post: any) => Promise<void>;
-    editPost: (postId: string, postData: any) => Promise<void>;
-    getPosts: () => Promise<void>;
-    getPostById: (postId: string) => Promise<void>;
-    getPostByKeyword: (keyword: string) => Promise<void>;
-    getFollowingPost: () => Promise<void>;
-    getPostByUserId: (userId: string) => Promise<void>;
-    editPostVisibility: (postId: string, isVisible: boolean) => Promise<void>;
-    getFavoritePost: () => Promise<void>;
+interface PostContextProps {
+    createPost: (title: string, content: string) => Promise<void>;
+    editPost: (id: string, title: string, content: string) => Promise<void>;
+    getPosts: () => Promise<any[]>;
+    getPostById: (id: string) => Promise<any>;
+    getPostByKeyword: (keyword: string) => Promise<any[]>;
+    getFollowingPost: () => Promise<any[]>;
+    getPostByUserId: (userId: string) => Promise<any[]>;
+    editPostVisibility: (id: string, visibility: boolean) => Promise<void>;
+    getFavoritePost: () => Promise<any[]>;
+
+    logout: () => Promise<void>;
+    darkMode: boolean;
+    handleDarkMode: () => void;
 }
 
-const UserContext = createContext<UserContextProps | null>(null);
+const PostContext = createContext<PostContextProps | null>(null);
 
-interface UserProviderProps {
+interface PostProviderProps {
     children: ReactNode;
 }
 
-export const UserProvider: FC<UserProviderProps> = ({ children }) => {
+export const PostProvider: FC<PostProviderProps> = ({ children }) => {
+    const [darkMode, setDarkMode] = useState<boolean>(() => {
+        const storedMode = window.localStorage.getItem("darkMode");
+        return storedMode === 'true' ? true : false;
+    });
+    const [posts, setPosts] = useState<any[]>([]);
     const router = useRouter();
 
-    const API_BASE_URL = 'https://social-media-api-1.onrender.com';
-
-    const getAuthHeaders = () => {
-        const token = Cookies.get('token');
-        return {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        };
-    };
-
-    const createPost = async (post: any) => {
+    const createPost = async (title: string, content: string) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts`, {
-                method: 'POST',
-                headers: getAuthHeaders(),
-                body: JSON.stringify(post),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to create post');
-            }
-        } catch (error) {
-            console.error('Error creating post:', error);
+            const newPost = { title, content };
+            setPosts(prevPosts => [...prevPosts, newPost]);
+        } catch (err) {
+            console.error('Create post error:', err);
         }
     };
 
-    const editPost = async (postId: string, postData: any) => {
+    const editPost = async (id: string, title: string, content: string) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
-                method: 'PUT',
-                headers: getAuthHeaders(),
-                body: JSON.stringify(postData),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to edit post');
-            }
-        } catch (error) {
-            console.error('Error editing post:', error);
+            setPosts(prevPosts =>
+                prevPosts.map(post =>
+                    post.id === id ? { ...post, title, content } : post
+                )
+            );
+        } catch (err) {
+            console.error('Edit post error:', err);
         }
     };
 
-    const getPosts = async () => {
+    const getPosts = async (): Promise<any[]> => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts`, {
-                method: 'GET',
-                headers: getAuthHeaders(),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch posts');
-            }
-            const posts = await response.json();
-        } catch (error) {
-            console.error('Error fetching posts:', error);
+            return posts;
+        } catch (err) {
+            console.error('Get posts error:', err);
+            return [];
         }
     };
 
-    const getPostById = async (postId: string) => {
+    const getPostById = async (id: string): Promise<any> => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts/${postId}`, {
-                method: 'GET',
-                headers: getAuthHeaders(),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch post');
-            }
-            const post = await response.json();
-        } catch (error) {
-            console.error('Error fetching post by ID:', error);
+            return posts.find(post => post.id === id);
+        } catch (err) {
+            console.error('Get post by ID error:', err);
+            return null;
         }
     };
 
-    const getPostByKeyword = async (keyword: string) => {
+    const getPostByKeyword = async (keyword: string): Promise<any[]> => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts/search?keyword=${keyword}`, {
-                method: 'GET',
-                headers: getAuthHeaders(),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch posts by keyword');
-            }
-            const posts = await response.json();
-        } catch (error) {
-            console.error('Error fetching posts by keyword:', error);
+            return posts.filter(post => post.title.includes(keyword) || post.content.includes(keyword));
+        } catch (err) {
+            console.error('Get posts by keyword error:', err);
+            return [];
         }
     };
 
-    const getFollowingPost = async () => {
+    const getFollowingPost = async (): Promise<any[]> => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts/following`, {
-                method: 'GET',
-                headers: getAuthHeaders(),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch following posts');
-            }
-            const posts = await response.json();
-        } catch (error) {
-            console.error('Error fetching following posts:', error);
+            return posts.filter(post => true);
+        } catch (err) {
+            console.error('Get following posts error:', err);
+            return [];
         }
     };
 
-    const getPostByUserId = async (userId: string) => {
+    const getPostByUserId = async (userId: string): Promise<any[]> => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts/user/${userId}`, {
-                method: 'GET',
-                headers: getAuthHeaders(),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch posts by user ID');
-            }
-            const posts = await response.json();
-        } catch (error) {
-            console.error('Error fetching posts by user ID:', error);
+            return posts.filter(post => post.userId === userId);
+        } catch (err) {
+            console.error('Get posts by user ID error:', err);
+            return [];
         }
     };
 
-    const editPostVisibility = async (postId: string, isVisible: boolean) => {
+    const editPostVisibility = async (id: string, visibility: boolean) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts/${postId}/visibility`, {
-                method: 'PATCH',
-                headers: getAuthHeaders(),
-                body: JSON.stringify({ isVisible }),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to edit post visibility');
-            }
-        } catch (error) {
-            console.error('Error editing post visibility:', error);
+            setPosts(prevPosts =>
+                prevPosts.map(post =>
+                    post.id === id ? { ...post, visibility } : post
+                )
+            );
+        } catch (err) {
+            console.error('Edit post visibility error:', err);
         }
     };
 
-    const getFavoritePost = async () => {
+    const getFavoritePost = async (): Promise<any[]> => {
         try {
-            const response = await fetch(`${API_BASE_URL}/posts/favorites`, {
-                method: 'GET',
-                headers: getAuthHeaders(),
-            });
-            if (!response.ok) {
-                throw new Error('Failed to fetch favorite posts');
-            }
-            const posts = await response.json();
-        } catch (error) {
-            console.error('Error fetching favorite posts:', error);
+            return posts.filter(post =>  true);
+        } catch (err) {
+            console.error('Get favorite posts error:', err);
+            return [];
         }
+    };
+
+    const handleDarkMode = () => {
+        const newDarkMode = !darkMode;
+        setDarkMode(newDarkMode);
+        window.localStorage.setItem("darkMode", newDarkMode.toString());
+    };
+
+    useLayoutEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    }, [darkMode]);
+
+    const logout = async () => {
+        Cookies.remove('token');
+        router.push("/pages/login");
     };
 
     return (
-        <UserContext.Provider value={{ createPost, editPost, getPosts, getPostById, getPostByKeyword, getFollowingPost, getPostByUserId, editPostVisibility, getFavoritePost }}>
+        <PostContext.Provider value={{ createPost, editPost, getPosts, getPostById, getPostByKeyword, getFollowingPost, getPostByUserId, editPostVisibility, getFavoritePost, logout, darkMode, handleDarkMode }}>
             {children}
-        </UserContext.Provider>
+        </PostContext.Provider>
     );
 }
 
-export const useUser = (): UserContextProps => {
-    const context = useContext(UserContext);
+export const usePost = (): PostContextProps => {
+    const context = useContext(PostContext);
     if (!context) {
-        throw new Error("useUser must be used within a UserProvider");
+        throw new Error("usePost must be used within a PostProvider");
     }
     return context;
 }
