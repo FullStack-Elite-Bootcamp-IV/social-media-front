@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -13,16 +13,12 @@ import NotificationModal from "../notification/NotificationModal";
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
-
-  // State to handle the notification modal
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
 
-  // Function to toggle the menu
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
   };
 
-  // Function to handle the resize of the window and set the state of the menu
   const handleResize = () => {
     if (window.innerWidth > 768) {
       setIsOpen(true);
@@ -51,13 +47,12 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  // Function to open/close the notification modal
   const handleNotifToggle = () => {
     setIsNotifModalOpen(!isNotifModalOpen);
   };
 
   return (
-    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64">
+    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-20">
       <div className="flex items-center justify-between p-4">
         <h2 className="text-2xl font-bold">Nexo</h2>
         <button
@@ -69,7 +64,9 @@ const Navbar: React.FC = () => {
         </button>
       </div>
       <nav
-        className={`${isOpen ? "block" : "hidden"} fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
+        className={`${
+          isOpen ? "block" : "hidden"
+        } fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
       >
         <ul className="flex flex-col space-y-4 p-4">
           <Link href="/pages/homepage">
@@ -127,7 +124,7 @@ const Navbar: React.FC = () => {
           onClick={handleCloseMenu}
         ></div>
       )}
-       {isNotifModalOpen && (
+      {isNotifModalOpen && (
         <div className="">
           ,<NotificationModal setIsNotifModalOpen={setIsNotifModalOpen} />
         </div>
