@@ -4,27 +4,22 @@ export const messagesApi = createApi ({
   reducerPath: 'messagesApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://social-media-api-1.onrender.com' }),
   endpoints: (builder) => ({ 
-    get: builder.query({
-      query: (param) => ({
-        url: Endpoint/${param}
-      }),
-    }),
     messages: builder.mutation({
       query: () => ({
-        url: /api/messages,
-        method: 'POST'
+        url: `/api/messages`,
+        method: 'POST',
       }),
     }),
 
     messagesByChatId: builder.query({
-      query: (chatId) => ({
-        url: /api/messages/${id},
+      query: (id) => ({
+        url: `/api/messages/${id}`,
       }),
     }),
 
     deleteMessages: builder.mutation({
       query: (id) => ({
-        url: /api/messages/${id},
+        url: `/api/messages/${id}`,
         method: 'DELETE',
       }),
     }),
@@ -32,7 +27,7 @@ export const messagesApi = createApi ({
     
     messagesByUserId: builder.query({
       query: (userId) => ({
-        url: /api/messages/${userId},
+        url: `/api/messages/${userId}`,
       }),
     }),
   })
@@ -40,8 +35,8 @@ export const messagesApi = createApi ({
 
 
 export const {
-  messages,
-  messagesByChatId,
-  deleteMessages,
-  messagesByUserId
+  useMessagesMutation,
+  useMessagesByChatIdQuery,
+  useDeleteMessagesMutation,
+  useMessagesByUserIdQuery,
 } = messagesApi;

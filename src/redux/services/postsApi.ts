@@ -4,7 +4,7 @@ export const postsApi = createApi({
   reducerPath: 'postsApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://social-media-api-1.onrender.com' }),
   endpoints: (builder) => ({
-    // Endpoints para posts
+
     createPost: builder.mutation({
       query: (body) => ({
         url: '/api/posts',

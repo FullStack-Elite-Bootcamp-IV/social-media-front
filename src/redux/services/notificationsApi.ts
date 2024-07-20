@@ -1,13 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-/*
-endpoints actuales
-  post:/api/notifications
-  delete:/api/notifications/{id}
-  get:/api/notifications/user/{userId}
-*/
-
-
 export const notificationsApi = createApi({
   reducerPath: 'notificationsApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://social-media-api-1.onrender.com' }),
@@ -33,5 +25,9 @@ export const notificationsApi = createApi({
   })
 })
 
-export const { useCreateNotificationMutation, useDeleteNotificationMutation, useGetNotificationsByUserQuery } = notificationsApi;
+export const { 
+  useCreateNotificationMutation, 
+  useDeleteNotificationMutation, 
+  useGetNotificationsByUserQuery
+} = notificationsApi;
 

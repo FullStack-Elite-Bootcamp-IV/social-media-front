@@ -55,17 +55,3 @@ export const {
   useEditProfileMutation,
   useDeleteUserMutation,
 } = usersApi;
-
-/* USO DEL HOOK EN OTROS ARCHIVOS
-import { useGetAllUsersQuery, useRegisterMutation, useEditProfileMutation } from 'usersApi'
-
-const respuesta = useGetAllUsersQuery(); 
-
-const respuesta = useRegisterMutation({
-  email: "algo@gmail.com",
-  password: "12345678",
-});
-
-const respuesta = useEditProfileMutation({
-  { Propiedades a modificar }, userId
-}) */
