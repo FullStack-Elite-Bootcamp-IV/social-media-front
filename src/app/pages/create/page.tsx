@@ -4,6 +4,8 @@ import AuthGuard from "@/app/components/Guards/AuthGuard";
 import { FormEvent, useState } from "react";
 import { useAuth } from "../../context/authContext";
 import Navbar from "../../components/navbar/Navbar"
+import React from 'react';
+import { useCreatePostMutation } from '../../../redux/postsApi';
 
 const CreatePost = () => {
     const { loginToken } = useAuth();
@@ -12,8 +14,11 @@ const CreatePost = () => {
     const [media, setMedia] = useState<File | null>(null);
     const [isPublic, setIsPublic] = useState(true);
 
-    const handlePost = (event: FormEvent<HTMLFormElement>) => {
+   
+
+    const handlePost = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        
 
         const formData = {
             title,
