@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-50">
+    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-20">
       <div className="flex items-center justify-between p-4">
         <h2 className="text-2xl font-bold">Nexo</h2>
         <button
