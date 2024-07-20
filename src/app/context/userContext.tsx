@@ -11,12 +11,12 @@ interface User {
 }
 
 interface UserContextProps {
-    getUsers: () => User[];
-    getUserById: (id: string) => User | undefined;
-    getFollowers: (id: string) => string[];
-    getFollowing: (id: string) => string[];
-    editProfile: (id: string, data: any) => void;
-    getUsersByUsername: (username: string) => User | undefined;
+    getUsers: () => Promise<User[]>;
+    getUserById: (id: string) => Promise<User | undefined>;
+    getFollowers: (id: string) => Promise<string[]>;
+    getFollowing: (id: string) => Promise<string[]>;
+    editProfile: (id: string, data: any) => Promise<void>;
+    getUsersByUsername: (username: string) => Promise<User | undefined>;
 }
 
 const UserContext = createContext<UserContextProps | null>(null);
@@ -26,43 +26,58 @@ interface UserProviderProps {
 }
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
-    const [users, setUsers] = useState<User[]>(() => {
-        const storedUsers = localStorage.getItem('users');
-        return storedUsers ? JSON.parse(storedUsers) : [];
-    });
+    const apiUrl = "https://social-media-api-1.onrender.com/";
 
-    const updateLocalStorage = (updatedUsers: User[]) => {
-        localStorage.setItem('users', JSON.stringify(updatedUsers));
-        setUsers(updatedUsers);
+    const fetchFromApi = async (endpoint: string, options?: RequestInit) => {
+        const response = await fetch(`${apiUrl}${endpoint}`, options);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
     };
 
-    const getUsers = (): User[] => {
-        return users;
+    const getUsers = async (): Promise<User[]> => {
+        return fetchFromApi('users');
     };
 
-    const getUserById = (id: string): User | undefined => {
-        return users.find(user => user.id === id);
+    const getUserById = async (id: string): Promise<User | undefined> => {
+        try {
+            const users = await getUsers();
+            return users.find(user => user.id === id);
+        } catch (error) {
+            console.error(error);
+            return undefined;
+        }
     };
 
-    const getFollowers = (id: string): string[] => {
-        const user = getUserById(id);
+    const getFollowers = async (id: string): Promise<string[]> => {
+        const user = await getUserById(id);
         return user ? user.followers : [];
     };
 
-    const getFollowing = (id: string): string[] => {
-        const user = getUserById(id);
+    const getFollowing = async (id: string): Promise<string[]> => {
+        const user = await getUserById(id);
         return user ? user.following : [];
     };
 
-    const editProfile = (id: string, data: any) => {
-        const updatedUsers = users.map(user =>
-            user.id === id ? { ...user, profile: data } : user
-        );
-        updateLocalStorage(updatedUsers);
+    const editProfile = async (id: string, data: any) => {
+        await fetchFromApi(`users/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ profile: data }),
+        });
     };
 
-    const getUsersByUsername = (username: string): User | undefined => {
-        return users.find(user => user.username === username);
+    const getUsersByUsername = async (username: string): Promise<User | undefined> => {
+        try {
+            const users = await getUsers();
+            return users.find(user => user.username === username);
+        } catch (error) {
+            console.error(error);
+            return undefined;
+        }
     };
 
     return (
