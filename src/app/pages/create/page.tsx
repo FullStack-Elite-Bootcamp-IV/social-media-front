@@ -7,7 +7,7 @@ import Navbar from "../../components/navbar/Navbar";
 import React from 'react';
 import { z } from 'zod';
 
-// Define el esquema de validación con zod
+
 const postSchema = z.object({
   title: z.string().min(5, { message: 'Title must be at least 5 characters long' }),
   description: z.string().min(3, { message: 'Description must be at least 3 characters long' }),
@@ -21,7 +21,7 @@ const CreatePost = () => {
   const [description, setDescription] = useState('');
   const [media, setMedia] = useState<File | null>(null);
   const [isPublic, setIsPublic] = useState(true);
-  const [errors, setErrors] = useState<any>({}); // Para almacenar los errores de validación
+  const [errors, setErrors] = useState<any>({}); 
 
   const handlePost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -34,9 +34,9 @@ const CreatePost = () => {
         isPublic
       });
 
-      // Si la validación es exitosa, puedes manejar los datos aquí
+      
       console.log({ title, description, media, isPublic });
-      setErrors({}); // Limpiar los errores si la validación es exitosa
+      setErrors({}); 
     } catch (err) {
       if (err instanceof z.ZodError) {
         const fieldErrors: any = {};
