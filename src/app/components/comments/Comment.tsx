@@ -8,7 +8,7 @@ const Comment = () => {
             </div>
             <div className="flex-grow">
               <div className="font-bold">Comment</div>
-              <div className="text-blancoHueso">Date</div>
+              <div className="text-darkVoid dark:text-blancoHueso">Date</div>
             </div>
           </div>
   )
