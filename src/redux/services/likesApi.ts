@@ -39,4 +39,10 @@ export const likesApi = createApi ({
   })
 })
 
-export const { useCreateLikeMutation, useGetAllLikesQuery, useDeleteLikeMutation, useGetLikesByPostIdQuery, useGetLikesByUserIdQuery } = likesApi;
+export const { 
+  useCreateLikeMutation, 
+  useGetAllLikesQuery, 
+  useDeleteLikeMutation, 
+  useGetLikesByPostIdQuery, 
+  useGetLikesByUserIdQuery 
+} = likesApi;
