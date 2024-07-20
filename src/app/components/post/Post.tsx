@@ -1,6 +1,7 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
+import Comments from '../comments/Comments';
 
 interface PostProps {
   userid: string;
@@ -14,6 +15,12 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments, description, favorites }) => {
+  const [showComments, setShowComments] = useState(false);
+
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
   return (
     <div className="border border-gray-700 p-4 m-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg">
       <div className="flex justify-between items-center mb-4">
@@ -29,29 +36,21 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
       </div>
 
       <div className="text-black dark:text-white bg-white dark:bg-black rounded-lg h-64 mb-4 flex items-center justify-center overflow-hidden">
-         <img src={media} alt="Media content" className="h-full w-full object-cover" />
+        <img src={media} alt="Media content" className="h-full w-full object-cover" />
       </div>
 
-
-     
       <div className="flex justify-around mb-4">
-        
         <section className="flex items-center">
-          {/* Realizar lógica de conexión con la vista de todas las personas que han dado like */}
           <Link href="/pages/likes" className="flex items-center">
             {likes} <span className="ml-1">♥</span>
           </Link>
         </section>
 
-        <section className="flex items-center">
-          {/* Realizar lógica de conexión con la vista de todas las personas que han comentado */}
-          <Link href="/pages/comments" className="flex items-center">
-            {comments} <span className="ml-1">💬</span>
-          </Link>
+        <section className="flex items-center cursor-pointer" onClick={toggleComments}>
+          {comments} <span className="ml-1">💬</span>
         </section>
 
         <section className="flex items-center">
-          {/* Realizar lógica de publicaciones guardadas */}
           <Link href="/pages/favorites" className="flex items-center">
             {favorites} <span className="ml-1">⭐</span>
           </Link>
@@ -61,8 +60,11 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
       <div className="text-black dark:text-white bg-white dark:bg-black p-4 rounded">
         <p>{description}</p>
       </div>
+
+      {showComments && <Comments />}
     </div>
   );
 };
 
 export default Post;
+

@@ -1,28 +1,32 @@
-"use client";
+'use client';
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { IoHomeSharp } from "react-icons/io5";
-import { FaSearch } from "react-icons/fa";
-import { IoChatbubbleEllipses } from "react-icons/io5";
+import { IoHomeSharp, IoChatbubbleEllipses, IoMenu } from "react-icons/io5";
+import { FaSearch, FaUser } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import { MdNotificationsActive } from "react-icons/md";
-import { FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
+import SearchBar from "../search/Search";
 import { IoMenu } from "react-icons/io5";
 import NotificationModal from "../notification/NotificationModal";
 
+
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
   // State to handle the notification modal
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
 
   // Function to toggle the menu
+
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
   };
 
   // Function to handle the resize of the window and set the state of the menu
+
   const handleResize = () => {
     if (window.innerWidth > 768) {
       setIsOpen(true);
@@ -31,12 +35,18 @@ const Navbar: React.FC = () => {
     }
   };
 
-  // Function to close the menu
   const handleCloseMenu = () => {
     setIsOpen(false);
   };
 
-  // UseEffect to handle the resize of the window and call the function handleResize to set the state of the menu
+  const handleSearchClick = () => {
+    setIsSearchBarVisible(true);
+  };
+
+  const handleCloseSearchBar = () => {
+    setIsSearchBarVisible(false);
+  };
+
   useEffect(() => {
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -51,7 +61,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64">
+    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64">
       <div className="flex items-center justify-between p-4">
         <h2 className="text-2xl font-bold">Nexo</h2>
         <button
@@ -63,23 +73,23 @@ const Navbar: React.FC = () => {
         </button>
       </div>
       <nav
-        className={`${
-          isOpen ? "block" : "hidden"
-        } fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-auto`}
-      >
+
+        className={`${isOpen ? "block" : "hidden"} fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
+      
         <ul className="flex flex-col space-y-4 p-4">
-          <Link href="/">
+          <Link href="/pages/homepage">
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <IoHomeSharp className="text-xl" />
               <span>Inicio</span>
             </li>
           </Link>
-          <Link href="/">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <FaSearch className="text-xl" />
-              <span>Buscar</span>
-            </li>
-          </Link>
+          <li
+            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+            onClick={handleSearchClick}
+          >
+            <FaSearch className="text-xl" />
+            <span>Buscar</span>
+          </li>
           <Link href="/pages/chat">
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <IoChatbubbleEllipses className="text-xl" />
@@ -124,9 +134,19 @@ const Navbar: React.FC = () => {
           onClick={handleCloseMenu}
         ></div>
       )}
-      {isNotifModalOpen && (
-        <div className="">
-          ,<NotificationModal setIsNotifModalOpen={setIsNotifModalOpen} />
+
+      {/* Modal for SearchBar */}
+      {isSearchBarVisible && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-md relative">
+            <button
+              className="absolute top-2 right-2 text-gray-600"
+              onClick={handleCloseSearchBar}
+            >
+              &times;
+            </button>
+            <SearchBar />
+          </div>
         </div>
       )}
     </div>
