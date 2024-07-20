@@ -6,6 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: 'class', 
   theme: {
     extend: {
       backgroundImage: {
@@ -19,7 +20,8 @@ const config: Config = {
         'darkVoid': '#151419', 
         'blancoHueso': '#FBFBFB', 
         'dustyGray': '#878787', 
-        'slateGray': '#262626', 
+        'slateGray': '#262626',
+        'lightGray': '#CACACA' 
       },
     },
   },
