@@ -12,13 +12,13 @@ export const usersApi = createApi ({
 
     getUserById: builder.query({
       query: (id) => ({
-        url: `/api/users/users/${id}`,
+        url: `/api/users/by-id/${id}`,
       }),
     }),
 
     getUserByUserName: builder.query({
       query: (userName) => ({
-        url: `/api/users/users/${userName}`,
+        url: `/api/users/by-username/${userName}`,
       }),
     }),
 
@@ -45,4 +45,27 @@ export const usersApi = createApi ({
       }),
     }),
   })
-})
+});
+
+export const {
+  useGetAllUsersQuery,
+  useGetUserByIdQuery,
+  useGetUserByUserNameQuery,
+  useRegisterMutation,
+  useEditProfileMutation,
+  useDeleteUserMutation,
+} = usersApi;
+
+/* USO DEL HOOK EN OTROS ARCHIVOS
+import { useGetAllUsersQuery, useRegisterMutation, useEditProfileMutation } from 'usersApi'
+
+const respuesta = useGetAllUsersQuery(); 
+
+const respuesta = useRegisterMutation({
+  email: "algo@gmail.com",
+  password: "12345678",
+});
+
+const respuesta = useEditProfileMutation({
+  { Propiedades a modificar }, userId
+}) */
