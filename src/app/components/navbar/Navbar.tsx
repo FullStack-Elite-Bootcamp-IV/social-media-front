@@ -9,11 +9,16 @@ import { MdNotificationsActive } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import SearchBar from "../search/Search";
 import NotificationModal from "../notification/NotificationModal";
+import { IoLogOutOutline } from "react-icons/io5";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
+  //Hook router para redireccionar
+  const router = useRouter();
 
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
@@ -49,6 +54,14 @@ const Navbar: React.FC = () => {
 
   const handleNotifToggle = () => {
     setIsNotifModalOpen(!isNotifModalOpen);
+  };
+
+  //Funcion para cerrar sesion
+  const handleLogout = () => {
+    //Borrar cookie
+    Cookies.remove("token");
+    //Redirigir a login
+    router.push("/pages/login");
   };
 
   return (
@@ -116,6 +129,13 @@ const Navbar: React.FC = () => {
               <span>Configuración</span>
             </li>
           </Link>
+          <li
+            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+            onClick={handleLogout}
+          >
+            <IoLogOutOutline className="text-xl" />
+            <span>Cerrar sesión</span>
+          </li>
         </ul>
       </nav>
       {isOpen && (
