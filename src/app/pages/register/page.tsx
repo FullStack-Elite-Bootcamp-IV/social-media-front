@@ -1,31 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useAuth } from "../../context/authContext";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema } from "@/app/validations/registerSchema";
 
+type Inputs = {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+ 
 const Register = () => {
-  const { loginToken, register } = useAuth();
-  const [formData, setFormData] = useState({
-    usernamae: "",
-    email: "",
-    password: "",
+  const { register, handleSubmit} = useForm<Inputs>({
+    resolver: zodResolver(registerSchema)
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
   };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-  };
-
-  useEffect(() => {
-    console.log(loginToken);
-  }, []);
 
   return (
     <main className="flex bg-slateGray justify-center items-center h-screen">
@@ -43,42 +36,58 @@ const Register = () => {
         </div>
         <form
           className="flex flex-col items-center gap-3 self-stretch"
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="" className="text-blancoHueso text-sm font-normal">
+            <label htmlFor="username" className="text-blancoHueso text-sm font-normal">
               Username
             </label>
             <input
               type="text"
+              id="username"
+              {...register("username")}
               className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray  max-[320px]:h-10 text-blancoHueso"
               required
               placeholder="eliteBootcamp"
-              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="" className="text-blancoHueso text-sm  font-normal">
+            <label htmlFor="email" className="text-blancoHueso text-sm  font-normal">
               Email
             </label>
             <input
               type="email"
+              id="email"
+              {...register("email")}
               className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
               required
               placeholder="elite@example.com"
-              onChange={handleChange}
             />
           </div>
           <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="" className="text-blancoHueso text-sm font-normal ">
+            <label htmlFor="password" className="text-blancoHueso text-sm  font-normal">
               Password
             </label>
             <input
               type="password"
+              id="password"
+              {...register("password")}
               className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
               required
               placeholder="isasecret"
-              onChange={handleChange}
+            />
+          </div>
+          <div className="flex flex-col justify-center items-start gap-1 self-stretch">
+            <label htmlFor="confirmPassword" className="text-blancoHueso text-sm font-normal ">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              {...register("confirmPassword")}
+              className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
+              required
+              placeholder="isasecret"
             />
             <button className="flex py-4 px-6 justify-center items-center gap-1 self-stretch rounded-lg bg-liquidLava mt-2 hover:bg-ligthPurple transition-colors">
               <div className="flex h-[22px] px-1 justify-center items-center gap-2">
@@ -91,9 +100,8 @@ const Register = () => {
         </form>
         <div>
           <p className="text-center text-blancoHueso font-normal text-sm">
-            Have and account?
+            Have and account? 
             <span className="text-blancoHueso font-extrabold cursor-pointer">
-              {" "}
               Login
             </span>
           </p>
