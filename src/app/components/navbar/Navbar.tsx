@@ -9,15 +9,18 @@ import { MdNotificationsActive } from "react-icons/md";
 import { FaUser } from "react-icons/fa";
 import { IoMdSettings } from "react-icons/io";
 import { IoMenu } from "react-icons/io5";
+import NotificationModal from "../notification/NotificationModal";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  // State to handle the notification modal
+  const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
 
   // Function to toggle the menu
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
   };
-
 
   // Function to handle the resize of the window and set the state of the menu
   const handleResize = () => {
@@ -42,6 +45,11 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  // Function to open/close the notification modal
+  const handleNotifToggle = () => {
+    setIsNotifModalOpen(!isNotifModalOpen);
+  };
+
   return (
     <div className="h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64">
       <div className="flex items-center justify-between p-4">
@@ -57,7 +65,7 @@ const Navbar: React.FC = () => {
       <nav
         className={`${
           isOpen ? "block" : "hidden"
-        } fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
+        } fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-auto`}
       >
         <ul className="flex flex-col space-y-4 p-4">
           <Link href="/">
@@ -84,12 +92,18 @@ const Navbar: React.FC = () => {
               <span>Crear</span>
             </li>
           </Link>
-          <Link href="/">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <MdNotificationsActive className="text-xl" />
-              <span>Notificaciones</span>
-            </li>
-          </Link>
+
+          <li
+            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+            onClick={() => {
+              handleNotifToggle();
+              setIsOpen(false);
+            }}
+          >
+            <MdNotificationsActive className="text-xl" />
+            <span>Notificaciones</span>
+          </li>
+
           <Link href="/pages/profile">
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <FaUser className="text-xl" />
@@ -109,6 +123,11 @@ const Navbar: React.FC = () => {
           className="fixed inset-0 z-10 bg-black bg-opacity-10 md:hidden"
           onClick={handleCloseMenu}
         ></div>
+      )}
+      {isNotifModalOpen && (
+        <div className="">
+          ,<NotificationModal setIsNotifModalOpen={setIsNotifModalOpen} />
+        </div>
       )}
     </div>
   );
