@@ -1,12 +1,15 @@
 'use client'
 import { useState } from "react";
 import { FormEvent } from "react";
-
-export default function SettingsForm() {
-  const [darkMode, setDarkMode] = useState(true);   
+import { useAuth } from "../../context/authContext";
+export default function SettingsForm() {  
   const [name, setName] = useState('');
   const [password, setPasword] = useState('');
+  const { loginToken, register, login ,darkMode , handleDarkMode } = useAuth();
 
+  const setHandleDarkMode = () => {
+   handleDarkMode()
+  }
   const handlePost = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -18,15 +21,15 @@ export default function SettingsForm() {
     console.log(formData);
   }
   return (
-    <div className={`${darkMode ? 'bg-darkVoid text-blancoHueso' : 'bg-blancoHueso text-darkVoid'} h-screen flex items-center justify-center`}>
-      <div className={`${darkMode ? 'bg-slateGray' : 'bg-blancoHueso'} p-8 rounded-lg shadow-lg w-full max-w-md`}>
+    <div className='dark:bg-darkVoid dark:text-blancoHueso bg-blancoHueso text-darkVoid h-screen flex items-center justify-center'>
+      <div className='dark:bg-slateGray bg-blancoHueso p-8 rounded-lg shadow-lg w-full max-w-md'>
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">SETTINGS</h1>
           <button
             className="text-blancoHueso bg-slateGray p-2 rounded-full"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={ setHandleDarkMode}
           >
-            {darkMode ? '🌞' : '🌜'}
+            { darkMode ? '🌞' : '🌜'}
           </button>
         </div>
         <form onSubmit={handlePost}>
