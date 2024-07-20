@@ -26,6 +26,6 @@ export const authApi = createApi ({
 });
 
 export const {
-  login,
-  setDarkMode,
+  useLoginMutation,
+  useSetDarkModeMutation,
 } = authApi;
