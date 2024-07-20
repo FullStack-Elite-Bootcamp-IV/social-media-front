@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../../../context/authContext";
 import AuthGuard from "@/app/components/Guards/AuthGuard";
+import Navbar from "../../../components/navbar/Navbar"
 
 const EditProfile = () => {
   const { loginToken, register, handleDarkMode } = useAuth();
@@ -38,6 +39,7 @@ const EditProfile = () => {
 
   return (
     <AuthGuard>
+      <Navbar></Navbar>
       <main className="dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
         <form className="space-y-4" onSubmit={handleUpdate}>
           <h1 className="text-2xl dark:text-white text-black mb-6 text-left">

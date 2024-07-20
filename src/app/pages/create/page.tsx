@@ -3,6 +3,7 @@
 import AuthGuard from "@/app/components/Guards/AuthGuard";
 import { FormEvent, useState } from "react";
 import { useAuth } from "../../context/authContext";
+import Navbar from "../../components/navbar/Navbar"
 
 const CreatePost = () => {
     const { loginToken } = useAuth();
@@ -26,12 +27,10 @@ const CreatePost = () => {
 
     return (
         <AuthGuard>
+            <Navbar></Navbar>
             <main className="min-h-screen bg-blancoHueso dark:bg-slateGray flex items-center justify-center text-white px-5">
-
                 <form onSubmit={handlePost} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid  flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
-
                     <h1 className="text-4xl text-darkVoid dark:text-blancoHueso">CREATE A POST</h1>
-
                     <div className="mb-4">
                         <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2" >
                             Title
@@ -42,7 +41,7 @@ const CreatePost = () => {
                             placeholder="Enter a title"
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            className="shadow appearance-none  rounded w-full py-2 px-3 text-white bg-slateGray leading-tight focus:outline-none focus:shadow-outline placeholder-blancoHueso"
+                            className="shadow appearance-none  rounded w-full py-2 px-3 text-white bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid"
                         />
                     </div>
                     <div className="mb-4">
@@ -54,7 +53,7 @@ const CreatePost = () => {
                             placeholder="Enter a description"
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            className="shadow appearance-none  rounded w-full py-2 px-3 text-white bg-slateGray leading-tight focus:outline-none focus:shadow-outline placeholder-blancoHueso"
+                            className="shadow appearance-none  rounded w-full py-2 px-3 text-white bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid"
                         />
                     </div>
                     <div className="mb-4">
@@ -66,7 +65,7 @@ const CreatePost = () => {
                             id="media"
                             title="Upload a media file"
                             onChange={(e) => setMedia(e.target.files ? e.target.files[0] : null)}
-                            className="shadow  appearance-none  rounded w-full py-2 px-3 text-white bg-slateGray leading-tight focus:outline-none focus:shadow-outline placeholder-blancoHueso"
+                            className="shadow  appearance-none  rounded w-full py-2 px-3 text-darkVoid bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid"
                         />
                     </div>
                     <div className="flex justify-end">
