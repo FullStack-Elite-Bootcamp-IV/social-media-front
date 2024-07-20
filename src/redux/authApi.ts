@@ -9,5 +9,23 @@ export const authApi = createApi ({
         url: `Endpoint/${param}`
       }),
     }),
+    login: builder.mutation({
+      query: (token) => ({
+        url: `/api/login`,
+        method: 'POST'
+      }),
+    }),
+
+    setDarkMode: builder.mutation({
+      query: (id) => ({
+        url: `/api/users/setDarkMode/${id}`,
+        method: 'POST'
+      }),
+    }),
   })
-})
+});
+
+export const {
+  login,
+  setDarkMode,
+} = authApi;

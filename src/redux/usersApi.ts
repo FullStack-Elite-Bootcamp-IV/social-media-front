@@ -4,10 +4,68 @@ export const usersApi = createApi ({
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://social-media-api-1.onrender.com' }),
   endpoints: (builder) => ({ 
-    get: builder.query({
-      query: (param) => ({
-        url: `Endpoint/${param}`
+    getAllUsers: builder.query({
+      query: () => ({
+        url: `/api/users/users`,
+      }),
+    }),
+
+    getUserById: builder.query({
+      query: (id) => ({
+        url: `/api/users/by-id/${id}`,
+      }),
+    }),
+
+    getUserByUserName: builder.query({
+      query: (userName) => ({
+        url: `/api/users/by-username/${userName}`,
+      }),
+    }),
+
+    register: builder.mutation({
+      query: (body) => ({
+        url: `/api/users/register`,
+        method: 'POST',
+        body,
+      }),
+    }),
+
+    editProfile: builder.mutation({
+      query: ({body, id}) => ({
+        url: `/api/users/${id}`,
+        method: 'PATCH',
+        body,
+      }),
+    }),
+
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/api/users/${id}`,
+        method: 'DELETE',
       }),
     }),
   })
-})
+});
+
+export const {
+  useGetAllUsersQuery,
+  useGetUserByIdQuery,
+  useGetUserByUserNameQuery,
+  useRegisterMutation,
+  useEditProfileMutation,
+  useDeleteUserMutation,
+} = usersApi;
+
+/* USO DEL HOOK EN OTROS ARCHIVOS
+import { useGetAllUsersQuery, useRegisterMutation, useEditProfileMutation } from 'usersApi'
+
+const respuesta = useGetAllUsersQuery(); 
+
+const respuesta = useRegisterMutation({
+  email: "algo@gmail.com",
+  password: "12345678",
+});
+
+const respuesta = useEditProfileMutation({
+  { Propiedades a modificar }, userId
+}) */
