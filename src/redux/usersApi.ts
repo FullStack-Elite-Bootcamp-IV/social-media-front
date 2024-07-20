@@ -12,13 +12,13 @@ export const usersApi = createApi ({
 
     getUserById: builder.query({
       query: (id) => ({
-        url: `/api/users/users/${id}`,
+        url: `/api/users/by-id/${id}`,
       }),
     }),
 
     getUserByUserName: builder.query({
       query: (userName) => ({
-        url: `/api/users/users/${userName}`,
+        url: `/api/users/by-username/${userName}`,
       }),
     }),
 
