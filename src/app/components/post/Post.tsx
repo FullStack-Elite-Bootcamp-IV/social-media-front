@@ -17,7 +17,6 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments, description, favorites }) => {
-
   const [showComments, setShowComments] = useState(false);
 
   const toggleComments = () => {
