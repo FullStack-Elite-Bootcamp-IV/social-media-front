@@ -8,14 +8,24 @@ import { IoIosAddCircle } from "react-icons/io";
 import { MdNotificationsActive } from "react-icons/md";
 import { IoMdSettings } from "react-icons/io";
 import SearchBar from "../search/Search";
+import { IoMenu } from "react-icons/io5";
+import NotificationModal from "../notification/NotificationModal";
+
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
 
+  // State to handle the notification modal
+  const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
+
+  // Function to toggle the menu
+
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
   };
+
+  // Function to handle the resize of the window and set the state of the menu
 
   const handleResize = () => {
     if (window.innerWidth > 768) {
@@ -45,6 +55,11 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
+  // Function to open/close the notification modal
+  const handleNotifToggle = () => {
+    setIsNotifModalOpen(!isNotifModalOpen);
+  };
+
   return (
     <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64">
       <div className="flex items-center justify-between p-4">
@@ -58,8 +73,9 @@ const Navbar: React.FC = () => {
         </button>
       </div>
       <nav
+
         className={`${isOpen ? "block" : "hidden"} fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
-      >
+      
         <ul className="flex flex-col space-y-4 p-4">
           <Link href="/pages/homepage">
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
@@ -86,12 +102,18 @@ const Navbar: React.FC = () => {
               <span>Crear</span>
             </li>
           </Link>
-          <Link href="/">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <MdNotificationsActive className="text-xl" />
-              <span>Notificaciones</span>
-            </li>
-          </Link>
+
+          <li
+            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+            onClick={() => {
+              handleNotifToggle();
+              setIsOpen(false);
+            }}
+          >
+            <MdNotificationsActive className="text-xl" />
+            <span>Notificaciones</span>
+          </li>
+
           <Link href="/pages/profile">
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <FaUser className="text-xl" />
@@ -112,6 +134,7 @@ const Navbar: React.FC = () => {
           onClick={handleCloseMenu}
         ></div>
       )}
+
       {/* Modal for SearchBar */}
       {isSearchBarVisible && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">

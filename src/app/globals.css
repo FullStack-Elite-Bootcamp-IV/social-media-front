@@ -18,3 +18,11 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'nico_moji', sans-serif;
 }
 
+/* Clase personalizada para ocultar la barra de desplazamiento */
+.scrollbar-hidden {
+  -ms-overflow-style: none;  /* IE y Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari y Opera */
+}
