@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64">
+    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-20">
       <div className="flex items-center justify-between p-4">
         <h2 className="text-2xl font-bold">Nexo</h2>
         <button
@@ -69,7 +69,9 @@ const Navbar: React.FC = () => {
         </button>
       </div>
       <nav
-        className={`${isOpen ? "block" : "hidden"} fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
+        className={`${
+          isOpen ? "block" : "hidden"
+        } fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
       >
         <ul className="flex flex-col space-y-4 p-4">
           <Link href="/pages/homepage">
@@ -127,7 +129,7 @@ const Navbar: React.FC = () => {
           onClick={handleCloseMenu}
         ></div>
       )}
-       {isNotifModalOpen && (
+      {isNotifModalOpen && (
         <div className="">
           ,<NotificationModal setIsNotifModalOpen={setIsNotifModalOpen} />
         </div>

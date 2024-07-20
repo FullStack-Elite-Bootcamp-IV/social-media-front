@@ -20,7 +20,7 @@ export default function RootLayout({children}: RootLayoutProps) {
     <head>
       <meta name="description" content={metadata.description ?? ''} />
     </head>
-    <body className={Roboto.className}>
+    <body className={`${Roboto.className} dark:bg-darkVoid`}>
       <AuthProvider>
         {children}
       </AuthProvider>
