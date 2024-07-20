@@ -43,7 +43,7 @@ const HomePage: React.FC = () => {
     <AuthGuard>
       <main className="flex">
         <Navbar />
-        <div className="app flex-1 ml-64 p-4">
+        <div className="app flex-1 ml-0 p-2 pt-16 md:ml-64 md:pt-4 sm:p-16">
           {posts.map((post, index) => (
             <Post
               key={index}

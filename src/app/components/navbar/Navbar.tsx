@@ -133,8 +133,8 @@ const Navbar: React.FC = () => {
         </div>
       )}
       {isSearchBarVisible && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg w-full max-w-md relative">
+        <div className="fixed inset-0 flex items-start justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-blancoHueso p-4 rounded-lg shadow-lg w-full max-w-md relative">
             <button
               className="absolute top-2 right-2 text-gray-600"
               onClick={handleCloseSearchBar}
