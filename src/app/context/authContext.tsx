@@ -77,7 +77,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     return (
         <AuthContext.Provider value={{ loginToken, login, register , darkMode , handleDarkMode, logout }}>
-
             {children}
         </AuthContext.Provider>
     )
