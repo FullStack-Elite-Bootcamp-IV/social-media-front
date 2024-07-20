@@ -1,4 +1,4 @@
-'use client'
+/* 'use client'
 
 import { useContext, useState, createContext, ReactNode } from "react";
 
@@ -94,3 +94,5 @@ export const useUser = (): UserContextProps => {
     }
     return context;
 };
+ */
+

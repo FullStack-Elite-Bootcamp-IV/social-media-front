@@ -1,4 +1,4 @@
-'use client'
+/*'use client'
 
 import { useContext, useState, createContext, ReactNode } from "react";
 import { useRouter } from "next/navigation";
@@ -75,4 +75,4 @@ export const useLike = (): LikeContextProps => {
         throw new Error("useLike must be used within a LikeProvider");
     }
     return context;
-};
+};*/
