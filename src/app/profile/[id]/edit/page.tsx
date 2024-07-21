@@ -41,12 +41,10 @@ const onSubmit: SubmitHandler<Inputs> = async (data) => {
 
   return (
     <AuthGuard>
-      <div className="grid grid-cols-12">
-      <div className="col-span-3">
       <Navbar></Navbar> 
-      </div>
-      <main className="col-span-9 dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
-        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      <div className="grid">
+      <main className="col-span-9 dark:bg-black bg-white p-8 h-screen ml:md-64 overflow-auto">
+        <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
           <h1 className="text-2xl dark:text-white text-black mb-6 text-left">
             Update Information
           </h1>
