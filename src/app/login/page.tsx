@@ -9,14 +9,15 @@ import { loginSchema } from "@/validations/loginSchema";
 import { z } from "zod";
 import Link from "next/link";
 import { useLoginMutation } from "@/redux/services/authApi";
-
-
+import { useRouter } from 'next/navigation';
 
 // The type of the form inputs is inferred from the schema
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
+  
   const { loginToken, login } = useAuth();
+  const router = useRouter();
 
   // useForm hook with zodResolver to validate the form
   const {
@@ -27,42 +28,37 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-
   useEffect(() => {
     const token = Cookies.get("token");
     if (token) {
       const decodeToken = JSON.parse(token);
       console.log(decodeToken);
     } else {
-      console.log("No hay cookie");
+      //console.log("No hay cookie");
     }
   }, []);
 
   // Llama al hook aquí
   const [loginn, { isLoading, error, isSuccess }] = useLoginMutation();
-  console.log("loginn:", loginn);
 
   // Función de manejo del envío del formulario
-  const onSubmit =async  (data:LoginFormInputs) => {
+  const onSubmit = async (data: LoginFormInputs) => {
     try {
       // Llama a la mutación de login
-      const result = await loginn(data); // `unwrap` maneja la promesa para obtener los datos directamente
-      const { accessToken } = result.data;
+      const result = await loginn(data).unwrap(); // `unwrap` maneja la promesa para obtener los datos directamente
+      const { accessToken } = result;
       localStorage.setItem("token", JSON.stringify(accessToken));
-      
-      console.log(localStorage.getItem("token"));
-
       console.log('Login successful:', result);
+      router.push("/homepage");
     } catch (err) {
       console.error('Failed to login:', err);
     }
   };
 
   return (
-
     <main className="flex bg-darkVoid sm:bg-slateGray w-full min-h-screen">
       <div className="contenedor-login bg-darkVoid w-96 rounded-3xl pt-5 pb-5 pl-5 pr-5 m-auto">
-        <h1 className="text-center  text-blancoHueso text-4xl">Nexo</h1>
+        <h1 className="text-center text-blancoHueso text-4xl">Nexo</h1>
         <form
           id="loginForm"
           onSubmit={handleSubmit(onSubmit)}

@@ -117,7 +117,7 @@ const Navbar: React.FC = () => {
             <MdNotificationsActive className="text-xl" />
             <span>Notificaciones</span>
           </li>
-          <Link href="/profile">
+          <Link href="/profile/1">
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <FaUser className="text-xl" />
               <span>Perfil</span>

@@ -11,7 +11,7 @@ const AuthGuard: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const router = useRouter();
 
     useEffect(() => {
-        const token = Cookies.get('token');
+        const token = localStorage.getItem('token');
 
         if (token) {
             setAuthenticated(true);
