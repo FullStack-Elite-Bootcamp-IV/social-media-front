@@ -28,7 +28,6 @@ const CreatePost = () => {
   const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null; 
 
   const id = decodedToken?.id;
-
   console.log(id);
 
   const [createPost, { isLoading, error, isSuccess }] = useCreatePostMutation();

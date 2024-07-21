@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/validations/registerSchema";
 import { useRegisterMutation } from "@/redux/services/usersApi";
 import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
 
 
 type Inputs = {
@@ -131,9 +132,9 @@ const Register = () => {
         <div>
           <p className="text-center text-blancoHueso font-normal text-sm">
             Have and account? 
-            <span className="text-blancoHueso font-extrabold cursor-pointer">
-              {" "}Login
-            </span>
+            <Link href="/login">
+              <strong>Log in</strong>
+            </Link>
           </p>
         </div>
       </section>
