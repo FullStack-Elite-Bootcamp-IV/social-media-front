@@ -1,32 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "@/context/authContext";
+import { useAuth } from "../../context/authContext";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
-import Link from 'next/link';
+
 import UserList from "@/components/userlist/Userlist";
-import { open } from "fs/promises";
-//import {UserList} from "../../components/userlist/Userlist"
 
-const Page = ({ params: { id: ind } }: { params: { id: number } }) => {
-  console.log(ind);
-
+const Profile = () => {
   const { loginToken, register } = useAuth();
-  const [isOpenFollowers, setIsOpenFollowers]= useState(false)
-  const [isOpenFollowed, setIsOpenFollowed]= useState(false)
+  const [isOpenFollowers, setIsOpenFollowers] = useState(false);
+  const [isOpenFollowed, setIsOpenFollowed] = useState(false);
 
-  const openFollowersList:any =()=>{
-    setIsOpenFollowers(!isOpenFollowers)
-  }
-  const openFollowedList:any =()=>{
-    setIsOpenFollowed(!isOpenFollowed)
-  }
-  
+  const openFollowersList = () => {
+    setIsOpenFollowers(!isOpenFollowers);
+  };
+  const openFollowedList = () => {
+    setIsOpenFollowed(!isOpenFollowed);
+  };
 
   useEffect(() => {
     console.log(loginToken);
-  }, []);
+  }, [loginToken]);
 
   let id = 0;
   let datos = [
@@ -51,83 +46,71 @@ const Page = ({ params: { id: ind } }: { params: { id: number } }) => {
   ];
 
   return (
-    <main className="bg-darkVoid flex">
-      <Navbar />
-      <div className="ml-[0px] w-[100vw] md:ml-[200px]  md:w-[100vw] lg:ml-[220px] lg:w-[100vw] xl:ml-[254px] xl:w-[100vw] 2xl:ml-[254px] 2xl:w-[100vw]  min-h-screen p-0 mt-0 md:bg-darkVoid">
-        <section className="seccion-cabecera h-[50vh] pos relative">
-          <div
-            className="imagen-portada bg-cover bg-center bg-no-repeat relative mb-36 mt-0 flex"
-            style={{
-              backgroundImage: `url(${datos[id].imagenPortada})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              height: "40vh",
-            }}
-          >
-            <div className="contedor-usuario text-center absolute  transform -translate-y-1/2  -translate-x-1/2 flex text-blancoHueso left-20  top-80 sm:left-40  sm:top-80  md:left-52  md:top-80 lg:left-60 lg:top-72 xl:top-64">
-              <div>
-              <img
-                className="rounded-full border-2 w-52 h-52 ml-4  sm:w-64 sm:h-64 md:w-64 md:h-64   lg:w-80 lg:h-80 xl:w-96 xl:h-96 "
-                src={datos[id].imagePerfil}
-                alt="imagen"
-              />
-              <h3 className="text-3xl mt-3">{datos[id].username}</h3>
-              </div>
-            
-            </div>
+    <main className="bg-darkVoid min-h-screen flex flex-col items-center">
+      {/* <Navbar /> */}
+      <div className="w-[100vw]  left-10   md:w-[100vh] lg:w-[100vw]">
+        <section className="relative w-full bg-cover bg-center mb-8 md:mb-12" style={{
+          backgroundImage: `url(${datos[id].imagenPortada})`,
+          height: "200px",
+        }}>
+          <div className="absolute inset-0 flex justify-center items-center">
+            <img
+              className="rounded-full border-4 border-white w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48"
+              src={datos[id].imagePerfil}
+              alt="perfil"
+            />
           </div>
         </section>
-        <section>
-        <div className="info-seguidores mt-11 text-blancoHueso flex w-[70vw] flex-col sm:flex-row  sm:justify-around mx-auto sm:ml-5 xl:justify-around xl:ml-5  ">
-             <div className="mr-4">
-              <p>{datos[id].post}</p>
-              <p>post</p>
-             </div>
-             <div className="mr-4">
-              <p>{datos[id].followers}</p>
+
+        <div className="text-center text-white mb-8">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">{datos[id].username}</h1>
+          <div className="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 mt-4 text-base sm:text-lg">
+            <div className="flex flex-col items-center mb-4 sm:mb-0">
+              <p className="text-xl">{datos[id].post}</p>
+              <p>posts</p>
+            </div>
+            <div className="flex flex-col items-center mb-4 sm:mb-0">
+              <p className="text-xl">{datos[id].followers}</p>
               <button onClick={openFollowedList}>followers</button>
               {isOpenFollowed && < UserList title="Followers List"/>}
             </div>
-             <div className="mr-4">
-              <p>{datos[id].followed}</p>
+            <div className="flex flex-col items-center mb-4 sm:mb-0">
+              <p className="text-xl">{datos[id].followed}</p>
               <button onClick={openFollowersList}>followed</button>
               {isOpenFollowers && <UserList title="Followeds List"/>}
-          </div>
-
+              
             </div>
-        <div className=" div-boton mt-28 sm:mt-6 sm:text-left justify-center mx-auto">
-          <button className="text-blancoHueso text-3xl ml-1  flex items-center mt-10 sm:ml-12 md:ml-36">
-            <FaPencilAlt className="mr-2"/>Edit profile</button>
+          </div>
+          <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600">
+            <FaPencilAlt className="mr-2" /> Edit profile
+          </button>
         </div>
-        <section className="info-usuario mt-6 ml-5 text-blancoHueso flex flex-col  mx-auto justify-between text-lg sm:flex-row md:ml-36 lg:ml-36 lg:w-[70%] xl:ml-36 xl:w-[80%]">
-                        <div>
-                            <p className="">Name</p>
-                            <p>{datos[id].name}</p>
-                        </div>
-                        <div>
-                            <p className="">Age</p>
-                            <p>{datos[id].age}</p>
-                        </div>
-                        <div>
-                            <p className="">Genre</p>
-                            <p>{datos[id].genre}</p>
-                        </div>
-                    </section>
-                    <section className="cont-posts mt-8 grid sm:grid-cols-2 sm:gap-4 md:grid-cols-3 md:gap-4  lg:grid-cols-4 lg:gap-4">
-                        {
-                            datos[id].posts.map((post:any) =>{
-                               return <img src={post} alt="post" />
-                            })
-                        }
 
-                    </section>
-
-
+        <section className="text-white mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-around text-base sm:text-lg">
+            <div className="mb-4 sm:mb-0">
+              <p className="font-semibold">Name</p>
+              <p>{datos[id].name}</p>
+            </div>
+            <div className="mb-4 sm:mb-0">
+              <p className="font-semibold">Age</p>
+              <p>{datos[id].age}</p>
+            </div>
+            <div className="mb-4 sm:mb-0">
+              <p className="font-semibold">Genre</p>
+              <p>{datos[id].genre}</p>
+            </div>
+          </div>
         </section>
 
+        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {datos[id].posts.map((post, index) => (
+            <img key={index} src={post} alt={`Post ${index + 1}`} className="w-full h-auto rounded-lg" />
+          ))}
+        </section>
       </div>
     </main>
   );
 };
 
-export default Page;
+export default Profile;
