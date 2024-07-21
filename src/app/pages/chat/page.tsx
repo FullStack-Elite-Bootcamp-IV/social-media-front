@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 
 function Messages ({messages, chatId}) {
     return (
-        <ul className="flex flex-col gap-2 py-2">
+        <ul className="flex flex-col gap-2 py-2 overflow-y-scroll max-h-dvh">
             {messages.filter((msg) => msg.chatId === chatId).map((msg, index) => (
                 <Message key={index} message={msg.message} userId={msg.userId} />
             ))}
