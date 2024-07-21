@@ -132,7 +132,7 @@ const Register = () => {
           <p className="text-center text-blancoHueso font-normal text-sm">
             Have and account? 
             <span className="text-blancoHueso font-extrabold cursor-pointer">
-              Login
+              {" "}Login
             </span>
           </p>
         </div>
