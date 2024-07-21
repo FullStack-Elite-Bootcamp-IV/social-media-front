@@ -1,10 +1,11 @@
 'use client'
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import Comments from '../comments/Comments';
 import AuthGuard from "@/components/Guards/AuthGuard";
 import { useAuth } from '@/context/authContext';
+import { useDeleteFavouriteMutation, useAddFavouriteMutation } from '@/redux/services/favouritesApi';
+import { useCreateLikeMutation, useDeleteLikeMutation } from '@/redux/services/likesApi';
 
 interface PostProps {
   userid: string;
@@ -20,28 +21,59 @@ interface PostProps {
 
 const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments, description, favorites, postId }) => {
   const [showComments, setShowComments] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const [addFavourite, { isLoading: isLoadingAddFav, error: errorAddFav }] = useAddFavouriteMutation();
+  const [deleteFavourite, { isLoading: isLoadingDelFav, error: errorDelFav }] = useDeleteFavouriteMutation();
+  const [createLike, { isLoading: isLoadingAddLike, error: errorAddLike }] = useCreateLikeMutation();
+  const [deleteLike, { isLoading: isLoadingDelLike, error: errorDelLike }] = useDeleteLikeMutation();
   
   const { getCurrentUTCDate } = useAuth();
   const date = getCurrentUTCDate();
 
-  const handleLikeClick = () => {
+  const handleLikeClick = async () => {
     const data = {
       userid,
       postId,
       date,
-      action: 'like'
+      action: isLiked ? 'unlike' : 'like'
     };
     console.log(data);
+
+    try {
+      if (isLiked) {
+        await deleteLike({ userid, postId, date });
+        setIsLiked(false);
+      } else {
+        await createLike({ userid, postId, date });
+        setIsLiked(true);
+      }
+    } catch (error) {
+      console.error('Error handling like action:', error);
+    }
   };
 
-  const handleFavoriteClick = () => {
+  const handleFavoriteClick = async () => {
     const data = {
       userid,
       postId,
       date,
-      action: 'favorite'
+      action: isFavorited ? 'unfavorite' : 'favorite'
     };
     console.log(data);
+
+    try {
+      if (isFavorited) {
+        await deleteFavourite({ userid, postId, date });
+        setIsFavorited(false);
+      } else {
+        await addFavourite({ userid, postId, date });
+        setIsFavorited(true);
+      }
+    } catch (error) {
+      console.error('Error handling favorite action:', error);
+    }
   };
 
   const toggleComments = () => {
@@ -69,7 +101,11 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
 
         <div className="flex justify-around mb-4">
           <section className="flex items-center">
-            <button className="flex items-center" onClick={handleLikeClick}>
+            <button 
+              className={`flex items-center ${isLiked ? 'text-red-500' : 'text-gray-500'}`} 
+              onClick={handleLikeClick} 
+              disabled={isLoadingAddLike || isLoadingDelLike}
+            >
               {likes} <span className="ml-1">♥</span>
             </button>
           </section>
@@ -79,7 +115,11 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
           </section>
 
           <section className="flex items-center">
-            <button className="flex items-center" onClick={handleFavoriteClick}>
+            <button 
+              className={`flex items-center ${isFavorited ? 'text-yellow-500' : 'text-gray-500'}`} 
+              onClick={handleFavoriteClick} 
+              disabled={isLoadingAddFav || isLoadingDelFav}
+            >
               {favorites} <span className="ml-1">⭐</span>
             </button>
           </section>
