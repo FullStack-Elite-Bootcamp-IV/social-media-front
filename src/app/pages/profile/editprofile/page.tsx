@@ -1,47 +1,46 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../../../context/authContext";
 import AuthGuard from "@/app/components/Guards/AuthGuard";
-import Navbar from "../../../components/navbar/Navbar"
+import Navbar from "../../../components/navbar/Navbar";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { editProfileSchema } from "@/app/validations/editProfileSchema";
+
+type Inputs={
+  fullname: string;
+  description: string;
+  media: File | null;
+  gender: string;
+  location: string;
+  workPlace: string;
+  personalWebSite: string;
+}
 
 const EditProfile = () => {
-  const { loginToken, register, handleDarkMode } = useAuth();
+  const { loginToken } = useAuth();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<Inputs>(
+    { resolver: zodResolver(editProfileSchema) }
+);
 
-  const [fullname, setFullName] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
-  const [description, setDecription] = useState("");
-  const [website, setWebSite] = useState("");
-  const [gender, setGender] = useState("");
-  const [workplace, setWorkPlace] = useState("");
-  const [location, setLocation] = useState("");
-  const setHandlerDarkMode = () => {
-    handleDarkMode();
-  };
 
-  useEffect(() => {}, []);
-
-  const handleUpdate = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const data = {
-      fullname,
-      profilePicture,
-      description,
-      website,
-      gender,
-      workplace,
-      location,
-    };
-
+const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
+}
+
+
+ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    console.log("Selected file:", file);
+    setValue("media", file as any);
   };
 
   return (
     <AuthGuard>
-      <Navbar></Navbar>
-      <main className="dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
-        <form className="space-y-4" onSubmit={handleUpdate}>
+      <Navbar></Navbar> 
+      <div className="grid">
+      <main className="col-span-9 dark:bg-black bg-white p-8 h-screen md:ml-64 overflow-auto">
+        <form className="space-y-2" onSubmit={handleSubmit(onSubmit)}>
           <h1 className="text-2xl dark:text-white text-black mb-6 text-left">
             Update Information
           </h1>
@@ -50,22 +49,21 @@ const EditProfile = () => {
               Profile Picture
             </label>
             <input
-              className="dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg"
+              className={`dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg ${errors.media ? 'border-red-500' : ''}`}
               type="file"
               accept="image/png, image/jpeg"
-              value={profilePicture}
-              onChange={(e) => setProfilePicture(e.target.value)}
+              onChange={handleFileChange}
             />
           </div>
           <div className="flex flex-col">
             <label className="mb-1 text-black dark:text-white">Fullname</label>
             <input
-              className="dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white"
+              className= {`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.fullname ? 'border-red-500' : ''}`}
               type="text"
               placeholder="Enter a fullname"
-              value={fullname}
-              onChange={(e) => setFullName(e.target.value)}
+              {...register("fullname")}
             />
+            {errors.fullname && <p className="text-red-500 text-xs italic">{errors.fullname?.message}</p>}
           </div>
           <div className="flex flex-col">
             <label className="mb-1 dark:text-white text-black">Gender</label>
@@ -73,30 +71,27 @@ const EditProfile = () => {
               <label className="flex items-center dark:text-white text-black">
                 <input
                   type="radio"
-                  name="gender"
                   value="Men"
-                  className="mr-2 dark:text-white text-black"
-                  onChange={(e) => setGender(e.target.value)}
+                  className= {`mr-2 dark:text-white text-black ${errors.gender ? 'border-red-500' : ''}`}
+                  {...register("gender")}
                 />
                 Men
               </label>
               <label className="flex items-center dark:text-white text-black">
                 <input
                   type="radio"
-                  name="gender"
                   value="Woman"
                   className="mr-2 dark:text-white text-black"
-                  onChange={(e) => setGender(e.target.value)}
+                  {...register("gender")}
                 />
                 Woman
               </label>
               <label className="flex items-center dark:text-white text-black">
                 <input
                   type="radio"
-                  name="gender"
                   value="Other"
                   className="mr-2 dark:text-white text-black"
-                  onChange={(e) => setGender(e.target.value)}
+                  {...register("gender")}
                 />
                 Other
               </label>
@@ -107,55 +102,55 @@ const EditProfile = () => {
               Description
             </label>
             <input
-              className="dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white"
+              className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.description ? 'border-red-500' : ''}`}
               type="text"
               placeholder="Enter a description"
-              value={description}
-              onChange={(e) => setDecription(e.target.value)}
+              {...register("description")}
             />
+            {errors.description && <p className="text-red-500 text-xs italic">{errors.description?.message}</p>}
           </div>
           <div className="flex flex-col">
             <label className="mb-1 dark:text-white text-black">Location</label>
             <input
-              className="dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white"
+              className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.location ? 'border-red-500' : ''}`}
               type="text"
               placeholder="Enter a location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
+              {...register("location")}
             />
+            {errors.location && <p className="text-red-500 text-xs italic">{errors.location?.message}</p>}
           </div>
           <div className="flex flex-col">
             <label className="mb-1 dark:text-white text-black">Workplace</label>
             <input
-              className="dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white"
+              className= {`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.workPlace ? 'border-red-500' : ''}`}
               type="text"
               placeholder="Enter a workplace"
-              value={workplace}
-              onChange={(e) => setWorkPlace(e.target.value)}
+              {...register("workPlace")}
             />
+            {errors.workPlace && <p className="text-red-500 text-xs italic">{errors.workPlace?.message}</p>}
           </div>
           <div className="flex flex-col">
             <label className="mb-1 dark:text-white text-black">
               Personal Website
             </label>
             <input
-              className="dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white"
+              className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.personalWebSite ? 'border-red-500' : ''}`}
               type="text"
               placeholder="Enter a link"
-              value={website}
-              onChange={(e) => setWebSite(e.target.value)}
+              {...register("personalWebSite")}
             />
+            {errors.personalWebSite && <p className="text-red-500 text-xs italic">{errors.personalWebSite?.message}</p>}
           </div>
           <div className="flex justify-end mt-6">
             <button
               type="submit"
-              className=" bg-liquidLava hover:bg-purple-400 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
-            >
+              className=" bg-liquidLava hover:bg-purple-400 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600">
               Update
             </button>
           </div>
         </form>
       </main>
+      </div>
     </AuthGuard>
   );
 };
