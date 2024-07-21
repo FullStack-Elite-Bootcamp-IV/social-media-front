@@ -45,10 +45,13 @@ const Profile = () => {
     },
   ];
 
+
   return (
-    <main className="bg-darkVoid min-h-screen flex flex-col items-center">
-      {/* <Navbar /> */}
-      <div className="w-[100vw]  left-10   md:w-[100vh] lg:w-[100vw]">
+    <div> 
+    <Navbar/>
+    <main className="bg-darkVoid  flex md:ml-64 min-h-screen ">
+      
+      <div className="w-[100vw] px-4  left-10 mt-10 md:mt-0 md:px-1  md:w-[100vh] lg:w-[100vw]">
         <section className="relative w-full bg-cover bg-center mb-8 md:mb-12" style={{
           backgroundImage: `url(${datos[id].imagenPortada})`,
           height: "200px",
@@ -110,6 +113,7 @@ const Profile = () => {
         </section>
       </div>
     </main>
+    </div>
   );
 };
 
