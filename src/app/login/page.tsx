@@ -8,7 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/validations/loginSchema";
 import { z } from "zod";
 import Link from "next/link";
+
 import { useLoginMutation } from "@/redux/services/authApi";
+
 import { useRouter } from 'next/navigation';
 
 // The type of the form inputs is inferred from the schema
@@ -38,6 +40,9 @@ const Login = () => {
     }
   }, []);
 
+
+
+  
   // Llama al hook aquí
   const [loginn, { isLoading, error, isSuccess }] = useLoginMutation();
 
@@ -46,8 +51,8 @@ const Login = () => {
     try {
       // Llama a la mutación de login
       const result = await loginn(data).unwrap(); // `unwrap` maneja la promesa para obtener los datos directamente
-      const { accessToken } = result;
-      localStorage.setItem("token", JSON.stringify(accessToken));
+      let { accessToken } = result;
+      localStorage.setItem("token", accessToken);
       console.log('Login successful:', result);
       router.push("/homepage");
     } catch (err) {
