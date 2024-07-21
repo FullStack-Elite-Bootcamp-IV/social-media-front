@@ -7,8 +7,13 @@ import Navbar from "../../components/navbar/Navbar";
 import React from 'react';
 import { z } from 'zod';
 import { postSchema } from "@/validations/createPostSchema";
-import {  useGetAllUsersQuery } from '@/redux/services/usersApi';
+import {useCreatePostMutation} from "@/redux/services/postsApi";
+import { jwtDecode } from "jwt-decode";
 
+interface MyJwtPayload {
+  id: string;
+  // otras propiedades del payload
+}
 
 const CreatePost = () => {
   const { getCurrentUTCDate } = useAuth();
@@ -19,23 +24,37 @@ const CreatePost = () => {
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState<any>({}); // Para almacenar los errores de validación
 
+  const token = localStorage.getItem('token');
+  const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null; 
+
+  const id = decodedToken?.id;
+
+  console.log(id);
+
+  const [createPost, { isLoading, error, isSuccess }] = useCreatePostMutation();
 
   const handlePost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const date = getCurrentUTCDate();
 
+    const result = await createPost({
+      "userId":"32611986-9f47-44b5-9f17-b9d9054636ad",
+      "title":"ijdfioj",
+      "description":"asjdsa",
+      "media":"image.jpg",
+      "isPublic":true
+  });
+    console.log(result.data);
+    
     try {
       postSchema.parse({
-        
         description,
         media,
         isPublic,
         date
       });
 
-      // Si la validación es exitosa, puedes manejar los datos aquí
-      console.log({  description, media, isPublic });
 
       setErrors({}); // Limpiar los errores si la validación es exitosa
     } catch (err) {

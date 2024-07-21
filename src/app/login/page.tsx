@@ -47,6 +47,11 @@ const Login = () => {
     try {
       // Llama a la mutación de login
       const result = await loginn(data); // `unwrap` maneja la promesa para obtener los datos directamente
+      const { accessToken } = result.data;
+      localStorage.setItem("token", JSON.stringify(accessToken));
+      
+      console.log(localStorage.getItem("token"));
+
       console.log('Login successful:', result);
     } catch (err) {
       console.error('Failed to login:', err);
