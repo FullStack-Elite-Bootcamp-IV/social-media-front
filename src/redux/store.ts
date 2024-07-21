@@ -8,6 +8,7 @@ import { likesApi } from './services/likesApi';
 import { messagesApi } from './services/messagesApi';
 import { notificationsApi } from './services/notificationsApi';
 import { followersApi } from './services/followersApi';
+import { commentsApi } from './services/commentsApi';
 
 
 // Configura el store
@@ -21,6 +22,7 @@ const store = configureStore({
     [messagesApi.reducerPath]: messagesApi.reducer,
     [notificationsApi.reducerPath]: notificationsApi.reducer,
     [followersApi.reducerPath]: followersApi.reducer,
+    [commentsApi.reducerPath]: commentsApi.reducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -32,7 +34,7 @@ const store = configureStore({
       .concat(messagesApi.middleware)
       .concat(notificationsApi.middleware)
       .concat(followersApi.middleware)
-      
+      .concat(commentsApi.middleware)
       
 });
 
