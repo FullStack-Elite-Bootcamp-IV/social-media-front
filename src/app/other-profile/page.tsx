@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useAuth } from "../../context/authContext";
-import Navbar from "@/app/components/navbar/Navbar";
+import Navbar from "@/components/navbar/Navbar";
 
 const Profile = () => {
   const { loginToken } = useAuth();
