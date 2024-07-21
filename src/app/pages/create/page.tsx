@@ -29,9 +29,6 @@ const CreatePost = () => {
     console.log(data);
   }
 
-
- 
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     console.log("Selected file:", file);
