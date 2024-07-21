@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "@/context/authContext";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 
