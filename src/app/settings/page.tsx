@@ -7,6 +7,7 @@ import { useAuth } from "@/context/authContext";
 import Navbar from "../../components/navbar/Navbar";
 import { settingsSchema } from "@/validations/settingsSchema";
 import { z } from "zod";
+import { useEditProfilev2Mutation } from "@/redux/services/editApi";
 
 type SettingsFormInputs = z.infer<typeof settingsSchema>;
 
@@ -24,6 +25,8 @@ export default function SettingsForm() {
   } = useForm<SettingsFormInputs>({
     resolver: zodResolver(settingsSchema),
   });
+
+  const [editProfile] = useEditProfilev2Mutation();
 
   const onSubmit = (data: SettingsFormInputs) => {
     console.log(data);

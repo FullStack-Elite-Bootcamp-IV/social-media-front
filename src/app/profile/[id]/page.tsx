@@ -5,8 +5,11 @@ import { useAuth } from "@/context/authContext";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 import UserList from "@/components/userlist/Userlist";
+import Link from "next/link";
 
 interface PostData {
   userid: string;
@@ -17,6 +20,11 @@ interface PostData {
   updateDate: Date;
   comments: number;
   favorites: number;
+}
+
+interface MyJwtPayload {
+  id: string;
+  // otras propiedades del payload
 }
 
 const Profile = () => {
@@ -30,6 +38,14 @@ const Profile = () => {
   const openFollowedList = () => {
     setIsOpenFollowed(!isOpenFollowed);
   };
+
+  const router = useRouter();
+
+  const token = localStorage.getItem("token");
+  const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null;
+
+  const idUser = decodedToken?.id;
+  console.log("idUsuario", idUser);
 
   useEffect(() => {
     console.log(loginToken);
@@ -223,9 +239,11 @@ const Profile = () => {
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600">
-              <FaPencilAlt className="mr-2" /> Edit profile
-            </button>
+            <Link href={`/profile/${idUser}/edit`}>
+              <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                <FaPencilAlt className="mr-2" /> Edit profile
+              </button>
+            </Link>
           </div>
 
           <section className="text-white mb-8">
