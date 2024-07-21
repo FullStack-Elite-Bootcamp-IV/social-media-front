@@ -11,6 +11,7 @@ import {  useGetAllUsersQuery } from '@/redux/services/usersApi';
 
 
 const CreatePost = () => {
+  const { getCurrentUTCDate } = useAuth();
   const { loginToken } = useAuth();
   
   const [description, setDescription] = useState('');
@@ -22,16 +23,20 @@ const CreatePost = () => {
   const handlePost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const date = getCurrentUTCDate();
+
     try {
       postSchema.parse({
         
         description,
         media,
-        isPublic
+        isPublic,
+        date
       });
 
       // Si la validación es exitosa, puedes manejar los datos aquí
       console.log({  description, media, isPublic });
+
       setErrors({}); // Limpiar los errores si la validación es exitosa
     } catch (err) {
       if (err instanceof z.ZodError) {
