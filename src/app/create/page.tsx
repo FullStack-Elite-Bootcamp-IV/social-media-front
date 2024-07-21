@@ -38,13 +38,13 @@ const CreatePost = () => {
     const date = getCurrentUTCDate();
 
     const result = await createPost({
-      "userId":"32611986-9f47-44b5-9f17-b9d9054636ad",
-      "title":"ijdfioj",
-      "description":"asjdsa",
-      "media":"image.jpg",
-      "isPublic":true
-  });
-    console.log(result.data);
+      "title": "Prueba3",
+      "description": description,
+      "media": "prueba3",
+      "isPublic": isPublic,
+      "userId":`${id}` 
+    });
+    console.log(result);
     
     try {
       postSchema.parse({
