@@ -4,8 +4,21 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authContext";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
+import Post from "@/components/post/Post"
 
 import UserList from "@/components/userlist/Userlist";
+
+
+interface PostData {
+  userid: string;
+  title: string;
+  description: string;
+  media: string;
+  likes: number;
+  updateDate: Date;
+  comments: number;
+  favorites: number;
+}
 
 const Profile = () => {
   const { loginToken, register } = useAuth();
@@ -36,15 +49,122 @@ const Profile = () => {
       name: "brayan andres pinchao",
       age: 20,
       genre: "male",
-      posts: [
-        "https://cdn.forbes.com.mx/2014/09/Travelocity-Cartagena-Destacada.Galeria.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Baluarte_de_Santiago_CTG_11_2019_9804.jpg/1200px-Baluarte_de_Santiago_CTG_11_2019_9804.jpg",
-        "https://blogskystorage.s3.amazonaws.com/2022/01/viaje-a-iquitos.jpeg",
-        "https://viajes.nationalgeographic.com.es/medio/2018/02/27/atenas-grecia__1280x720.jpg",
-      ],
+      
     },
   ];
 
+  const [posts, setPosts] = useState<PostData[]>([
+    {
+      userid: 'MarcuSV0',
+      title: 'El patio de mi casa',
+      description: 'Quien quiere venir a mi casa?',
+      media: 'https://1.bp.blogspot.com/-zKX8CREi3QY/T2OMZgW3s6I/AAAAAAAAWzg/5sFH754c6sw/s1600/Los-mas-Hermosos-Paisajes-Naturales_04.jpg',
+      likes: 20,
+      updateDate: new Date(),
+      comments: 5,
+      favorites: 10,
+    },
+    {
+      userid: 'DANIEL-1',
+      title: 'Mi viaje a Europa',
+      description: 'Nest way to find my proposit',
+      media: 'https://th.bing.com/th/id/OIF.0mpwGSIBRUhbxBmKJHCrpA?rs=1&pid=ImgDetMain',
+      likes: 1,
+      updateDate: new Date('2023-03-23'),
+      comments: 3,
+      favorites: 8,
+    },
+    {
+      userid: 'AnnaB',
+      title: 'Amanecer en la montaña',
+      description: 'Un amanecer increíble en las montañas de los Andes.',
+      media: 'https://media.es.wired.com/photos/6519015ce1045b93e30d62e9/16:9/w_2560%2Cc_limit/51071209',
+      likes: 45,
+      updateDate: new Date(),
+      comments: 12,
+      favorites: 22,
+    },
+    {
+      userid: 'TravelGuru',
+      title: 'Visita a las Pirámides de Egipto',
+      description: 'Una experiencia inolvidable explorando las maravillas antiguas de Egipto.',
+      media: 'https://th.bing.com/th/id/OIP.XVhP0HHw7C4GhA1Wb5NqogHaEK?pid=ImgDet&rs=1',
+      likes: 100,
+      updateDate: new Date(),
+      comments: 30,
+      favorites: 50,
+    },
+    {
+      userid: 'NatureLover',
+      title: 'Cascada oculta en el bosque',
+      description: 'Descubrí una hermosa cascada en medio del bosque.',
+      media: 'https://i.pinimg.com/originals/70/4a/f1/704af178a4bce3fc60b1f8f709f149b4.jpg',
+      likes: 75,
+      updateDate: new Date(),
+      comments: 20,
+      favorites: 35,
+    },
+    {
+      userid: 'FoodieFan',
+      title: 'Delicias de la cocina italiana',
+      description: 'Probé las mejores pizzas y pastas en mi último viaje a Italia.',
+      media: 'https://th.bing.com/th/id/OIP.ZFk9vD6Btj6gJ1-KgpGf2QHaLH?pid=ImgDet&rs=1',
+      likes: 60,
+      updateDate: new Date(),
+      comments: 25,
+      favorites: 40,
+    },
+    {
+      userid: 'TechGuy',
+      title: 'Nueva tecnología en 2023',
+      description: 'Explorando las últimas innovaciones tecnológicas de este año.',
+      media: 'https://th.bing.com/th/id/OIP.NINu7mYB-OAem0pvcGfP5QHaEK?pid=ImgDet&rs=1',
+      likes: 85,
+      updateDate: new Date(),
+      comments: 15,
+      favorites: 45,
+    },
+    {
+      userid: 'ArtFanatic',
+      title: 'Exposición de arte moderno',
+      description: 'Visité una increíble exposición de arte moderno en Nueva York.',
+      media: 'https://th.bing.com/th/id/OIP.Xk3QdOzMjNLd9n3LKlMUKgHaE7?pid=ImgDet&rs=1',
+      likes: 50,
+      updateDate: new Date(),
+      comments: 18,
+      favorites: 30,
+    },
+    {
+      userid: 'SportsEnthusiast',
+      title: 'Final del campeonato de fútbol',
+      description: 'El partido más emocionante de la temporada.',
+      media: 'https://th.bing.com/th/id/OIP.LI8MZkTS3H7ph5UKnso29gHaEK?pid=ImgDet&rs=1',
+      likes: 95,
+      updateDate: new Date(),
+      comments: 40,
+      favorites: 60,
+    },
+    {
+      userid: 'FitnessFreak',
+      title: 'Rutina de ejercicios en casa',
+      description: 'Compartiendo mi rutina de ejercicios para mantenerse en forma en casa.',
+      media: 'https://th.bing.com/th/id/OIP.4ZsW0B0ZHa6f8eBt32B5VAHaE7?pid=ImgDet&rs=1',
+      likes: 70,
+      updateDate: new Date(),
+      comments: 22,
+      favorites: 33,
+    },
+    {
+      userid: 'PhotographerJoe',
+      title: 'Capturando la belleza del otoño',
+      description: 'Fotos de paisajes otoñales en el parque local.',
+      media: 'https://th.bing.com/th/id/OIP.w5s1YNo3Dpeokq4hgZkrtgHaE8?pid=ImgDet&rs=1',
+      likes: 40,
+      updateDate: new Date(),
+      comments: 10,
+      favorites: 20,
+    },
+  ]);
 
   return (
     <div> 
@@ -106,9 +226,19 @@ const Profile = () => {
           </div>
         </section>
 
-        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {datos[id].posts.map((post, index) => (
-            <img key={index} src={post} alt={`Post ${index + 1}`} className="w-full h-auto rounded-lg" />
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-4">
+        {posts.map((post:any , index:any) => (
+            <Post
+              key={index}
+              userid={post.userid}
+              title={post.title}
+              description={post.description}
+              media={post.media}
+              likes={post.likes}
+              updateDate={post.updateDate}
+              comments={post.comments}
+              favorites={post.favorites}
+            />
           ))}
         </section>
       </div>
@@ -118,3 +248,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
