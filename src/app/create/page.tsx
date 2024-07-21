@@ -11,6 +11,7 @@ import { postSchema } from "@/validations/createPostSchema";
 
 
 const CreatePost = () => {
+  const { getCurrentUTCDate } = useAuth();
   const { loginToken } = useAuth();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -21,16 +22,19 @@ const CreatePost = () => {
   const handlePost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const date = getCurrentUTCDate();
+
     try {
       postSchema.parse({
         title,
         description,
         media,
-        isPublic
+        isPublic,
+        date
       });
 
       // Si la validación es exitosa, puedes manejar los datos aquí
-      console.log({ title, description, media, isPublic });
+      console.log({ title, description, media, isPublic, date });
       setErrors({}); // Limpiar los errores si la validación es exitosa
     } catch (err) {
       if (err instanceof z.ZodError) {
