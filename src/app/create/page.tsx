@@ -12,7 +12,7 @@ import {  useGetAllUsersQuery } from '@/redux/services/usersApi';
 
 const CreatePost = () => {
   const { loginToken } = useAuth();
-  const [title, setTitle] = useState('');
+  
   const [description, setDescription] = useState('');
   const [media, setMedia] = useState<File | null>(null);
   const [isPublic, setIsPublic] = useState(true);
@@ -24,14 +24,14 @@ const CreatePost = () => {
 
     try {
       postSchema.parse({
-        title,
+        
         description,
         media,
         isPublic
       });
 
       // Si la validación es exitosa, puedes manejar los datos aquí
-      console.log({ title, description, media, isPublic });
+      console.log({  description, media, isPublic });
       setErrors({}); // Limpiar los errores si la validación es exitosa
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -52,20 +52,7 @@ const CreatePost = () => {
       <main className="min-h-screen bg-blancoHueso dark:bg-slateGray flex items-center justify-center text-white px-5">
         <form onSubmit={handlePost} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
           <h1 className="text-4xl text-darkVoid dark:text-blancoHueso">CREATE A POST</h1>
-          <div className="mb-4">
-            <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2">
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              placeholder="Enter a title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className={`shadow appearance-none rounded w-full py-2 px-3 text-darkVoid bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid ${errors.title ? 'border-red-500' : ''}`}
-            />
-            {errors.title && <p className="text-red-500 text-xs italic">{errors.title}</p>}
-          </div>
+          
           <div className="mb-4">
             <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2">
               Description
