@@ -60,6 +60,7 @@ const Navbar: React.FC = () => {
   const handleLogout = () => {
     //Borrar cookie
     Cookies.remove("token");
+    localStorage.removeItem('token');
     //Redirigir a login
     router.push("/login");
   };
