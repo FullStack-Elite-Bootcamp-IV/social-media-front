@@ -129,7 +129,7 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
           <p>{description}</p>
         </div>
 
-        {showComments && <Comments />}
+        {showComments && <Comments postId={postId} />}
       </div>
     </AuthGuard>
   );

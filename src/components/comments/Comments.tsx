@@ -69,7 +69,7 @@ const Comments = ({ postId }: { postId: string }) => {
 
   return (
     <section className="flex items-center justify-center py-10">
-      <div className="bg-gray-70 text-darkVoid dark:bg-darkVoid dark:text-gray-70 w-full flex flex-col md:flex-row">
+      <div className="bg-gray-70 text-darkVoid dark:bg-darkVoid dark:text-white w-full flex flex-col md:flex-row">
         <div className="w-full flex flex-col">
           <div>
             <div className="flex p-2 items-center mb-4">
