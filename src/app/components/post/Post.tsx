@@ -3,10 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Comments from '../comments/Comments';
-<<<<<<< HEAD
-=======
 import AuthGuard from "@/app/components/Guards/AuthGuard";
->>>>>>> 0226af179c6bef314260a44ba00dc9567d19f0df
 
 interface PostProps {
   userid: string;
@@ -20,10 +17,6 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments, description, favorites }) => {
-<<<<<<< HEAD
-
-=======
->>>>>>> 0226af179c6bef314260a44ba00dc9567d19f0df
   const [showComments, setShowComments] = useState(false);
 
   const toggleComments = () => {
@@ -78,8 +71,3 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
 };
 
 export default Post;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 0226af179c6bef314260a44ba00dc9567d19f0df
