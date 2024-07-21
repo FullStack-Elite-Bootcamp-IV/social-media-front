@@ -38,9 +38,7 @@ const CreatePost = () => {
     const date = getCurrentUTCDate();
 
     const result = await createPost({
-      "title": "Prueba3",
       "description": description,
-      "media": "prueba3",
       "isPublic": isPublic,
       "userId":`${id}` 
     });
