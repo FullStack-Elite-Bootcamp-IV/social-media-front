@@ -7,7 +7,7 @@ import Navbar from "../../components/navbar/Navbar";
 import React from 'react';
 import { z } from 'zod';
 import { postSchema } from "@/validations/createPostSchema";
-
+import {  useGetAllUsersQuery } from '@/redux/services/usersApi';
 
 
 const CreatePost = () => {
@@ -17,6 +17,7 @@ const CreatePost = () => {
   const [media, setMedia] = useState<File | null>(null);
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState<any>({}); // Para almacenar los errores de validación
+
 
   const handlePost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

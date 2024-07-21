@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/validations/registerSchema";
 
+
 type Inputs = {
   username: string;
   email: string;
@@ -16,7 +17,12 @@ const Register = () => {
     resolver: zodResolver(registerSchema)
   });
 
+  
+
+  
+
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+   
     console.log(data);
   };
 
