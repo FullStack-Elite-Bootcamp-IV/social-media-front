@@ -7,6 +7,12 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editProfileSchema } from "@/validations/editProfileSchema";
 import { useEditProfilev2Mutation } from "@/redux/services/editApi";
+import { jwtDecode } from "jwt-decode";
+
+interface MyJwtPayload {
+  id: string;
+}
+
 
 type Inputs = {
   fullname?: string;
@@ -18,7 +24,7 @@ type Inputs = {
   personalWebSite?: string;
 };
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = () => {
   // console.log(id);
   const { loginToken } = useAuth();
   const {
@@ -32,6 +38,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   // console.log(date);
 
   const [editProfile] = useEditProfilev2Mutation();
+   const token = localStorage.getItem("token");
+   const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null;
+
+   const id = decodedToken?.id;
+   console.log(id);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const result = await editProfile({
@@ -85,7 +96,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.fullname ? "border-red-500" : ""}`}
                 type="text"
                 placeholder="Enter a fullname"
-                {...register("fullname")}
+                {...register("fullname",{ required: false })}
               />
               {errors.fullname && (
                 <p className="text-red-500 text-xs italic">
@@ -117,7 +128,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 <label className="flex items-center dark:text-white text-black">
                   <input
                     type="radio"
-                    value="Other"
+                    value="other"
                     className="mr-2 dark:text-white text-black"
                     {...register("gender")}
                   />

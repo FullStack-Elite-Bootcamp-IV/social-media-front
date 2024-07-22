@@ -1,21 +1,40 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/context/authContext";
 import Navbar from "../../components/navbar/Navbar";
 import { settingsSchema } from "@/validations/settingsSchema";
 import { z } from "zod";
+import { useEditProfilev2Mutation } from "@/redux/services/editApi";
+import { jwtDecode } from "jwt-decode";
 
 type SettingsFormInputs = z.infer<typeof settingsSchema>;
+
+interface MyJwtPayload {
+  id: string;
+}
 
 export default function SettingsForm() {
   const { darkMode, handleDarkMode } = useAuth();
 
-  const setHandleDarkMode = () => {
+  
+  const token = localStorage.getItem("token");
+  const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null;
+  
+  const id = decodedToken?.id;
+  
+  const setHandleDarkMode = async () => {
     handleDarkMode();
+    const result = await editProfile({
+      body: {
+        darkMode: darkMode,
+      },
+      id: id,
+    });
+    console.log(result);
   };
+
 
   const {
     register,
@@ -25,8 +44,20 @@ export default function SettingsForm() {
     resolver: zodResolver(settingsSchema),
   });
 
-  const onSubmit = (data: SettingsFormInputs) => {
+  const [editProfile] = useEditProfilev2Mutation();
+
+  const onSubmit = async (data: SettingsFormInputs) => {
     console.log(data);
+    console.log("dark",darkMode);
+    const result = await editProfile({
+      body: {
+        userName: data.userName,
+        password: data.password,
+        darkMode: darkMode,
+      },
+      id: id,
+    });
+    console.log(result);
   };
 
   return (
@@ -53,11 +84,11 @@ export default function SettingsForm() {
                 type="text"
                 id="username"
                 placeholder="Enter your username"
-                {...register("username")}
+                {...register("userName", { required: false })}
               />
-              {errors.username && (
+              {errors.userName && (
                 <span className="text-red-500 text-sm">
-                  {errors.username.message}
+                  {errors.userName.message}
                 </span>
               )}
             </div>
@@ -70,7 +101,7 @@ export default function SettingsForm() {
                 type="password"
                 id="password"
                 placeholder="Enter your password"
-                {...register("password")}
+                {...register("password", { required: false })}
               />
               {errors.password && (
                 <span className="text-red-500 text-sm">

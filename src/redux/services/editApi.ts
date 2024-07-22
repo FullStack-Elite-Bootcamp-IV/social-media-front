@@ -2,7 +2,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 
-console.log(localStorage.getItem('token'));
+// console.log(localStorage.getItem('token'));
 
 export const editProfileApi = createApi({
     reducerPath: 'editProfileApi',
@@ -24,7 +24,8 @@ export const editProfileApi = createApi({
                 method: 'PATCH',
                 body,
             }),
-        })
+        }),
+        
     }),
 });
 

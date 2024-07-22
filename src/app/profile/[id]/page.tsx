@@ -5,9 +5,12 @@ import { useAuth } from "@/context/authContext";
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
-import {useDeletePostMutation} from "@/redux/services/postsApi";
+import { useDeletePostMutation } from "@/redux/services/postsApi";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
 import UserList from "@/components/userlist/Userlist";
+import Link from "next/link";
 
 interface PostData {
   userid: string;
@@ -19,6 +22,11 @@ interface PostData {
   comments: number;
   favorites: number;
   postId: string;
+}
+
+interface MyJwtPayload {
+  id: string;
+  // otras propiedades del payload
 }
 
 const Profile = () => {
@@ -33,23 +41,28 @@ const Profile = () => {
     setIsOpenFollowed(!isOpenFollowed);
   };
 
+  const token = localStorage.getItem("token");
+  const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null;
+
+  const idUser = decodedToken?.id;
+  // console.log("idUsuario", decodedToken);
+
   useEffect(() => {
     console.log(loginToken);
   }, [loginToken]);
 
-  const [deletePost, { isLoading: isLoadingDelPost, error: errorDelPost}] = useDeletePostMutation();
+  const [deletePost, { isLoading: isLoadingDelPost, error: errorDelPost }] =
+    useDeletePostMutation();
 
   const handleDeletePost = async (postId: string) => {
     console.log({ postId });
     try {
-    await deletePost(postId).unwrap();
-    setPosts(posts.filter((post) => post.postId !== postId));
-  } catch (error) {
-    console.error("No se pudo eliminar el post: ", error)
-  }
-}
-
-  
+      await deletePost(postId).unwrap();
+      setPosts(posts.filter((post) => post.postId !== postId));
+    } catch (error) {
+      console.error("No se pudo eliminar el post: ", error);
+    }
+  };
 
   let id = 0;
   let datos = [
@@ -64,7 +77,7 @@ const Profile = () => {
       name: "brayan andres pinchao",
       age: 20,
       genre: "male",
-      postId: "hola1234" 
+      postId: "hola1234",
     },
   ];
 
@@ -103,7 +116,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 12,
       favorites: 22,
-      postId: "3456"
+      postId: "3456",
     },
     {
       userid: "TravelGuru",
@@ -116,7 +129,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 30,
       favorites: 50,
-      postId: "ola678"
+      postId: "ola678",
     },
     {
       userid: "NatureLover",
@@ -128,7 +141,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 20,
       favorites: 35,
-      postId: "2345s"
+      postId: "2345s",
     },
     {
       userid: "FoodieFan",
@@ -141,7 +154,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 25,
       favorites: 40,
-      postId:"123455hola"
+      postId: "123455hola",
     },
     {
       userid: "TechGuy",
@@ -154,7 +167,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 15,
       favorites: 45,
-      postId: "1234jsd"
+      postId: "1234jsd",
     },
     {
       userid: "ArtFanatic",
@@ -167,7 +180,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 18,
       favorites: 30,
-      postId: "holaa2345"
+      postId: "holaa2345",
     },
     {
       userid: "SportsEnthusiast",
@@ -179,7 +192,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 40,
       favorites: 60,
-      postId: "holaaa123434"
+      postId: "holaaa123434",
     },
     {
       userid: "FitnessFreak",
@@ -192,7 +205,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 22,
       favorites: 33,
-      postId: "olaaaaa98"
+      postId: "olaaaaa98",
     },
     {
       userid: "PhotographerJoe",
@@ -204,7 +217,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 10,
       favorites: 20,
-      postId: "1111ola"
+      postId: "1111ola",
     },
   ];
 
@@ -261,9 +274,11 @@ const Profile = () => {
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
-              <FaPencilAlt className="mr-2" /> Edit profile
-            </button>
+            <Link href={`/profile/1/edit`}>
+              <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600">
+                <FaPencilAlt className="mr-2" /> Edit profile
+              </button>
+            </Link>
           </div>
 
           <section className="text-white mb-8">
@@ -280,28 +295,31 @@ const Profile = () => {
                 <p className="font-semibold text-gray-400">Genre</p>
                 <p>{datos[id].genre}</p>
               </div>
-            </div>  
+            </div>
           </section>
 
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {posts.map((post: any, index: any) => (
               <div key={index} className="relative">
-              <Post
-                key={index}
-                userid={post.userid}
-                title={post.title}
-                description={post.description}
-                media={post.media}
-                likes={post.likes}
-                updateDate={post.updateDate}
-                comments={post.comments}
-                favorites={post.favorites}
-                postId={post.postId}
-              />
-              <button className="mt-3 absolute top-2 right-2 text-red-600 hover:text-red-800"
-              onClick={() => handleDeletePost(post.postId)}>
-              <FaTrashAlt></FaTrashAlt>
-              </button>
+                <Post
+                  key={index}
+                  userid={post.userid}
+                  title={post.title}
+                  description={post.description}
+                  media={post.media}
+                  likes={post.likes}
+                  updateDate={post.updateDate}
+                  comments={post.comments}
+                  favorites={post.favorites}
+                  postId={post.postId}
+                />
+                <button
+                  className="mt-3 absolute top-2 right-2 text-red-600 hover:text-red-800"
+                  onClick={() => handleDeletePost(post.postId)}
+                  aria-label="Delete post"
+                >
+                  <FaTrashAlt></FaTrashAlt>
+                </button>
               </div>
             ))}
           </section>
