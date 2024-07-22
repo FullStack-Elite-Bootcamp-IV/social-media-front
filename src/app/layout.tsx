@@ -1,10 +1,7 @@
 import type {Metadata} from "next";
 import {Roboto_Mono} from "next/font/google";
 import "./globals.css";
-import {AuthProvider} from "@/context/UserContext";
 import {ReactNode} from "react";
-import {Provider} from 'react-redux';
-import index from "@/store";
 import {Providers} from "./providers";
 
 const Roboto = Roboto_Mono({subsets: ["latin"]});

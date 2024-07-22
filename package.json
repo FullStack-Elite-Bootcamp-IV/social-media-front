@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "set NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)/rootCA.pem\" && next dev",
+    "dev": "cross-env NODE_EXTRA_CA_CERTS=\"$(mkcert -CAROOT)/rootCA.pem\" next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -25,7 +25,8 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.411.0",
-    "next": "14.2.5",
+    "mkcert": "^3.2.0",
+    "next": "^14.2.5",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.1",
@@ -46,6 +47,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",

@@ -1,83 +1,44 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NotificationCard from "./NotificationCard";
 import { IoClose } from "react-icons/io5";
+import { useGetNotificationsByUserQuery } from "@/store/services/notificationsApi";
+import { useGetUserByIdQuery } from "@/store/services/usersApi";
 
-const initialNotifArray = [
-  {
-    notificationId: "1",
-    emisorName: "Alice Johnson",
-    message: "liked your post",
-    date: "2024-07-19T10:15:30Z",
-  },
-  {
-    notificationId: "2",
-    emisorName: "Bob Smith",
-    message: "started following you",
-    date: "2024-07-18T14:30:00Z",
-  },
-  {
-    notificationId: "3",
-    emisorName: "Charlie Brown",
-    message: "commented on your photo",
-    date: "2024-07-18T08:45:00Z",
-  },
-  {
-    notificationId: "4",
-    emisorName: "David Wilson",
-    message: "shared your post",
-    date: "2024-07-17T11:20:45Z",
-  },
-  {
-    notificationId: "5",
-    emisorName: "Eve Davis",
-    message: "mentioned you in a comment",
-    date: "2024-07-16T16:05:30Z",
-  },
-  {
-    notificationId: "6",
-    emisorName: "Frank Clark",
-    message: "sent you a friend request",
-    date: "2024-07-16T09:50:15Z",
-  },
-  {
-    notificationId: "7",
-    emisorName: "Grace Lee",
-    message: "liked your photo",
-    date: "2024-07-15T13:10:00Z",
-  },
-  {
-    notificationId: "8",
-    emisorName: "Henry Martinez",
-    message: "commented on your post",
-    date: "2024-07-14T17:35:20Z",
-  },
-  {
-    notificationId: "9",
-    emisorName: "Ivy Walker",
-    message: "tagged you in a photo",
-    date: "2024-07-13T19:25:30Z",
-  },
-  {
-    notificationId: "10",
-    emisorName: "Jack Lewis",
-    message: "shared your story",
-    date: "2024-07-12T12:00:00Z",
-  },
-];
-
+interface Notification {
+  id: string;
+  status: boolean;
+  action: string;
+  title: string;
+  description: string;
+  notificationDate: string;
+  receptorUser: string;
+  emisorUser: string;
+}
 const NotificationModal = ({ setIsNotifModalOpen }: any) => {
-  //Hook to manage the notifications array
-  const [notifArray, setNotifArray] = useState(initialNotifArray);
 
-  //Function to delete a notification
+  const { data: notifications } = useGetNotificationsByUserQuery('9a251aea-e6b5-4e96-a75a-b18af7f3e97e');
+
+  const [notifArray, setNotifArray] = useState<Notification[]>([]);
+  
+  useEffect(() => {
+    if (notifications) {
+      setNotifArray(notifications);
+    }
+  }, [notifications]);
+
   const handleDelete = (notificationId: string) => {
-    setNotifArray((previusNotifArray) =>
-      previusNotifArray.filter(
-        (notif) => notif.notificationId !== notificationId
+    setNotifArray((previousNotifArray) =>
+      previousNotifArray.filter(
+        notif => notif.id !== notificationId
       )
     );
   };
+
+  const getUser = (notif: any): string => {
+    const { data } = useGetUserByIdQuery(notif.emisorUser) 
+    return data.userName;
+  }
 
   return (
     <>
@@ -98,10 +59,13 @@ const NotificationModal = ({ setIsNotifModalOpen }: any) => {
           </button>
         </div>
         <div className="flex flex-col">
-          {notifArray.map((notif) => (
+        {notifArray.map((notif) => (
             <NotificationCard
-              key={notif.notificationId}
-              {...notif}
+              key={notif.id}
+              id={notif.id}
+              emisorUser={notif.emisorUser}
+              title={notif.description}
+              notificationDate={notif.notificationDate}
               onDelete={handleDelete}
             />
           ))}
