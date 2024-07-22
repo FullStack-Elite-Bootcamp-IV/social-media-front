@@ -2,11 +2,15 @@
 
 import React, { useState, useEffect, FormEvent } from 'react';
 import { useSearchPostsQuery, useSearchUsersQuery } from '@/redux/services/search';
+
+const ITEMS_PER_PAGE = 6; 
+
 const SearchBar = () => {
     const [searchParameter, setSearchParameter] = useState('');
     const [filter, setFilter] = useState('people');
     const [results, setResults] = useState([]);
     const [token, setToken] = useState('');
+    const [currentPage, setCurrentPage] = useState(1); 
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -58,11 +62,20 @@ const SearchBar = () => {
         if (usersError) {
             console.error('Error fetching users:', usersError);
         }
-        
+
         if (postsError) {
             console.error('Error fetching posts:', postsError);
         }
+
+        setCurrentPage(1); 
     };
+
+    const totalPages = Math.ceil(results.length / ITEMS_PER_PAGE);
+
+    const currentResults = results.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
 
     return (
         <div className="w-full p-4">
@@ -72,7 +85,7 @@ const SearchBar = () => {
                         <select
                             value={filter}
                             onChange={(e) => setFilter(e.target.value)}
-                            className="ml-2 bg-transparent outline-none text-lg text-slateGray"
+                            className="ml-2 bg-transparent outline-none text-lg text-black"
                         >
                             <option value="people">Personas</option>
                             <option value="posts">Publicaciones</option>
@@ -82,9 +95,9 @@ const SearchBar = () => {
                             value={searchParameter}
                             onChange={(e) => setSearchParameter(e.target.value)}
                             placeholder="Buscar En Nexo"
-                            className="ml-2 w-full bg-transparent outline-none text-lg text-center text-slateGray"
+                            className="ml-2 w-full bg-transparent outline-none text-lg text-center text-black"
                         />
-                        <button type="submit" className="ml-2 p-2 bg-ligthPurple text-white rounded-full">
+                        <button type="submit" className="ml-2 p-2 bg-purple-500 text-white rounded-full">
                             <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fillRule="evenodd" d="M12.9 14.32a8 8 0 111.414-1.414l4.9 4.9a1 1 0 01-1.414 1.414l-4.9-4.9zM14 8a6 6 0 11-12 0 6 6 0 0112 0z" clipRule="evenodd" />
                             </svg>
@@ -92,24 +105,41 @@ const SearchBar = () => {
                     </form>
                 </div>
             </div>
-            <SearchUser results={results} />
+            <SearchUser results={currentResults} />
+            <div className="flex justify-center mt-4 items-center text-black">
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="mx-2 px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Anterior
+                </button>
+                <span className="mx-2">{currentPage} de {totalPages}</span>
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="mx-2 px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Siguiente
+                </button>
+            </div>
         </div>
     );
 };
 
 const SearchUser = ({ results }) => {
-    const defaultProfileImage = 'https://www.example.com/default-profile.png'; // Reemplaza con la URL de la imagen por defecto
+    const defaultProfileImage = 'https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain';
 
     return (
-        <div className="mt-4">
+        <div className="mt-4 max-h-96 overflow-y-auto">
             {results && results.length > 0 ? (
-                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
                     {results.map((result, index) => (
                         <li key={index} className="border border-dustyGray rounded-lg p-4 shadow-md flex flex-col items-center text-center">
-                            <img 
-                                src={result.profileImage || defaultProfileImage} 
-                                alt={result.userName} 
-                                className="w-24 h-24 rounded-full object-cover mb-4" 
+                            <img
+                                src={result.profileImage || defaultProfileImage}
+                                alt={result.userName}
+                                className="w-24 h-24 rounded-full object-cover mb-4"
                             />
                             <div>
                                 <p className="font-bold text-lg">{result.fullName}</p>
