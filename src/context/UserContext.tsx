@@ -26,7 +26,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const router = useRouter();
 
     useEffect(() => {
-            console.log({data})
         if (isChangingTheme) {
             toast.loading('Changing theme...');
         }
