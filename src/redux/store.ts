@@ -9,6 +9,8 @@ import { messagesApi } from './services/messagesApi';
 import { notificationsApi } from './services/notificationsApi';
 import { followersApi } from './services/followersApi';
 import { editProfileApi } from './services/editApi';
+import { socialMediaApi } from './services/search';
+
 
 
 // Configura el store
@@ -23,6 +25,7 @@ const store = configureStore({
     [notificationsApi.reducerPath]: notificationsApi.reducer,
     [followersApi.reducerPath]: followersApi.reducer,
     [editProfileApi.reducerPath]: editProfileApi.reducer,
+    [socialMediaApi.reducerPath]: socialMediaApi.reducer, 
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -34,8 +37,9 @@ const store = configureStore({
       .concat(messagesApi.middleware)
       .concat(notificationsApi.middleware)
       .concat(followersApi.middleware)
-      .concat(editProfileApi.middleware),
+      .concat(editProfileApi.middleware)
+      .concat(socialMediaApi.middleware), 
 });
 
-// Exporta el store para usar en tu aplicación
+
 export default store;
