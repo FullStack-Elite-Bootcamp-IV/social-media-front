@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authContext";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
+import {useDeletePostMutation} from "@/redux/services/postsApi";
 
 import UserList from "@/components/userlist/Userlist";
 
@@ -17,6 +18,7 @@ interface PostData {
   updateDate: Date;
   comments: number;
   favorites: number;
+  postId: string;
 }
 
 const Profile = () => {
@@ -35,6 +37,20 @@ const Profile = () => {
     console.log(loginToken);
   }, [loginToken]);
 
+  const [deletePost, { isLoading: isLoadingDelPost, error: errorDelPost}] = useDeletePostMutation();
+
+  const handleDeletePost = async (postId: string) => {
+    console.log({ postId });
+    try {
+    await deletePost(postId).unwrap();
+    setPosts(posts.filter((post) => post.postId !== postId));
+  } catch (error) {
+    console.error("No se pudo eliminar el post: ", error)
+  }
+}
+
+  
+
   let id = 0;
   let datos = [
     {
@@ -48,6 +64,7 @@ const Profile = () => {
       name: "brayan andres pinchao",
       age: 20,
       genre: "male",
+      postId: "hola1234" 
     },
   ];
 
@@ -62,6 +79,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 5,
       favorites: 10,
+      postId: "hola1",
     },
     {
       userid: "DANIEL-1",
@@ -73,6 +91,7 @@ const Profile = () => {
       updateDate: new Date("2023-03-23"),
       comments: 3,
       favorites: 8,
+      postId: "hola12",
     },
     {
       userid: "AnnaB",
@@ -84,6 +103,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 12,
       favorites: 22,
+      postId: "3456"
     },
     {
       userid: "TravelGuru",
@@ -96,6 +116,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 30,
       favorites: 50,
+      postId: "ola678"
     },
     {
       userid: "NatureLover",
@@ -107,6 +128,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 20,
       favorites: 35,
+      postId: "2345s"
     },
     {
       userid: "FoodieFan",
@@ -119,6 +141,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 25,
       favorites: 40,
+      postId:"123455hola"
     },
     {
       userid: "TechGuy",
@@ -131,6 +154,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 15,
       favorites: 45,
+      postId: "1234jsd"
     },
     {
       userid: "ArtFanatic",
@@ -143,6 +167,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 18,
       favorites: 30,
+      postId: "holaa2345"
     },
     {
       userid: "SportsEnthusiast",
@@ -154,6 +179,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 40,
       favorites: 60,
+      postId: "holaaa123434"
     },
     {
       userid: "FitnessFreak",
@@ -166,6 +192,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 22,
       favorites: 33,
+      postId: "olaaaaa98"
     },
     {
       userid: "PhotographerJoe",
@@ -177,6 +204,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 10,
       favorites: 20,
+      postId: "1111ola"
     },
   ];
 
@@ -247,6 +275,7 @@ const Profile = () => {
 
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {posts.map((post: any, index: any) => (
+              <div key={index} className="relative">
               <Post
                 key={index}
                 userid={post.userid}
@@ -257,7 +286,13 @@ const Profile = () => {
                 updateDate={post.updateDate}
                 comments={post.comments}
                 favorites={post.favorites}
+                postId={post.postId}
               />
+              <button className="mt-3 absolute top-2 right-2 text-red-600 hover:text-red-800"
+              onClick={() => handleDeletePost(post.postId)}>
+              <FaTrashAlt></FaTrashAlt>
+              </button>
+              </div>
             ))}
           </section>
         </div>
