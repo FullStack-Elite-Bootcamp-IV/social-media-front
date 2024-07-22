@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/context/authContext";
@@ -8,8 +7,13 @@ import Navbar from "../../components/navbar/Navbar";
 import { settingsSchema } from "@/validations/settingsSchema";
 import { z } from "zod";
 import { useEditProfilev2Mutation } from "@/redux/services/editApi";
+import { jwtDecode } from "jwt-decode";
 
 type SettingsFormInputs = z.infer<typeof settingsSchema>;
+
+interface MyJwtPayload {
+  id: string;
+}
 
 export default function SettingsForm() {
   const { darkMode, handleDarkMode } = useAuth();
@@ -17,6 +21,11 @@ export default function SettingsForm() {
   const setHandleDarkMode = () => {
     handleDarkMode();
   };
+
+  const token = localStorage.getItem("token");
+  const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null;
+
+  const id = decodedToken?.id;
 
   const {
     register,
@@ -28,8 +37,16 @@ export default function SettingsForm() {
 
   const [editProfile] = useEditProfilev2Mutation();
 
-  const onSubmit = (data: SettingsFormInputs) => {
+  const onSubmit = async (data: SettingsFormInputs) => {
     console.log(data);
+    console.log("Entro aqui");
+    const result = await editProfile({
+      body: {
+        userName: data.username,
+        password: data.password,
+      },
+      id: id,
+    });
   };
 
   return (
@@ -56,7 +73,7 @@ export default function SettingsForm() {
                 type="text"
                 id="username"
                 placeholder="Enter your username"
-                {...register("username")}
+                {...register("username", { required: false })}
               />
               {errors.username && (
                 <span className="text-red-500 text-sm">
@@ -73,7 +90,7 @@ export default function SettingsForm() {
                 type="password"
                 id="password"
                 placeholder="Enter your password"
-                {...register("password")}
+                {...register("password",{ required: false })}
               />
               {errors.password && (
                 <span className="text-red-500 text-sm">

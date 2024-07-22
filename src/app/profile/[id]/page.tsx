@@ -39,13 +39,13 @@ const Profile = () => {
     setIsOpenFollowed(!isOpenFollowed);
   };
 
-  const router = useRouter();
 
   const token = localStorage.getItem("token");
   const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null;
 
   const idUser = decodedToken?.id;
-  console.log("idUsuario", idUser);
+  // console.log("idUsuario", decodedToken);
+
 
   useEffect(() => {
     console.log(loginToken);
