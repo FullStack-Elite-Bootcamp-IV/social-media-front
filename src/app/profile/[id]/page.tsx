@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/authContext";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
+import {useDeletePostMutation} from "@/redux/services/postsApi";
 
 import UserList from "@/components/userlist/Userlist";
 
@@ -17,6 +18,7 @@ interface PostData {
   updateDate: Date;
   comments: number;
   favorites: number;
+  postId: string;
 }
 
 const Profile = () => {
@@ -35,6 +37,20 @@ const Profile = () => {
     console.log(loginToken);
   }, [loginToken]);
 
+  const [deletePost, { isLoading: isLoadingDelPost, error: errorDelPost}] = useDeletePostMutation();
+
+  const handleDeletePost = async (postId: string) => {
+    console.log({ postId });
+    try {
+    await deletePost(postId).unwrap();
+    setPosts(posts.filter((post) => post.postId !== postId));
+  } catch (error) {
+    console.error("No se pudo eliminar el post: ", error)
+  }
+}
+
+  
+
   let id = 0;
   let datos = [
     {
@@ -48,6 +64,7 @@ const Profile = () => {
       name: "brayan andres pinchao",
       age: 20,
       genre: "male",
+      postId: "hola1234" 
     },
   ];
 
@@ -62,6 +79,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 5,
       favorites: 10,
+      postId: "hola1",
     },
     {
       userid: "DANIEL-1",
@@ -73,6 +91,7 @@ const Profile = () => {
       updateDate: new Date("2023-03-23"),
       comments: 3,
       favorites: 8,
+      postId: "hola12",
     },
     {
       userid: "AnnaB",
@@ -84,6 +103,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 12,
       favorites: 22,
+      postId: "3456"
     },
     {
       userid: "TravelGuru",
@@ -96,6 +116,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 30,
       favorites: 50,
+      postId: "ola678"
     },
     {
       userid: "NatureLover",
@@ -107,6 +128,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 20,
       favorites: 35,
+      postId: "2345s"
     },
     {
       userid: "FoodieFan",
@@ -119,6 +141,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 25,
       favorites: 40,
+      postId:"123455hola"
     },
     {
       userid: "TechGuy",
@@ -131,6 +154,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 15,
       favorites: 45,
+      postId: "1234jsd"
     },
     {
       userid: "ArtFanatic",
@@ -143,6 +167,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 18,
       favorites: 30,
+      postId: "holaa2345"
     },
     {
       userid: "SportsEnthusiast",
@@ -154,6 +179,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 40,
       favorites: 60,
+      postId: "holaaa123434"
     },
     {
       userid: "FitnessFreak",
@@ -166,6 +192,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 22,
       favorites: 33,
+      postId: "olaaaaa98"
     },
     {
       userid: "PhotographerJoe",
@@ -177,24 +204,25 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 10,
       favorites: 20,
+      postId: "1111ola"
     },
   ];
 
   const [posts, setPosts] = useState<PostData[]>(postsArray);
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-900">
       <Navbar />
-      <main className="bg-darkVoid  flex md:ml-64 min-h-screen ">
-        <div className="w-[100vw] px-4  left-10 mt-10 md:mt-0 md:px-1  md:w-[100vh] lg:w-[100vw]">
+      <main className="flex md:ml-64 min-h-screen">
+        <div className="w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0">
           <section
-            className="relative w-full bg-cover bg-center mb-8 md:mb-12"
+            className="relative w-full bg-cover bg-center rounded-lg shadow-lg overflow-hidden mb-8 md:mb-12"
             style={{
               backgroundImage: `url(${datos[id].imagenPortada})`,
               height: "200px",
             }}
           >
-            <div className="absolute inset-0 flex justify-center items-center">
+            <div className="absolute inset-0 flex justify-center items-center bg-black bg-opacity-50">
               <img
                 className="rounded-full border-4 border-white w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48"
                 src={datos[id].imagePerfil}
@@ -204,26 +232,36 @@ const Profile = () => {
           </section>
 
           <div className="text-center text-white mb-8">
-            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
               {datos[id].username}
             </h1>
             <div className="flex flex-col sm:flex-row sm:justify-center sm:space-x-4 mt-4 text-base sm:text-lg">
               <div className="flex flex-col items-center mb-4 sm:mb-0">
                 <p className="text-xl">{datos[id].post}</p>
-                <p>posts</p>
+                <p className="text-gray-400">posts</p>
               </div>
               <div className="flex flex-col items-center mb-4 sm:mb-0">
                 <p className="text-xl">{datos[id].followers}</p>
-                <button onClick={openFollowedList}>followers</button>
+                <button
+                  onClick={openFollowedList}
+                  className="text-blue-400 hover:text-blue-300"
+                >
+                  followers
+                </button>
                 {isOpenFollowed && <UserList title="Followers List" />}
               </div>
               <div className="flex flex-col items-center mb-4 sm:mb-0">
                 <p className="text-xl">{datos[id].followed}</p>
-                <button onClick={openFollowersList}>followed</button>
+                <button
+                  onClick={openFollowersList}
+                  className="text-blue-400 hover:text-blue-300"
+                >
+                  followed
+                </button>
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600">
+            <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
               <FaPencilAlt className="mr-2" /> Edit profile
             </button>
           </div>
@@ -231,22 +269,23 @@ const Profile = () => {
           <section className="text-white mb-8">
             <div className="flex flex-col sm:flex-row sm:justify-around text-base sm:text-lg">
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold">Name</p>
+                <p className="font-semibold text-gray-400">Name</p>
                 <p>{datos[id].name}</p>
               </div>
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold">Age</p>
+                <p className="font-semibold text-gray-400">Age</p>
                 <p>{datos[id].age}</p>
               </div>
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold">Genre</p>
+                <p className="font-semibold text-gray-400">Genre</p>
                 <p>{datos[id].genre}</p>
               </div>
-            </div>
+            </div>  
           </section>
 
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {posts.map((post: any, index: any) => (
+              <div key={index} className="relative">
               <Post
                 key={index}
                 userid={post.userid}
@@ -257,7 +296,13 @@ const Profile = () => {
                 updateDate={post.updateDate}
                 comments={post.comments}
                 favorites={post.favorites}
+                postId={post.postId}
               />
+              <button className="mt-3 absolute top-2 right-2 text-red-600 hover:text-red-800"
+              onClick={() => handleDeletePost(post.postId)}>
+              <FaTrashAlt></FaTrashAlt>
+              </button>
+              </div>
             ))}
           </section>
         </div>
