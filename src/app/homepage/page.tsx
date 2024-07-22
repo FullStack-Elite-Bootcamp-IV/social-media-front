@@ -132,7 +132,7 @@ const setPrivatesPost = () =>
        <button onClick={setPrivatesPost} className='dark:text-blancoHueso text-darkVoid  hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Privados</button>
        <button onClick={setPublices}  className='dark:text-blancoHueso text-darkVoid  hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Publicos</button>
         </div>
-      <main className="flex  dark:bg-darkVoid">
+      <main className="flex min-h-screen dark:bg-darkVoid">
         <div className="app flex-1 ml-0 p-2 pt-16 md:ml-64 md:pt-4 sm:p-16">
           {object.map((post:any , index:any) => (
             <Post
