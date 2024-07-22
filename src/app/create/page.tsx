@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { postSchema } from "@/validations/createPostSchema";
 import {useCreatePostMutation, useUploadImageMutation} from "@/store/services/postsApi";
 import { useUser } from "@/context/UserContext";
+import { useRouter } from "next/navigation";
 
 const CreatePost = () => {
   const [description, setDescription] = useState('');
@@ -14,7 +15,7 @@ const CreatePost = () => {
   const [media, setMedia] = useState<File | null>(null);
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState<any>({}); // Para almacenar los errores de validación
-  const [id, setId] = useState("")
+  const router = useRouter();
 
   const [createPost, { isLoading, error, isSuccess }] = useCreatePostMutation();
   const [uploadImage, { isLoading: isUploading, error: uploadError, isSuccess: isUploadSuccess }] = useUploadImageMutation();
@@ -74,6 +75,8 @@ const CreatePost = () => {
         console.error('Create post error:', err);
       }
     }
+
+    router.push('/homepage');
   }
 
   return (
