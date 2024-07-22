@@ -2,29 +2,32 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const usersApi = createApi ({
   reducerPath: 'usersApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://social-media-api-1.onrender.com' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+    credentials: 'include',
+  }),
   endpoints: (builder) => ({ 
     getAllUsers: builder.query({
       query: () => ({
-        url: `/api/users/users`,
+        url: `/users/users`,
       }),
     }),
 
     getUserById: builder.query({
       query: (id) => ({
-        url: `/api/users/by-id/${id}`,
+        url: `/users/by-id/${id}`,
       }),
     }),
 
     getUserByUserName: builder.query({
       query: (userName) => ({
-        url: `/api/users/by-username/${userName}`,
+        url: `/users/by-username/${userName}`,
       }),
     }),
 
     register: builder.mutation({
       query: (body) => ({
-        url: `/api/register`,
+        url: `/register`,
         method: 'POST',
         body,
       }),
@@ -32,7 +35,7 @@ export const usersApi = createApi ({
 
     editProfile: builder.mutation({
       query: ({body, id}) => ({
-        url: `/api/users/${id}`,
+        url: `/users/${id}`,
         method: 'PATCH',
         body,
       }),
@@ -40,7 +43,7 @@ export const usersApi = createApi ({
 
     deleteUser: builder.mutation({
       query: (id) => ({
-        url: `/api/users/${id}`,
+        url: `/users/${id}`,
         method: 'DELETE',
       }),
     }),

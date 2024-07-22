@@ -2,24 +2,27 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const messagesApi = createApi ({
   reducerPath: 'messagesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://social-media-api-1.onrender.com' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+    credentials: 'include',
+  }),
   endpoints: (builder) => ({ 
     messages: builder.mutation({
       query: () => ({
-        url: `/api/messages`,
+        url: `/messages`,
         method: 'POST',
       }),
     }),
 
     messagesByChatId: builder.query({
       query: (id) => ({
-        url: `/api/messages/${id}`,
+        url: `/messages/${id}`,
       }),
     }),
 
     deleteMessages: builder.mutation({
       query: (id) => ({
-        url: `/api/messages/${id}`,
+        url: `/messages/${id}`,
         method: 'DELETE',
       }),
     }),
@@ -27,7 +30,7 @@ export const messagesApi = createApi ({
     
     messagesByUserId: builder.query({
       query: (userId) => ({
-        url: `/api/messages/${userId}`,
+        url: `/messages/${userId}`,
       }),
     }),
   })

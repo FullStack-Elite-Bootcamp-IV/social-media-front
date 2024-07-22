@@ -10,14 +10,18 @@ import { IoMdSettings } from "react-icons/io";
 import SearchBar from "../search/Search";
 import NotificationModal from "../notification/NotificationModal";
 import { IoLogOutOutline } from "react-icons/io5";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useLogoutMutation } from "@/store/services/authApi";
+import { useUser } from "@/context/UserContext";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
-  //Hook router para redireccionar
+
+  const { user } = useUser();
+
+  const [logout, {isSuccess: isLogout, isLoading}] = useLogoutMutation();
   const router = useRouter();
 
   const handleMenuToggle = () => {
@@ -45,24 +49,26 @@ const Navbar: React.FC = () => {
   };
 
   useEffect(() => {
+    if (isLogout) {
+      return router.push("/login");
+    }
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [isLogout, router]);
 
   const handleNotifToggle = () => {
     setIsNotifModalOpen(!isNotifModalOpen);
   };
 
-  //Funcion para cerrar sesion
-  const handleLogout = () => {
-    //Borrar cookie
-    Cookies.remove("token");
-    localStorage.removeItem('token');
-    //Redirigir a login
-    router.push("/login");
+  //Logout
+  const handleLogout = async () => {
+    logout({
+      date: new Date(),
+      email: "jhanssss@gmail.com",
+    });
   };
 
   return (
@@ -118,7 +124,7 @@ const Navbar: React.FC = () => {
             <MdNotificationsActive className="text-xl" />
             <span>Notificaciones</span>
           </li>
-          <Link href="/profile/1">
+          <Link href={`/profile/${user?.userName}`}>
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <FaUser className="text-xl" />
               <span>Perfil</span>

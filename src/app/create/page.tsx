@@ -1,41 +1,24 @@
 'use client'
 
-import AuthGuard from "@/components/Guards/AuthGuard";
 import { FormEvent, useState } from "react";
-import { useAuth } from "../../context/authContext";
 import Navbar from "../../components/navbar/Navbar";
 import React from 'react';
 import { z } from 'zod';
 import { postSchema } from "@/validations/createPostSchema";
-import {useCreatePostMutation} from "@/redux/services/postsApi";
-import { jwtDecode } from "jwt-decode";
-
-interface MyJwtPayload {
-  id: string;
-  // otras propiedades del payload
-}
+import {useCreatePostMutation} from "@/store/services/postsApi";
 
 const CreatePost = () => {
-  const { getCurrentUTCDate } = useAuth();
-  const { loginToken } = useAuth();
-  
   const [description, setDescription] = useState('');
   const [media, setMedia] = useState<File | null>(null);
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState<any>({}); // Para almacenar los errores de validación
-
-  const token = localStorage.getItem('token');
-  const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null; 
-
-  const id = decodedToken?.id;
-  console.log(id);
 
   const [createPost, { isLoading, error, isSuccess }] = useCreatePostMutation();
 
   const handlePost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const date = getCurrentUTCDate();
+    const date = new Date();
 
     const result = await createPost({
       "description": description,
@@ -68,7 +51,7 @@ const CreatePost = () => {
   }
 
   return (
-    <AuthGuard>
+    <>
       <Navbar />
       <main className="min-h-screen bg-blancoHueso dark:bg-slateGray flex items-center justify-center text-white px-5">
         <form onSubmit={handlePost} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
@@ -126,7 +109,7 @@ const CreatePost = () => {
           </div>
         </form>
       </main>
-    </AuthGuard>
+    </>
   );
 }
 

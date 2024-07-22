@@ -4,7 +4,7 @@ import {
   useAddComentMutation,
   useUpdateCommentMutation,
   useDeleteCommentMutation,
-} from "@/redux/services/commentsApi";
+} from "@/store/services/commentsApi";
 import CommentIcon from "@/icons/CommentIcon";
 import Comment from "./Comment";
 import HeartIcon from "@/icons/HeartIcon";

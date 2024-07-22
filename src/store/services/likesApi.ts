@@ -2,11 +2,14 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const likesApi = createApi ({
   reducerPath: 'likesApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://social-media-api-1.onrender.com' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+    credentials: 'include',
+  }),
   endpoints: (builder) => ({ 
     createLike: builder.mutation({
       query: (body) => ({
-        url: `api/likes/create`,
+        url: `/likes/create`,
         method: 'POST',
         body,
       }),
@@ -14,26 +17,26 @@ export const likesApi = createApi ({
 
     getAllLikes: builder.query({
       query: () => ({
-        url: `api/likes/all`,
+        url: `/likes/all`,
       }),
     }),
 
     deleteLike: builder.mutation({
       query: (id) => ({
-        url: `api/likes/${id}`,
+        url: `/likes/${id}`,
         method: 'DELETE',
       }),
     }),
 
     getLikesByPostId: builder.query({
       query: (postId) => ({
-        url: `api/likes/post/${postId}`,
+        url: `/likes/post/${postId}`,
       }),
     }),
 
     getLikesByUserId: builder.query({
       query: (userId) => ({
-        url: `api/likes/user/${userId}`,
+        url: `/likes/user/${userId}`,
       }),
     }),
   })

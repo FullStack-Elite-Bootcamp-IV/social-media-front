@@ -1,22 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+
 export const editProfileApi = createApi({
     reducerPath: 'editProfileApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: 'https://social-media-api-1.onrender.com',
-        prepareHeaders: (headers, { getState }) => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                const BearerToken = `Bearer ${token}`
-                headers.set('Authorization', BearerToken);
-            }
-            return headers;
-        }
+        baseUrl: process.env.NEXT_PUBLIC_BASE_URL,
+        credentials: 'include',
     }),
     endpoints: (builder) => ({
         editProfilev2: builder.mutation({
             query: ({ body, id }) => ({
-                url: `/api/users/${id}`,
+                url: `/users/${id}`,
                 method: 'PATCH',
                 body,
             }),

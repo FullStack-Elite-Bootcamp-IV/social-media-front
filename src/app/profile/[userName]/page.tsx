@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useAuth } from "@/context/authContext";
-import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
+import {useEffect, useState} from "react";
+import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
-import {useDeletePostMutation} from "@/redux/services/postsApi";
+import Link from 'next/link';
 
 import UserList from "@/components/userlist/Userlist";
+import {useUser} from "@/context/UserContext";
 
 interface PostData {
   userid: string;
@@ -21,10 +21,13 @@ interface PostData {
   postId: string;
 }
 
-const Profile = () => {
-  const { loginToken, register } = useAuth();
+const Profile = ({ params: userName }: { params: { userName: string } }) => {
+  console.log(userName);
   const [isOpenFollowers, setIsOpenFollowers] = useState(false);
   const [isOpenFollowed, setIsOpenFollowed] = useState(false);
+
+  const { user, setLoading } = useUser();
+
 
   const openFollowersList = () => {
     setIsOpenFollowers(!isOpenFollowers);
@@ -32,24 +35,6 @@ const Profile = () => {
   const openFollowedList = () => {
     setIsOpenFollowed(!isOpenFollowed);
   };
-
-  useEffect(() => {
-    console.log(loginToken);
-  }, [loginToken]);
-
-  const [deletePost, { isLoading: isLoadingDelPost, error: errorDelPost}] = useDeletePostMutation();
-
-  const handleDeletePost = async (postId: string) => {
-    console.log({ postId });
-    try {
-    await deletePost(postId).unwrap();
-    setPosts(posts.filter((post) => post.postId !== postId));
-  } catch (error) {
-    console.error("No se pudo eliminar el post: ", error)
-  }
-}
-
-  
 
   let id = 0;
   let datos = [
@@ -64,7 +49,6 @@ const Profile = () => {
       name: "brayan andres pinchao",
       age: 20,
       genre: "male",
-      postId: "hola1234" 
     },
   ];
 
@@ -79,7 +63,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 5,
       favorites: 10,
-      postId: "hola1",
+      postId: "1",
     },
     {
       userid: "DANIEL-1",
@@ -91,7 +75,7 @@ const Profile = () => {
       updateDate: new Date("2023-03-23"),
       comments: 3,
       favorites: 8,
-      postId: "hola12",
+      postId: "2",
     },
     {
       userid: "AnnaB",
@@ -103,7 +87,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 12,
       favorites: 22,
-      postId: "3456"
+      postId: "3",
     },
     {
       userid: "TravelGuru",
@@ -116,7 +100,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 30,
       favorites: 50,
-      postId: "ola678"
+      postId: "4",
     },
     {
       userid: "NatureLover",
@@ -128,7 +112,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 20,
       favorites: 35,
-      postId: "2345s"
+      postId: "5",
     },
     {
       userid: "FoodieFan",
@@ -141,7 +125,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 25,
       favorites: 40,
-      postId:"123455hola"
+      postId: "6",
     },
     {
       userid: "TechGuy",
@@ -154,7 +138,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 15,
       favorites: 45,
-      postId: "1234jsd"
+      postId: "7",
     },
     {
       userid: "ArtFanatic",
@@ -167,7 +151,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 18,
       favorites: 30,
-      postId: "holaa2345"
+      postId: "8",
     },
     {
       userid: "SportsEnthusiast",
@@ -179,7 +163,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 40,
       favorites: 60,
-      postId: "holaaa123434"
+      postId: "9",
     },
     {
       userid: "FitnessFreak",
@@ -192,7 +176,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 22,
       favorites: 33,
-      postId: "olaaaaa98"
+      postId: "10",
     },
     {
       userid: "PhotographerJoe",
@@ -204,7 +188,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 10,
       favorites: 20,
-      postId: "1111ola"
+      postId: "11",
     },
   ];
 
@@ -261,9 +245,9 @@ const Profile = () => {
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
+            <Link href={`/profile/${user?.userName}/edit`} className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
               <FaPencilAlt className="mr-2" /> Edit profile
-            </button>
+            </Link>
           </div>
 
           <section className="text-white mb-8">
@@ -283,25 +267,20 @@ const Profile = () => {
             </div>  
           </section>
 
-          <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {posts.map((post: any, index: any) => (
-              <div key={index} className="relative">
-              <Post
-                key={index}
-                userid={post.userid}
-                title={post.title}
-                description={post.description}
-                media={post.media}
-                likes={post.likes}
-                updateDate={post.updateDate}
-                comments={post.comments}
-                favorites={post.favorites}
-                postId={post.postId}
-              />
-              <button className="mt-3 absolute top-2 right-2 text-red-600 hover:text-red-800"
-              onClick={() => handleDeletePost(post.postId)}>
-              <FaTrashAlt></FaTrashAlt>
-              </button>
+          <section className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
+            {posts.map((post, index) => (
+              <div key={index} className="bg-gray-800 rounded-lg shadow-lg p-4">
+                <Post
+                  userid={post.userid}
+                  title={post.title}
+                  description={post.description}
+                  media={post.media}
+                  likes={post.likes}
+                  updateDate={post.updateDate}
+                  comments={post.comments}
+                  favorites={post.favorites}
+                  postId={post.postId}
+                />
               </div>
             ))}
           </section>

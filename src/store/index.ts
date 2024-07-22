@@ -12,9 +12,7 @@ import { editProfileApi } from './services/editApi';
 import { commentsApi } from './services/commentsApi';
 import { socialMediaApi } from './services/search';
 
-
-// Configura el store
-const store = configureStore({
+const index = configureStore({
   reducer: {
     [usersApi.reducerPath]: usersApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
@@ -26,7 +24,7 @@ const store = configureStore({
     [followersApi.reducerPath]: followersApi.reducer,
     [editProfileApi.reducerPath]: editProfileApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
-    [socialMediaApi.reducerPath]: socialMediaApi.reducer, 
+    [socialMediaApi.reducerPath]: socialMediaApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -40,9 +38,8 @@ const store = configureStore({
       .concat(followersApi.middleware)
       .concat(editProfileApi.middleware)
       .concat(commentsApi.middleware)
-      .concat(socialMediaApi.middleware), 
+      .concat(socialMediaApi.middleware),
 
 });
 
-
-export default store;
+export default index;
