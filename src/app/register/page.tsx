@@ -3,7 +3,7 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/validations/registerSchema";
-import { useRegisterMutation } from "@/redux/services/usersApi";
+import { useRegisterMutation } from "@/store/services/usersApi";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 
@@ -19,15 +19,8 @@ const Register = () => {
   const { register, handleSubmit} = useForm<Inputs>({
     resolver: zodResolver(registerSchema)
   });
-
-  const token = localStorage.getItem('token');
-  const decodedToken = token ? jwtDecode(token) : null;
-  console.log(decodedToken);
   
   const [registerUser, { isLoading, error, isSuccess }] = useRegisterMutation();
-  
-
-
   
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {

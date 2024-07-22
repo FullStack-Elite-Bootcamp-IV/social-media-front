@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "@/context/authContext";
+import { useUser } from "@/context/UserContext";
 import Navbar from "../../components/navbar/Navbar";
 import { settingsSchema } from "@/validations/settingsSchema";
 import { z } from "zod";
@@ -11,11 +10,8 @@ import { z } from "zod";
 type SettingsFormInputs = z.infer<typeof settingsSchema>;
 
 export default function SettingsForm() {
-  const { darkMode, handleDarkMode } = useAuth();
-
-  const setHandleDarkMode = () => {
-    handleDarkMode();
-  };
+  const { toggleTheme, user } = useUser();
+  const darkMode = !user?.darkMode;
 
   const {
     register,
@@ -38,7 +34,7 @@ export default function SettingsForm() {
             <h1 className="text-3xl font-bold">SETTINGS</h1>
             <button
               className="text-blancoHueso bg-slateGray p-2 rounded-full"
-              onClick={setHandleDarkMode}
+              onClick={toggleTheme}
             >
               {darkMode ? "🌞" : "🌜"}
             </button>

@@ -1,7 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo } from "react";
-import { useAuth } from "../../context/authContext";
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useSearchParams } from "next/navigation";
 
@@ -34,7 +33,6 @@ let socket;
 
 function Chat() {
     const chatId = useSearchParams().get('chatId');
-    const { loginToken, register } = useAuth();
     const [messages, setMessages ] = useState([]);
 
 

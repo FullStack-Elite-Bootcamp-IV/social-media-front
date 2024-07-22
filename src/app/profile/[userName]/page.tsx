@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useAuth } from "@/context/authContext";
+import { useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
+import Link from 'next/link';
 
 import UserList from "@/components/userlist/Userlist";
+import {useUser} from "@/context/UserContext";
 
 interface PostData {
   userid: string;
@@ -20,10 +21,12 @@ interface PostData {
   postId: string;
 }
 
-const Profile = () => {
-  const { loginToken, register } = useAuth();
+const Profile = ({ params: userName }: { params: { userName: string } }) => {
+  console.log(userName);
   const [isOpenFollowers, setIsOpenFollowers] = useState(false);
   const [isOpenFollowed, setIsOpenFollowed] = useState(false);
+
+  const { user } =useUser();
 
   const openFollowersList = () => {
     setIsOpenFollowers(!isOpenFollowers);
@@ -31,10 +34,6 @@ const Profile = () => {
   const openFollowedList = () => {
     setIsOpenFollowed(!isOpenFollowed);
   };
-
-  useEffect(() => {
-    console.log(loginToken);
-  }, [loginToken]);
 
   let id = 0;
   let datos = [
@@ -245,9 +244,9 @@ const Profile = () => {
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
+            <Link href={`/profile/${user?.userName}/edit`} className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
               <FaPencilAlt className="mr-2" /> Edit profile
-            </button>
+            </Link>
           </div>
 
           <section className="text-white mb-8">

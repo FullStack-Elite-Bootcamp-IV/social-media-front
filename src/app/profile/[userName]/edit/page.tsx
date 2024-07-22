@@ -1,37 +1,30 @@
 "use client";
-
-import { useAuth } from "@/context/authContext";
-import AuthGuard from "@/components/Guards/AuthGuard";
 import Navbar from "../../../../components/navbar/Navbar";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editProfileSchema } from "@/validations/editProfileSchema";
-import { useEditProfilev2Mutation } from "@/redux/services/editApi";
+import { useEditProfilev2Mutation } from "@/store/services/editApi";
+import {useUser} from "@/context/UserContext";
+import { User } from "@/types/user";
 
-type Inputs = {
-  fullname?: string;
-  description?: string;
-  media?: File | null;
-  gender?: string;
-  location?: string;
-  workPlace?: string;
-  personalWebSite?: string;
-};
+const Page = ({ params: userName }: { params: { userName: string } }) => {
+  console.log(userName);
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
-  // console.log(id);
-  const { loginToken } = useAuth();
+  const { user } = useUser();
+
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<Inputs>({ resolver: zodResolver(editProfileSchema) });
-  const { getCurrentUTCDate } = useAuth();
-  const date = getCurrentUTCDate();
-  // console.log(date);
+  } = useForm<User>({
+    values: user || {} as User,
+    resolver: zodResolver(editProfileSchema)
+  });
 
   const [editProfile] = useEditProfilev2Mutation();
+
+  console.log(userName);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const result = await editProfile({
@@ -43,7 +36,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         personalWebSite: data.personalWebSite,
         workPlace: data.workPlace,
       },
-      id: id,
+      id: 232,//TODO implement userName fetch
     });
     console.log("Edit profile result, ", result);
   };
@@ -55,7 +48,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   };
 
   return (
-    <AuthGuard>
       <div className="grid grid-cols-12">
         <div className="col-span-3">
           <Navbar></Navbar>
@@ -85,11 +77,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.fullname ? "border-red-500" : ""}`}
                 type="text"
                 placeholder="Enter a fullname"
-                {...register("fullname")}
+                {...register("fullName")}
               />
-              {errors.fullname && (
+              {errors.fullName && (
                 <p className="text-red-500 text-xs italic">
-                  {errors.fullname?.message}
+                  {errors.fullName?.message}
                 </p>
               )}
             </div>
@@ -200,7 +192,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           </form>
         </main>
       </div>
-    </AuthGuard>
   );
 };
 

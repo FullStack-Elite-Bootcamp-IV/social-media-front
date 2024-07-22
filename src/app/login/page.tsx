@@ -1,24 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAuth } from "@/context/authContext";
-import Cookies from "js-cookie";
+import { useUser } from "@/context/UserContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/validations/loginSchema";
 import { z } from "zod";
 import Link from "next/link";
 
-import { useLoginMutation } from "@/redux/services/authApi";
+import { useLoginMutation } from "@/store/services/authApi";
 
 import { useRouter } from 'next/navigation';
+import {useEffect} from "react";
+import {toast} from "sonner";
 
 // The type of the form inputs is inferred from the schema
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
   
-  const { loginToken, login } = useAuth();
+  const { setUser  } = useUser();
   const router = useRouter();
 
   // useForm hook with zodResolver to validate the form
@@ -29,35 +29,21 @@ const Login = () => {
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
   });
-
-  useEffect(() => {
-    const token = Cookies.get("token");
-    if (token) {
-      const decodeToken = JSON.parse(token);
-      console.log(decodeToken);
-    } else {
-      //console.log("No hay cookie");
-    }
-  }, []);
-
-
-
   
   // Llama al hook aquí
-  const [loginn, { isLoading, error, isSuccess }] = useLoginMutation();
+  const [login, { isLoading, error, isSuccess, data }] = useLoginMutation();
 
-  // Función de manejo del envío del formulario
-  const onSubmit = async (data: LoginFormInputs) => {
-    try {
-      // Llama a la mutación de login
-      const result = await loginn(data).unwrap(); // `unwrap` maneja la promesa para obtener los datos directamente
-      let { accessToken } = result;
-      localStorage.setItem("token", accessToken);
-      console.log('Login successful:', result);
-      router.push("/homepage");
-    } catch (err) {
-      console.error('Failed to login:', err);
+  useEffect(() => {
+    if (isSuccess) {
+      setUser(data.user);
+      toast.success("Has iniciado sesión");
+      return router.push("/homepage");
     }
+
+  }, [isSuccess, router, data, setUser]);
+  // Función de manejo del envío del formulario
+  const onSubmit = (data: LoginFormInputs) => {
+    login(data);
   };
 
   return (

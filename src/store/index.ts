@@ -13,7 +13,7 @@ import { commentsApi } from './services/commentsApi';
 
 
 // Configura el store
-const store = configureStore({
+const index = configureStore({
   reducer: {
     [usersApi.reducerPath]: usersApi.reducer,
     [authApi.reducerPath]: authApi.reducer,
@@ -42,4 +42,4 @@ const store = configureStore({
 });
 
 // Exporta el store para usar en tu aplicación
-export default store;
+export default index;

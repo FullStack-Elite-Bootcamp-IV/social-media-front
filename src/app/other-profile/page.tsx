@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useAuth } from "../../context/authContext";
+import { useAuth } from "../../context/UserContext";
 import Navbar from "@/components/navbar/Navbar";
 
 const Profile = () => {
