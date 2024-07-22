@@ -54,10 +54,13 @@ export const postsApi = createApi({
         return {
           url: '/upload',
           method: 'POST',
-          body: formData,
+          body: formData,    
         };
       },
     }),
+    getAllPublicsPosts: builder.query({
+      query: () => `/posts`, 
+    }),  
   }),
 });
 
@@ -69,5 +72,6 @@ export const {
   useUnlikePostMutation,
   useGetPostsByUserQuery,
   useGetVisiblePostsByUserQuery,
-  useUploadImageMutation
+  useUploadImageMutation,
+  useGetAllPublicsPostsQuery,
 } = postsApi;

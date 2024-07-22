@@ -47,6 +47,13 @@ export const usersApi = createApi ({
         method: 'DELETE',
       }),
     }),
+
+    getUserWithPostsByUserName: builder.query({
+      query: (userName) => ({
+        url: `/users/profile-info/${userName}`,
+      }),
+    
+    }),
   })
 });
 
@@ -57,4 +64,5 @@ export const {
   useRegisterMutation,
   useEditProfileMutation,
   useDeleteUserMutation,
+  useGetUserWithPostsByUserNameQuery
 } = usersApi;
