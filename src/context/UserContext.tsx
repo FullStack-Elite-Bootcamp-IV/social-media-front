@@ -32,7 +32,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         if (isSuccess) {
             setUser({ ...user, darkMode: newTheme } as User);
             document.body.classList.remove('light', 'dark');
-            document.body.classList.add(newTheme ? 'dark' : 'light');
+            document.body.classList.add(!newTheme ? 'dark' : 'light');
         }
         if (data) {
             setUser(data);
@@ -42,7 +42,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
         document.body.classList.remove('light', 'dark');
         document.body.classList.add(user?.darkMode ? 'dark' : 'light');
-    }, [data, error, router, isLoading, setLoading, setUser, isChangingTheme, user, newTheme,]);
+    }, [data, error, router, isLoading, setLoading, setUser, isChangingTheme, user, newTheme, isSuccess]);
 
     const toggleTheme = () => {
         if (user) {
