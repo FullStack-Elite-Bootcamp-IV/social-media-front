@@ -6,11 +6,15 @@ import { editProfileSchema } from "@/validations/editProfileSchema";
 import { useEditProfilev2Mutation } from "@/store/services/editApi";
 import {useUser} from "@/context/UserContext";
 import { User } from "@/types/user";
+import { useEffect } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const Page = ({ params: userName }: { params: { userName: string } }) => {
   console.log(userName);
 
   const { user } = useUser();
+  const router = useRouter();
 
   const {
     register,
@@ -22,9 +26,16 @@ const Page = ({ params: userName }: { params: { userName: string } }) => {
     resolver: zodResolver(editProfileSchema)
   });
 
-  const [editProfile] = useEditProfilev2Mutation();
+  const [editProfile, { isSuccess}] = useEditProfilev2Mutation();
 
   console.log(userName);
+
+  useEffect(() => {
+    if(isSuccess) {
+      toast.success("Profile updated successfully");
+      router.push('/homepage');
+    }
+  }, [isSuccess]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const result = await editProfile({
@@ -36,7 +47,7 @@ const Page = ({ params: userName }: { params: { userName: string } }) => {
         personalWebSite: data.personalWebSite,
         workPlace: data.workPlace,
       },
-      id: 232,//TODO implement userName fetch
+      id: user?.userId,
     });
     console.log("Edit profile result, ", result);
   };

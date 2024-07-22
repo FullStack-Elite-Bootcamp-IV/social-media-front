@@ -16,7 +16,7 @@ export function Providers({children}: Props) {
     <Provider store={store}>
       <UserProvider>
         <PrivateRoute>
-          <Toaster richColors/>
+          <Toaster richColors position="top-right"/>
           {children}
         </PrivateRoute>
       </UserProvider>
