@@ -252,7 +252,7 @@ const Profile = () => {
                 <p className="font-semibold text-gray-400">Genre</p>
                 <p>{datos[id].genre}</p>
               </div>
-            </div>
+            </div>  
           </section>
 
           <section className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
