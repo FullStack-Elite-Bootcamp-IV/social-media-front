@@ -267,7 +267,7 @@ const Profile = () => {
             </div>  
           </section>
 
-          <section className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+          <section className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
             {posts.map((post, index) => (
               <div key={index} className="bg-gray-800 rounded-lg shadow-lg p-4">
                 <Post
