@@ -39,14 +39,11 @@ export default function SettingsForm() {
 
   const onSubmit = async (data: SettingsFormInputs) => {
     console.log(data);
-    console.log("Entro aqui");
     const result = await editProfile({
-      body: {
-        userName: data.username,
-        password: data.password,
-      },
+      body: data,
       id: id,
     });
+    console.log(result);
   };
 
   return (
@@ -73,11 +70,11 @@ export default function SettingsForm() {
                 type="text"
                 id="username"
                 placeholder="Enter your username"
-                {...register("username", { required: false })}
+                {...register("userName", { required: false })}
               />
-              {errors.username && (
+              {errors.userName && (
                 <span className="text-red-500 text-sm">
-                  {errors.username.message}
+                  {errors.userName.message}
                 </span>
               )}
             </div>
@@ -90,7 +87,7 @@ export default function SettingsForm() {
                 type="password"
                 id="password"
                 placeholder="Enter your password"
-                {...register("password",{ required: false })}
+                {...register("password", { required: false })}
               />
               {errors.password && (
                 <span className="text-red-500 text-sm">
