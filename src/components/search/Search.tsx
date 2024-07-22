@@ -1,14 +1,35 @@
 'use client'
 
-import React, { useState, FormEvent } from 'react';
-
+import React, { useState, useEffect, FormEvent } from 'react';
+import { useSearchPostsQuery, useSearchUsersQuery } from '@/redux/services/search';
 const SearchBar = () => {
     const [searchParameter, setSearchParameter] = useState('');
     const [filter, setFilter] = useState('people');
     const [results, setResults] = useState([]);
+    const [token, setToken] = useState('');
 
-    const handleSearch = async (event: FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            setToken(token);
+        }
+    }, []);
+
+    const { data: usersData, error: usersError } = useSearchUsersQuery(searchParameter, {
+        skip: filter !== 'people' || !token,
+    });
+
+    const { data: postsData, error: postsError } = useSearchPostsQuery(searchParameter, {
+        skip: filter !== 'posts' || !token,
+    });
+
+    const handleSearch = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
+        if (!token) {
+            console.error('No token available');
+            return;
+        }
 
         const cacheKey = `${searchParameter}_${filter}`;
         const cachedResults = localStorage.getItem(cacheKey);
@@ -19,31 +40,27 @@ const SearchBar = () => {
             return;
         }
 
-        const requestBody = JSON.stringify({
-            filter: filter,
-            searchParameter: searchParameter
-        });
-        console.log('Request Body:', requestBody);
+        if (filter === 'people' && usersData) {
+            const filteredUsers = usersData.map((user) => ({
+                age: user.age,
+                fullName: user.fullName,
+                profileImage: user.profileImage,
+                userName: user.userName,
+                location: user.location,
+            }));
+            localStorage.setItem(cacheKey, JSON.stringify(filteredUsers));
+            setResults(filteredUsers);
+        } else if (filter === 'posts' && postsData) {
+            localStorage.setItem(cacheKey, JSON.stringify(postsData));
+            setResults(postsData);
+        }
 
-        try {
-            const response = await fetch('/api/search', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: requestBody
-            });
-
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }
-
-            const data = await response.json();
-            localStorage.setItem(cacheKey, JSON.stringify(data));
-            console.log('Resultados desde la API:', data);
-            setResults(data);
-        } catch (error) {
-            console.error('Error al realizar la búsqueda:', error);
+        if (usersError) {
+            console.error('Error fetching users:', usersError);
+        }
+        
+        if (postsError) {
+            console.error('Error fetching posts:', postsError);
         }
     };
 
@@ -75,6 +92,37 @@ const SearchBar = () => {
                     </form>
                 </div>
             </div>
+            <SearchUser results={results} />
+        </div>
+    );
+};
+
+const SearchUser = ({ results }) => {
+    const defaultProfileImage = 'https://www.example.com/default-profile.png'; // Reemplaza con la URL de la imagen por defecto
+
+    return (
+        <div className="mt-4">
+            {results && results.length > 0 ? (
+                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {results.map((result, index) => (
+                        <li key={index} className="border border-dustyGray rounded-lg p-4 shadow-md flex flex-col items-center text-center">
+                            <img 
+                                src={result.profileImage || defaultProfileImage} 
+                                alt={result.userName} 
+                                className="w-24 h-24 rounded-full object-cover mb-4" 
+                            />
+                            <div>
+                                <p className="font-bold text-lg">{result.fullName}</p>
+                                <p className="text-gray-500">@{result.userName}</p>
+                                <p className="text-gray-500">Age: {result.age}</p>
+                                <p className="text-gray-500">Location: {result.location || 'Unknown'}</p>
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            ) : (
+                <p>No hay resultados</p>
+            )}
         </div>
     );
 };
