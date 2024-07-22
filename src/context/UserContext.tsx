@@ -47,7 +47,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const toggleTheme = () => {
         if (user) {
             setNewTheme(!user.darkMode as boolean);
-            setChangingTheme(true);
             setDarkMode({ id: user.userId });
         }
     };
