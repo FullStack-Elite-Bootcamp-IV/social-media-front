@@ -17,6 +17,7 @@ interface PostData {
   updateDate: Date;
   comments: number;
   favorites: number;
+  postId: string;
 }
 
 const Profile = () => {
@@ -62,6 +63,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 5,
       favorites: 10,
+      postId: "1",
     },
     {
       userid: "DANIEL-1",
@@ -73,6 +75,7 @@ const Profile = () => {
       updateDate: new Date("2023-03-23"),
       comments: 3,
       favorites: 8,
+      postId: "2",
     },
     {
       userid: "AnnaB",
@@ -84,6 +87,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 12,
       favorites: 22,
+      postId: "3",
     },
     {
       userid: "TravelGuru",
@@ -96,6 +100,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 30,
       favorites: 50,
+      postId: "4",
     },
     {
       userid: "NatureLover",
@@ -107,6 +112,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 20,
       favorites: 35,
+      postId: "5",
     },
     {
       userid: "FoodieFan",
@@ -119,6 +125,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 25,
       favorites: 40,
+      postId: "6",
     },
     {
       userid: "TechGuy",
@@ -131,6 +138,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 15,
       favorites: 45,
+      postId: "7",
     },
     {
       userid: "ArtFanatic",
@@ -143,6 +151,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 18,
       favorites: 30,
+      postId: "8",
     },
     {
       userid: "SportsEnthusiast",
@@ -154,6 +163,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 40,
       favorites: 60,
+      postId: "9",
     },
     {
       userid: "FitnessFreak",
@@ -166,6 +176,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 22,
       favorites: 33,
+      postId: "10",
     },
     {
       userid: "PhotographerJoe",
@@ -177,6 +188,7 @@ const Profile = () => {
       updateDate: new Date(),
       comments: 10,
       favorites: 20,
+      postId: "11",
     },
   ];
 
@@ -255,7 +267,7 @@ const Profile = () => {
             </div>  
           </section>
 
-          <section className="grid lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+          <section className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
             {posts.map((post, index) => (
               <div key={index} className="bg-gray-800 rounded-lg shadow-lg p-4">
                 <Post
@@ -267,6 +279,7 @@ const Profile = () => {
                   updateDate={post.updateDate}
                   comments={post.comments}
                   favorites={post.favorites}
+                  postId={post.postId}
                 />
               </div>
             ))}
