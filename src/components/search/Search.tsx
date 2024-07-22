@@ -12,11 +12,11 @@ const SearchBar = () => {
     const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
 
     const { data: usersData, error: usersError } = useSearchUsersQuery(searchParameter, {
-        skip: filter !== 'people' || !token,
+        skip: filter !== 'people',
     });
 
     const { data: postsData, error: postsError } = useSearchPostsQuery(searchParameter, {
-        skip: filter !== 'posts' || !token,
+        skip: filter !== 'posts',
     });
 
     const handleSearch = (event: FormEvent<HTMLFormElement>) => {
