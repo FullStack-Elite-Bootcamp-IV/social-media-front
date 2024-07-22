@@ -18,14 +18,23 @@ interface MyJwtPayload {
 export default function SettingsForm() {
   const { darkMode, handleDarkMode } = useAuth();
 
-  const setHandleDarkMode = () => {
-    handleDarkMode();
-  };
-
+  
   const token = localStorage.getItem("token");
   const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null;
-
+  
   const id = decodedToken?.id;
+  
+  const setHandleDarkMode = async () => {
+    handleDarkMode();
+    const result = await editProfile({
+      body: {
+        darkMode: darkMode,
+      },
+      id: id,
+    });
+    console.log(result);
+  };
+
 
   const {
     register,
@@ -39,8 +48,13 @@ export default function SettingsForm() {
 
   const onSubmit = async (data: SettingsFormInputs) => {
     console.log(data);
+    console.log("dark",darkMode);
     const result = await editProfile({
-      body: data,
+      body: {
+        userName: data.userName,
+        password: data.password,
+        darkMode: darkMode,
+      },
       id: id,
     });
     console.log(result);

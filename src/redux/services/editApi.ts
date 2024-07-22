@@ -25,11 +25,6 @@ export const editProfileApi = createApi({
                 body,
             }),
         }),
-        getUserInfo: builder.query({
-            query: (id) => ({
-                url: `/api/users/by-id/${id}`,
-            }),
-        }),
         
     }),
 });

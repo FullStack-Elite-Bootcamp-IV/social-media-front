@@ -96,7 +96,7 @@ const Page = () => {
                 className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.fullname ? "border-red-500" : ""}`}
                 type="text"
                 placeholder="Enter a fullname"
-                {...register("fullname")}
+                {...register("fullname",{ required: false })}
               />
               {errors.fullname && (
                 <p className="text-red-500 text-xs italic">

@@ -239,7 +239,7 @@ const Profile = () => {
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <Link href={`/profile/${idUser}/edit`}>
+            <Link href={`/profile/1/edit`}>
               <button className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600">
                 <FaPencilAlt className="mr-2" /> Edit profile
               </button>
