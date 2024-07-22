@@ -48,6 +48,17 @@ export const postsApi = createApi({
     getVisiblePostsByUser: builder.query({
       query: (userId) => `/posts/user/${userId}/visible`,
     }),
+    uploadImage: builder.mutation({
+      query: (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        return {
+          url: '/upload',
+          method: 'POST',
+          body: formData,
+        };
+      },
+    }),
   }),
 });
 
@@ -59,4 +70,5 @@ export const {
   useUnlikePostMutation,
   useGetPostsByUserQuery,
   useGetVisiblePostsByUserQuery,
+  useUploadImageMutation
 } = postsApi;

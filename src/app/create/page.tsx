@@ -5,30 +5,56 @@ import Navbar from "../../components/navbar/Navbar";
 import React from 'react';
 import { z } from 'zod';
 import { postSchema } from "@/validations/createPostSchema";
-import {useCreatePostMutation} from "@/store/services/postsApi";
+import {useCreatePostMutation, useUploadImageMutation} from "@/store/services/postsApi";
+import { useUser } from "@/context/UserContext";
 
 const CreatePost = () => {
   const [description, setDescription] = useState('');
+  const [title, setTitle] = useState('');
   const [media, setMedia] = useState<File | null>(null);
   const [isPublic, setIsPublic] = useState(true);
   const [errors, setErrors] = useState<any>({}); // Para almacenar los errores de validación
+  const [id, setId] = useState("")
 
   const [createPost, { isLoading, error, isSuccess }] = useCreatePostMutation();
+  const [uploadImage, { isLoading: isUploading, error: uploadError, isSuccess: isUploadSuccess }] = useUploadImageMutation();
+
+  const user = useUser();
 
   const handlePost = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const date = new Date();
 
+    console.log("user:", user);
+    console.log("media:", media);
+
+    let imageUrl = '';
+
+    if (media) {
+      try {
+        const response = await uploadImage(media).unwrap();
+        imageUrl = response.imageUrl;
+        console.log('Image URL:', imageUrl);
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+        return; // Salir si la subida de la imagen falla
+      }
+    }
+
     const result = await createPost({
-      "description": description,
-      "isPublic": isPublic,
-      "userId":`${id}` 
+      title,
+      description,
+      isPublic,
+      userId: user.user?.userId,
+      media: imageUrl,
     });
-    console.log(result);
+
+    console.log(result)
     
     try {
       postSchema.parse({
+        title,
         description,
         media,
         isPublic,
@@ -58,6 +84,16 @@ const CreatePost = () => {
           <h1 className="text-4xl text-darkVoid dark:text-blancoHueso">CREATE A POST</h1>
           
           <div className="mb-4">
+          <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2">
+              Title
+            </label>
+            <textarea
+              id="title"
+              placeholder="Enter a title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={`shadow appearance-none rounded w-full py-2 px-3 text-darkVoid bg-lightGray leading-tight focus:outline-none focus:shadow-outline placeholder-darkVoid ${errors.title ? 'border-red-500' : ''}`}
+            />
             <label className="block text-darkVoid dark:text-blancoHueso text-sm font-bold mb-2">
               Description
             </label>
