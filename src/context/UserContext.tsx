@@ -1,7 +1,7 @@
 import {createContext, useContext, useEffect, useState, ReactNode, useRef} from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetCurrentUserQuery, useSetDarkModeMutation } from '@/store/services/authApi';
-import { User } from '@/types/user';
+import { User, UserWithToken } from '@/types/user';
 import {toast} from "sonner";
 
 interface UserContextProps {
@@ -15,7 +15,7 @@ interface UserContextProps {
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserWithToken | null>(null);
     const [loading, setLoading] = useState(true);
     const [newTheme, setNewTheme] = useState<boolean>(user?.darkMode || false);
     const userRef = useRef({
@@ -26,11 +26,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const router = useRouter();
 
     useEffect(() => {
+            console.log({data})
         if (isChangingTheme) {
             toast.loading('Changing theme...');
         }
         if (isSuccess) {
-            setUser({ ...user, darkMode: newTheme } as User);
+            setUser({ ...user, darkMode: newTheme } as UserWithToken);
             document.body.classList.remove('light', 'dark');
             document.body.classList.add(!newTheme ? 'dark' : 'light');
         }

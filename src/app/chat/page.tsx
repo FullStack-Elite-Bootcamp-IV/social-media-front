@@ -3,8 +3,8 @@
 import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import { redirect, useSearchParams } from "next/navigation";
-import { useFollowersMutation } from "@/redux/services/followersApi";
 import Messages from "@/components/chat/Messages";
+import { useUser } from "@/context/UserContext";
 
 interface Message {
     message: string;
@@ -18,7 +18,7 @@ function useChatSocket(chatId: string | null, setMessages: React.Dispatch<React.
     useEffect(() => {
         if (typeof window === 'undefined' || !chatId) return;
         console.log(localStorage.getItem('loginToken'));
-        socket = io('https://8c81mq74-5002.use2.devtunnels.ms/chat', {
+        socket = io('http://localhost:5002/chat', {
             auth: { token: localStorage.getItem('loginToken') },
         });
 
@@ -38,21 +38,9 @@ function useChatSocket(chatId: string | null, setMessages: React.Dispatch<React.
     }, [chatId, setMessages]);
 }
 
-function FollowButton({ userId, followId }) {
-    const [follow] = useFollowersMutation();
-    return (
-        <button
-            onClick={() => follow({ userId, followId })}
-            className="bg-liquidLava text-blancoHueso rounded-xl px-4 py-2"
-        >
-            Follow
-        </button>
-    );
-
-}
 
 export default function Chat() {
-    const chatId = useSearchParams().get('chatId');
+    const chatId = useSearchParams()?.get('chatId');
     if (!chatId) return redirect('/homepage');
     const [messages, setMessages] = useState<Message[]>([]);
 
@@ -78,7 +66,6 @@ export default function Chat() {
                     <button className="px-4 bg-liquidLava rounded-e-xl ring-1 ring-white text-blancoHueso">Send</button>
                 </form>
             </div>
-            <FollowButton userId="b8ce0d5f-e9df-4b9a-93fb-5189a27d664e" followId="b8387f27-8aa4-49ad-9562-bcc606612df2" />
         </main>
     );
 }
