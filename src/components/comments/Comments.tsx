@@ -1,35 +1,51 @@
-import { useState } from "react";
-import { useGetCommentsByPostIdQuery, useAddComentMutation, useUpdateCommentMutation, useDeleteCommentMutation, } from "@/redux/services/commentsApi";
+import { useState, useEffect } from "react";
+import {
+  useGetCommentsByPostIdQuery,
+  useAddComentMutation,
+  useUpdateCommentMutation,
+  useDeleteCommentMutation,
+} from "@/redux/services/commentsApi";
 import CommentIcon from "@/icons/CommentIcon";
 import Comment from "./Comment";
 import HeartIcon from "@/icons/HeartIcon";
 import UserCircleIcon from "@/icons/UserCircleIcon";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 interface MyJwtPayload {
   id: string;
 }
 
-const token = localStorage.getItem('token');
-const decodedToken = token ? jwtDecode<MyJwtPayload>(token) : null; 
-
-const id = decodedToken?.id;
-
 const Comments = ({ postId }: { postId: string }) => {
-  
-
   const [newComment, setNewComment] = useState("");
-  const { data: comments, error, isLoading } = useGetCommentsByPostIdQuery(postId);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode<MyJwtPayload>(token);
+        setUserId(decodedToken.id);
+      } catch (error) {
+        console.error("Failed to decode token", error);
+      }
+    }
+  }, []);
+
+  const { data: comments, error, isLoading, isError } = useGetCommentsByPostIdQuery(postId);
   const [addComment] = useAddComentMutation();
   const [updateComment] = useUpdateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
 
   const handleAddComment = async () => {
     try {
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+
       await addComment({
         postId,
         body: {
-          userId: id,
+          userId,
           content: newComment,
         },
       }).unwrap();
@@ -37,7 +53,7 @@ const Comments = ({ postId }: { postId: string }) => {
     } catch (error) {
       console.error("Failed to add comment", error);
     }
-  }
+  };
 
   const handleDeleteComment = async (commentId: string) => {
     try {
@@ -63,9 +79,10 @@ const Comments = ({ postId }: { postId: string }) => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error loading comments</div>;
-  }
+  // if (isError) {
+  //   console.error("Error loading comments:", error);
+  //   return <div>Error loading comments</div>;
+  // }
 
   return (
     <section className="flex items-center justify-center py-10">
@@ -83,14 +100,18 @@ const Comments = ({ postId }: { postId: string }) => {
             </div>
             <div className="w-full h-[1px] bg-gray-70" />
             <div className="space-y-2 p-2">
-              {comments.map((comment: { id: string, userId: string, content: string, date: string }) => (
-                <Comment
-                  key={comment.id}
-                  comment={comment}
-                  onDelete={() => handleDeleteComment(comment.id)}
-                  onEdit={(updatedContent: string) => handleEditComment(comment.id, updatedContent)}
-                />
-              ))}
+              {comments && comments.length > 0 ? (
+                comments.map((comment: { id: string, userId: string, content: string, date: string }) => (
+                  <Comment
+                    key={comment.id}
+                    comment={comment}
+                    onDelete={() => handleDeleteComment(comment.id)}
+                    onEdit={(updatedContent: string) => handleEditComment(comment.id, updatedContent)}
+                  />
+                ))
+              ) : (
+                <div>No comments yet. Be the first to comment!</div>
+              )}
             </div>
           </div>
 
@@ -114,7 +135,7 @@ const Comments = ({ postId }: { postId: string }) => {
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-              <button onClick={handleAddComment} className="mt-2 bg-blue-500 text-white p-2 rounded">Add Comment</button>
+              <button onClick={handleAddComment} className="mt-2 bg-liquidLava text-white p-2 rounded">Add Comment</button>
             </div>
           </div>
         </div>
