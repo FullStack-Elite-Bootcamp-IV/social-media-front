@@ -230,7 +230,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                   onClick={openFollowedList}
                   className="text-blue-400 hover:text-blue-300"
                 >
-                  followers
+                  seguidores
                 </button>
                 {isOpenFollowed && <UserList title="Followers List" />}
               </div>
@@ -240,28 +240,28 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                   onClick={openFollowersList}
                   className="text-blue-400 hover:text-blue-300"
                 >
-                  followed
+                  seguidos
                 </button>
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <Link href={`/profile/${user?.userName}/edit`} className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200">
-              <FaPencilAlt className="mr-2" /> Edit profile
+            <Link href={`/profile/${user?.userName}/edit`} className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-liquidLava text-white rounded-md hover:bg-purple-800 transition duration-200">
+              <FaPencilAlt className="mr-2" /> Editar perfil
             </Link>
           </div>
 
           <section className="text-white mb-8">
             <div className="flex flex-col sm:flex-row sm:justify-around text-base sm:text-lg">
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold text-gray-400">Name</p>
+                <p className="font-semibold text-gray-400">Nombre</p>
                 <p>{datos[id].name}</p>
               </div>
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold text-gray-400">Age</p>
+                <p className="font-semibold text-gray-400">Edad</p>
                 <p>{datos[id].age}</p>
               </div>
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold text-gray-400">Genre</p>
+                <p className="font-semibold text-gray-400">Género</p>
                 <p>{datos[id].genre}</p>
               </div>
             </div>  
