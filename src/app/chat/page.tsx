@@ -5,6 +5,7 @@ import { io, Socket } from "socket.io-client";
 import { redirect, useSearchParams } from "next/navigation";
 import Messages from "@/components/chat/Messages";
 import { useUser } from "@/context/UserContext";
+import Navbar from "@/components/navbar/Navbar";
 
 interface Message {
     message: string;
@@ -18,7 +19,7 @@ function useChatSocket(chatId: string | null, setMessages: React.Dispatch<React.
     useEffect(() => {
         if (typeof window === 'undefined' || !chatId) return;
         console.log(localStorage.getItem('loginToken'));
-        socket = io('http://localhost:5002/chat', {
+        socket = io('https://dwhj9dsl-5002.use2.devtunnels.ms/chat', {
             auth: { token: localStorage.getItem('loginToken') },
         });
 
@@ -58,14 +59,17 @@ export default function Chat() {
     }, [chatId, socket]);
 
     return (
-        <main className="flex justify-center items-end w-dvw h-dvh bg-purple-50 dark:bg-darkVoid py-4">
-            <div className="w-full max-w-2xl px-4 md:px-0">
-                <Messages messages={messages} chatId={chatId}/>
-                <form onSubmit={handleSubmit} className="flex">
-                    <input type="text" name="message" className="p-2 rounded-s-xl ring-1 ring-white flex-grow     bg-darkVoid text-blancoHueso placeholder:text-blancoHueso focus:outline-none" />
-                    <button className="px-4 bg-liquidLava rounded-e-xl ring-1 ring-white text-blancoHueso">Send</button>
-                </form>
-            </div>
-        </main>
+        <>
+            <Navbar />
+            <main className="flex justify-center items-end h-dvh bg-purple-50 dark:bg-darkVoid py-4 md:ml-64">
+                <div className="w-full max-w-2xl px-4 md:px-0">
+                    <Messages messages={messages} chatId={chatId}/>
+                    <form onSubmit={handleSubmit} className="flex px-4">
+                        <input type="text" name="message" className="p-2 rounded-s-xl ring-1 ring-white flex-grow     bg-darkVoid text-blancoHueso placeholder:text-blancoHueso focus:outline-none" />
+                        <button className="px-4 bg-liquidLava rounded-e-xl ring-1 ring-white text-blancoHueso">Send</button>
+                    </form>
+                </div>
+            </main>
+        </>
     );
 }

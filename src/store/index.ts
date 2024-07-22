@@ -11,6 +11,7 @@ import { followersApi } from './services/followersApi';
 import { editProfileApi } from './services/editApi';
 import { commentsApi } from './services/commentsApi';
 import { socialMediaApi } from './services/search';
+import { chatApi } from './services/chatApi';
 
 const index = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ const index = configureStore({
     [editProfileApi.reducerPath]: editProfileApi.reducer,
     [commentsApi.reducerPath]: commentsApi.reducer,
     [socialMediaApi.reducerPath]: socialMediaApi.reducer,
+    [chatApi.reducerPath]: chatApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -38,8 +40,8 @@ const index = configureStore({
       .concat(followersApi.middleware)
       .concat(editProfileApi.middleware)
       .concat(commentsApi.middleware)
-      .concat(socialMediaApi.middleware),
-
+      .concat(socialMediaApi.middleware)
+      .concat(chatApi.middleware)
 });
 
 export default index;
