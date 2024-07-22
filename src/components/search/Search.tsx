@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, FormEvent } from 'react';
-import { useSearchPostsQuery, useSearchUsersQuery } from '@/redux/services/search';
+import { useSearchPostsQuery, useSearchUsersQuery } from '@/store/services/search';
 
 const ITEMS_PER_PAGE = 6; // Número de elementos por página
 
@@ -9,15 +9,7 @@ const SearchBar = () => {
     const [searchParameter, setSearchParameter] = useState('');
     const [filter, setFilter] = useState('people');
     const [results, setResults] = useState([]);
-    const [token, setToken] = useState('');
     const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
-
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            setToken(token);
-        }
-    }, []);
 
     const { data: usersData, error: usersError } = useSearchUsersQuery(searchParameter, {
         skip: filter !== 'people' || !token,

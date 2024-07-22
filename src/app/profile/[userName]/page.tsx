@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
@@ -26,7 +26,8 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const [isOpenFollowers, setIsOpenFollowers] = useState(false);
   const [isOpenFollowed, setIsOpenFollowed] = useState(false);
 
-  const { user } =useUser();
+  const { user, setLoading } = useUser();
+
 
   const openFollowersList = () => {
     setIsOpenFollowers(!isOpenFollowers);

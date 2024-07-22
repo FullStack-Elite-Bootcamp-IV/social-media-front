@@ -9,6 +9,7 @@ interface UserContextProps {
     setUser: (user: User) => void;
     toggleTheme: () => void;
     loading: boolean;
+    setLoading: (loading: boolean) => void;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -52,7 +53,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-      <UserContext.Provider value={{ user, setUser, toggleTheme, loading }}>
+      <UserContext.Provider value={{ user, setUser, toggleTheme, loading, setLoading }}>
           {children}
       </UserContext.Provider>
     );
