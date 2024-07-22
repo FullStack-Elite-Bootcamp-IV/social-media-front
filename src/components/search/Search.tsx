@@ -3,14 +3,14 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import { useSearchPostsQuery, useSearchUsersQuery } from '@/redux/services/search';
 
-const ITEMS_PER_PAGE = 6; 
+const ITEMS_PER_PAGE = 6; // Número de elementos por página
 
 const SearchBar = () => {
     const [searchParameter, setSearchParameter] = useState('');
     const [filter, setFilter] = useState('people');
     const [results, setResults] = useState([]);
     const [token, setToken] = useState('');
-    const [currentPage, setCurrentPage] = useState(1); 
+    const [currentPage, setCurrentPage] = useState(1); // Estado para la página actual
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -67,11 +67,13 @@ const SearchBar = () => {
             console.error('Error fetching posts:', postsError);
         }
 
-        setCurrentPage(1); 
+        setCurrentPage(1); // Reiniciar a la primera página al realizar una nueva búsqueda
     };
 
+    // Calcular el número de páginas
     const totalPages = Math.ceil(results.length / ITEMS_PER_PAGE);
 
+    // Obtener los resultados de la página actual
     const currentResults = results.slice(
         (currentPage - 1) * ITEMS_PER_PAGE,
         currentPage * ITEMS_PER_PAGE
@@ -80,7 +82,7 @@ const SearchBar = () => {
     return (
         <div className="w-full p-4">
             <div className="flex justify-center w-full">
-                <div className="flex items-center w-full max-w-screen-lg bg-blancoHueso border border-dustyGray rounded-full p-2 shadow-md">
+                <div className="flex items-center w-full max-w-screen-lg bg-white border border-gray-300 rounded-full p-2 shadow-md">
                     <form onSubmit={handleSearch} className="flex items-center w-full">
                         <select
                             value={filter}
@@ -105,54 +107,56 @@ const SearchBar = () => {
                     </form>
                 </div>
             </div>
-            <SearchUser results={currentResults} />
-            <div className="flex justify-center mt-4 items-center text-black">
-                <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="mx-2 px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    Anterior
-                </button>
-                <span className="mx-2">{currentPage} de {totalPages}</span>
-                <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="mx-2 px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    Siguiente
-                </button>
-            </div>
+            <SearchUser results={currentResults} totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </div>
     );
 };
 
-const SearchUser = ({ results }) => {
-    const defaultProfileImage = 'https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain';
+const SearchUser = ({ results, totalPages, currentPage, setCurrentPage }) => {
+    const defaultProfileImage = 'https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain'; 
 
     return (
-        <div className="mt-4 max-h-96 overflow-y-auto">
-            {results && results.length > 0 ? (
-                <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
-                    {results.map((result, index) => (
-                        <li key={index} className="border border-dustyGray rounded-lg p-4 shadow-md flex flex-col items-center text-center">
-                            <img
-                                src={result.profileImage || defaultProfileImage}
-                                alt={result.userName}
-                                className="w-24 h-24 rounded-full object-cover mb-4"
-                            />
-                            <div>
-                                <p className="font-bold text-lg">{result.fullName}</p>
-                                <p className="text-gray-500">@{result.userName}</p>
-                                <p className="text-gray-500">Age: {result.age}</p>
-                                <p className="text-gray-500">Location: {result.location || 'Unknown'}</p>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No hay resultados</p>
-            )}
+        <div className="mt-4 flex flex-col justify-between max-h-96 overflow-y-auto">
+            <div>
+                {results && results.length > 0 ? (
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
+                        {results.map((result, index) => (
+                            <li key={index} className="border border-gray-300 rounded-lg p-4 shadow-md flex flex-col items-center text-center">
+                                <img 
+                                    src={result.profileImage || defaultProfileImage} 
+                                    alt={result.userName} 
+                                    className="w-24 h-24 rounded-full object-cover mb-4" 
+                                />
+                                <div>
+                                    <p className="font-bold text-lg">{result.fullName}</p>
+                                    <p className="text-gray-500">@{result.userName}</p>
+                                    <p className="text-gray-500">Age: {result.age}</p>
+                                    <p className="text-gray-500">Location: {result.location || 'Unknown'}</p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No hay resultados</p>
+                )}
+            </div>
+            <div className="flex justify-center mt-4 items-center text-black space-x-2">
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Anterior
+                </button>
+                <span className="text-sm">{currentPage} de {totalPages}</span>
+                <button
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage === totalPages}
+                    className="px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    Siguiente
+                </button>
+            </div>
         </div>
     );
 };
