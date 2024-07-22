@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Comments from '../comments/Comments';
-import { useAuth } from '@/context/UserContext';
 import { useDeleteFavouriteMutation, useAddFavouriteMutation } from '@/store/services/favouritesApi';
 import { useCreateLikeMutation, useDeleteLikeMutation } from '@/store/services/likesApi';
 
@@ -11,7 +10,7 @@ interface PostProps {
   title: string;
   description: string;
   likes: number;
-  updateDate: string; // Changed to string for the input prop
+  updateDate: string;
   media: string;
   comments: number;
   favorites: number;
