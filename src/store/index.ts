@@ -10,9 +10,8 @@ import { notificationsApi } from './services/notificationsApi';
 import { followersApi } from './services/followersApi';
 import { editProfileApi } from './services/editApi';
 import { commentsApi } from './services/commentsApi';
+import { socialMediaApi } from './services/search';
 
-
-// Configura el store
 const index = configureStore({
   reducer: {
     [usersApi.reducerPath]: usersApi.reducer,
@@ -24,7 +23,8 @@ const index = configureStore({
     [notificationsApi.reducerPath]: notificationsApi.reducer,
     [followersApi.reducerPath]: followersApi.reducer,
     [editProfileApi.reducerPath]: editProfileApi.reducer,
-    [commentsApi.reducerPath]: commentsApi.reducer
+    [commentsApi.reducerPath]: commentsApi.reducer,
+    [socialMediaApi.reducerPath]: socialMediaApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
@@ -38,8 +38,8 @@ const index = configureStore({
       .concat(followersApi.middleware)
       .concat(editProfileApi.middleware)
       .concat(commentsApi.middleware)
-      
+      .concat(socialMediaApi.middleware),
+
 });
 
-// Exporta el store para usar en tu aplicación
 export default index;
