@@ -13,11 +13,13 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/store/services/authApi";
 import { useUser } from "@/context/UserContext";
+import Chats from "../chat/Chats";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
   const [isNotifModalOpen, setIsNotifModalOpen] = useState(false);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const { user } = useUser();
 
@@ -102,12 +104,12 @@ const Navbar: React.FC = () => {
             <FaSearch className="text-xl" />
             <span>Buscar</span>
           </li>
-          <Link href="/chat">
+          <button onClick={() => setIsChatModalOpen(prevState => !prevState)}>
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <IoChatbubbleEllipses className="text-xl" />
               <span>Chats</span>
             </li>
-          </Link>
+          </button>
           <Link href="/create">
             <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
               <IoIosAddCircle className="text-xl" />
@@ -169,6 +171,9 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       )}
+      {
+        isChatModalOpen && <Chats />
+      }
     </div>
   );
 };
