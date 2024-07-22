@@ -13,7 +13,6 @@ const SearchBar = () => {
     const [results, setResults] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
 
-    const { setUser } = useUser();
     const router = useRouter();
 
     const { data: usersData, error: usersError } = useSearchUsersQuery(searchParameter, {
@@ -121,8 +120,8 @@ const SearchResults = ({ results, totalPages, currentPage, setCurrentPage, filte
     const router = useRouter();
 
     const handleUserClick = (userName) => {
-        console.log(`Redirecting to /user/${userName}`);
-        router.push(`/user/${userName}`);
+        console.log(`Redirecting to /profile/${userName}/edit`);
+        router.push(`/profile/${userName}/edit`);
     };
 
     const handlePostClick = (postId) => {
