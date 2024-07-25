@@ -9,10 +9,11 @@ import Link from "next/link";
 
 
 type Inputs = {
-  username: string;
+  userName: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  gender: string;
+  fullName: string; 
 };
  
 const Register = () => {
@@ -24,21 +25,13 @@ const Register = () => {
   
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    
+    console.log(data)
     const result = await registerUser({
-      "username": "prueba1234",
-      "email": "prueba1234@gmail.com",
-      "password": "prueba1234",
-      "fullName": "prueba1234",
-      "age": 25,
-      "gender": "male",
-      "profileImage": "https://example.com/profile.jpg",
-      "coverImage": "https://example.com/cover.jpg",
-      "description": "Descripción del usuario prueba1234.",
-      "college": "Universidad Ejemplo",
-      "workPlace": "Empresa Ejemplo",
-      "location": "Ciudad Ejemplo",
-      "personalWebSite": "https://example.com/"
+      "userName": data.userName,
+      "email": data.email,
+      "password": data.password,
+      "fullName": data.fullName,
+      "gender": data.gender
   });
     console.log(result);
     console.log(data);
@@ -63,13 +56,13 @@ const Register = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="username" className="text-blancoHueso text-sm font-normal">
+            <label htmlFor="userName" className="text-blancoHueso text-sm font-normal">
               Username
             </label>
             <input
               type="text"
-              id="username"
-              {...register("username")}
+              id="userName"
+              {...register("userName")}
               className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray  max-[320px]:h-10 text-blancoHueso"
               required
               placeholder="eliteBootcamp"
@@ -102,16 +95,29 @@ const Register = () => {
             />
           </div>
           <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="confirmPassword" className="text-blancoHueso text-sm font-normal ">
-              Confirm Password
+            <label htmlFor="gender" className="text-blancoHueso text-sm  font-normal">
+              Gender
             </label>
             <input
-              type="password"
-              id="confirmPassword"
-              {...register("confirmPassword")}
+              type="text"
+              id="gender"
+              {...register("gender")}
               className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
               required
-              placeholder="isasecret"
+              placeholder="male or female"
+            />
+          </div>
+          <div className="flex flex-col justify-center items-start gap-1 self-stretch">
+            <label htmlFor="fullName" className="text-blancoHueso text-sm font-normal ">
+              fullName
+            </label>
+            <input
+              type="text"
+              id="fullName"
+              {...register("fullName")}
+              className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
+              required
+              placeholder="Your Name"
             />
             <button className="flex py-4 px-6 justify-center items-center gap-1 self-stretch rounded-lg bg-liquidLava mt-2 hover:bg-ligthPurple transition-colors">
               <div className="flex h-[22px] px-1 justify-center items-center gap-2">
