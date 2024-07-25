@@ -4,6 +4,7 @@ import NotificationCard from "./NotificationCard";
 import { IoClose } from "react-icons/io5";
 import { useGetNotificationsByUserQuery } from "@/store/services/notificationsApi";
 import { useGetUserByIdQuery } from "@/store/services/usersApi";
+import { useUser } from "@/context/UserContext";
 
 interface Notification {
   id: string;
@@ -17,7 +18,9 @@ interface Notification {
 }
 const NotificationModal = ({ setIsNotifModalOpen }: any) => {
 
-  const { data: notifications } = useGetNotificationsByUserQuery('9a251aea-e6b5-4e96-a75a-b18af7f3e97e');
+  const user = useUser();
+
+  const { data: notifications } = useGetNotificationsByUserQuery(user.user?.userId);
 
   const [notifArray, setNotifArray] = useState<Notification[]>([]);
   
