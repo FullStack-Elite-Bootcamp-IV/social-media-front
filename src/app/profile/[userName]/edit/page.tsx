@@ -1,20 +1,40 @@
-"use client";
+'use client';
+
 import Navbar from "../../../../components/navbar/Navbar";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editProfileSchema } from "@/validations/editProfileSchema";
 import { useEditProfilev2Mutation } from "@/store/services/editApi";
-import {useUser} from "@/context/UserContext";
+import { useUser } from "@/context/UserContext";
 import { User } from "@/types/user";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import axios from 'axios';
 
-const Page = ({ params: userName }: { params: { userName: string } }) => {
-  console.log(userName);
-
+const Page = ({ params: { userName } }: { params: { userName: string } }) => {
   const { user } = useUser();
   const router = useRouter();
+  const [initialValues, setInitialValues] = useState<User | null>(null);
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/profile/${userName}`);
+        const fetchedUserData = response.data;
+
+        setInitialValues(fetchedUserData);
+        if (user && user.userName === userName) {
+          setIsCurrentUser(true);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [userName, user]);
 
   const {
     register,
@@ -22,26 +42,25 @@ const Page = ({ params: userName }: { params: { userName: string } }) => {
     setValue,
     formState: { errors },
   } = useForm<User>({
-    values: user || {} as User,
-    resolver: zodResolver(editProfileSchema)
+    values: initialValues || ({} as User),
+    resolver: zodResolver(editProfileSchema),
   });
 
-  const [editProfile, { isSuccess}] = useEditProfilev2Mutation();
-
-  console.log(userName);
+  const [editProfile, { isSuccess }] = useEditProfilev2Mutation();
 
   useEffect(() => {
-    if(isSuccess) {
+    if (isSuccess) {
       toast.success("Profile updated successfully");
       router.push('/homepage');
     }
   }, [isSuccess]);
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     const result = await editProfile({
       body: {
+        userName: data.userName,
         description: data.description,
-        fullName: data.fullname,
+        fullName: data.fullName,
         gender: data.gender,
         location: data.location,
         personalWebSite: data.personalWebSite,
@@ -54,16 +73,16 @@ const Page = ({ params: userName }: { params: { userName: string } }) => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
-    // console.log("Selected file:", file);
     setValue("media", file as any);
   };
 
   return (
-      <div className="grid grid-cols-12">
-        <div className="col-span-3">
-          <Navbar></Navbar>
-        </div>
-        <main className="col-span-9 dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
+    <div className="grid grid-cols-12">
+      <div className="col-span-3">
+        <Navbar></Navbar>
+      </div>
+      <main className="col-span-9 dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
+        {isCurrentUser ? (
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <h1 className="text-2xl dark:text-white text-black mb-6 text-left">
               Actualizar información
@@ -85,7 +104,7 @@ const Page = ({ params: userName }: { params: { userName: string } }) => {
                 Nombre completo
               </label>
               <input
-                className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.fullname ? "border-red-500" : ""}`}
+                className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.fullName ? "border-red-500" : ""}`}
                 type="text"
                 placeholder="Enter a fullname"
                 {...register("fullName")}
@@ -201,8 +220,11 @@ const Page = ({ params: userName }: { params: { userName: string } }) => {
               </button>
             </div>
           </form>
-        </main>
-      </div>
+        ) : (
+          <p className="text-white">No tienes permisos para editar este perfil.</p>
+        )}
+      </main>
+    </div>
   );
 };
 
