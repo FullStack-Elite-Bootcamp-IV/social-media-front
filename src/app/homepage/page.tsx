@@ -22,6 +22,7 @@ interface PostData {
 
 const HomePage: React.FC = () => {
   const { user } = useUser();
+  console.log(user);
   const id = user?.userId;
   const { data, isLoading, error } = useGetAllPublicsPostsQuery(id);
 

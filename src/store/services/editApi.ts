@@ -20,6 +20,6 @@ export const editProfileApi = createApi({
 
 
 export const {
-    useEditProfilev2Mutation,
-} = editProfileApi;
+    useEditProfilev2Mutation
+}= editProfileApi;
 

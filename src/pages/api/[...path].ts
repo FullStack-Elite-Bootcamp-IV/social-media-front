@@ -1,8 +1,7 @@
 import httpProxy from 'http-proxy'
 import Cookies from 'cookies'
 import url from 'url'
-import { NextApiRequest, NextApiResponse } from "next";
-import { ProxyResponse } from "next/dist/experimental/testmode/proxy";
+import { NextApiRequest, NextApiResponse } from 'next'
 
 const API_URL = process.env.API_URL
 
@@ -17,8 +16,8 @@ export const config = {
 export default (req: NextApiRequest, res: NextApiResponse) => {
   return new Promise<void>((resolve, reject) => {
     const pathname = url.parse(req.url).pathname
-    const isLogin = pathname === '/api/login';
-    const isLogout = pathname === '/api/logout';
+    const isLogin = pathname === '/api/login'
+    const isLogout = pathname === '/api/logout'
 
     const cookies = new Cookies(req, res)
     const accessToken = cookies.get('auth-token')
@@ -39,7 +38,11 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       proxy.once('proxyRes', interceptLogoutResponse)
     }
 
-    proxy.once('error', reject)
+    proxy.once('error', (err) => {
+      console.error('Proxy error:', err)
+      res.status(500).json({ message: 'Proxy error', error: err.message })
+      reject(err)
+    })
 
     proxy.web(req, res, {
       target: API_URL,
@@ -78,6 +81,8 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
           res.status(200).json({ accessToken: undefined, ...response })
           resolve()
         } catch (err) {
+          console.error('Error parsing JSON:', err)
+          res.status(500).json({ message: 'Error parsing login response', error: err.message })
           reject(err)
         }
       })
