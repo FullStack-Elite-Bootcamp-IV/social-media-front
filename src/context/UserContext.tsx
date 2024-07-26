@@ -7,6 +7,7 @@ import {toast} from "sonner";
 interface UserContextProps {
     user: User | null;
     setUser: (user: User) => void;
+    toggleTheme: () => void;
     loading: boolean;
     setLoading: (loading: boolean) => void;
 }
@@ -16,9 +17,42 @@ const UserContext = createContext<UserContextProps | undefined>(undefined);
 export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<UserWithToken | null>(null);
     const [loading, setLoading] = useState(true);
+    const [newTheme, setNewTheme] = useState<boolean>(user?.darkMode || false);
+    const userRef = useRef({
+        isChangingTheme: false,
+    });
+    const { data, error, isLoading } = useGetCurrentUserQuery();
+    const [setDarkMode, { isSuccess, isLoading: isChangingTheme }] = useSetDarkModeMutation();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (isChangingTheme) {
+            toast.loading('Changing theme...');
+        }
+        if (isSuccess) {
+            setUser({ ...user, darkMode: newTheme } as UserWithToken);
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(!newTheme ? 'dark' : 'light');
+        }
+        if (data) {
+            setUser(data);
+            setLoading(false);
+        } else if (error) {
+            setLoading(false);
+        }
+        document.body.classList.remove('light', 'dark');
+        document.body.classList.add(user?.darkMode ? 'dark' : 'light');
+    }, [data, error, router, isLoading, setLoading, setUser, isChangingTheme, user, newTheme, isSuccess]);
+
+    const toggleTheme = () => {
+        if (user) {
+            setNewTheme(!user.darkMode as boolean);
+            setDarkMode({ id: user.userId });
+        }
+    };
 
     return (
-      <UserContext.Provider value={{ user, setUser, loading, setLoading }}>
+      <UserContext.Provider value={{ user, setUser, toggleTheme, loading, setLoading }}>
           {children}
       </UserContext.Provider>
     );
