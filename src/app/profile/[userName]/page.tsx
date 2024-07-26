@@ -9,20 +9,6 @@ import Link from 'next/link';
 import UserList from "@/components/userlist/Userlist";
 import {useUser} from "@/context/UserContext";
 import { useGetUserWithPostsByUserNameQuery }  from "@/store/services/usersApi";
-import postcss from "postcss";
-import { set } from "date-fns";
-
-interface PostData1 {
-  userid: string;
-  title: string;
-  description: string;
-  media: string;
-  likes: number;
-  updateDate: Date;
-  comments: number;
-  favorites: number;
-  postId: string;
-}
 
 interface PostData {
   description: string;
@@ -32,7 +18,7 @@ interface PostData {
   postId: string;
   publicationDate: Date;
   title: string;
-  updateDate: Date;
+  updateDate: string;
   userId: string;
   userName: string;
   comments: number;
@@ -67,7 +53,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
     setIsOpenFollowed(!isOpenFollowed);
   };
 
-  const { data, currentData, isLoading, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
+  const { data, currentData, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
   console.log(currentData);
 
   let datos: UserData = data
