@@ -74,13 +74,19 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
 
   const postsArray: PostData[] = datos?.userPost;
 
+  console.log("datos:", datos)
+
   const [posts, setPosts] = useState<PostData[]>(postsArray);
 
-  if (isSuccess) {
-    console.log("entra")
-    setPosts(postsArray);
-    console.log('posts', posts);
-  }
+  // Cuando llegan los datos se setean en el estado
+  useEffect(() => {
+    if (isSuccess) {
+      console.log("entra")
+      setPosts(postsArray);
+      console.log('posts', posts);
+    }
+  }, [isSuccess, data])
+  
 
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
