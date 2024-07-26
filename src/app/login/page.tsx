@@ -40,7 +40,7 @@ const Login = () => {
       return router.push("/homepage");
     }
 
-  }, [isSuccess, router, data, setUser]);
+  }, [isSuccess, router, data]);
   // Función de manejo del envío del formulario
   const onSubmit = (data: LoginFormInputs) => {
     login(data);

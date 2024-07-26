@@ -35,7 +35,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             document.body.classList.add(!newTheme ? 'dark' : 'light');
         }
         if (data) {
-            setUser(data);
+            console.log("data en el useContext", data);
+            /* setUser(data); */ // Este seter hacia que el usuario se sobre actualizara
             setLoading(false);
         } else if (error) {
             setLoading(false);
