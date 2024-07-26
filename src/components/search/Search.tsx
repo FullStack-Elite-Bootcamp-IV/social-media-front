@@ -4,7 +4,6 @@ import { useUser } from "@/context/UserContext";
 import React, { useState, FormEvent } from 'react';
 import { useSearchPostsQuery, useSearchUsersQuery } from '@/store/services/search';
 import { useRouter } from 'next/navigation';
-import Image from "next/image";
 
 // Definición de tipos
 interface User {
@@ -162,7 +161,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
 
     return (
         <div className="mt-4 flex flex-col justify-between max-h-96 overflow-y-auto">
-            <div>
+            <div className="overflow-y-auto">
                 {results.length > 0 ? (
                     <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-black">
                         {results.map((result, index) => (
@@ -172,7 +171,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
                                     className="border border-gray-300 rounded-lg p-4 shadow-md flex flex-col items-center text-center cursor-pointer"
                                     onClick={() => handleUserClick((result as User).userName)}
                                 >
-                                    <Image
+                                    <img
                                         src={(result as User).profileImage || defaultProfileImage}
                                         alt={(result as User).userName}
                                         className="w-24 h-24 rounded-full object-cover mb-4"
