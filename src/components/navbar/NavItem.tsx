@@ -15,13 +15,13 @@ const NavItem: React.FC<NavItemProps> = ({ href, icon, label, onClick }) => {
   return (
     <Link href={href}>
       <li
-        className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+        className={`flex items-center space-x-2 cursor-pointer hover:text-slate-800 p-2 rounded-md ${
           pathname === href ? "bg-white text-liquidLava" : ""
         }`}
         onClick={onClick}
       >
         {icon}
-        <span>{label}</span>
+        <span className="font-medium">{label}</span>
       </li>
     </Link>
   );
