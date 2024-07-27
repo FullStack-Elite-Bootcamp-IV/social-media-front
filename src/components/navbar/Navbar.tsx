@@ -10,7 +10,7 @@ import { IoMdSettings } from "react-icons/io";
 import SearchBar from "../search/Search";
 import NotificationModal from "../notification/NotificationModal";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/store/services/authApi";
 import { useUser } from "@/context/UserContext";
 import Chats from "../chat/Chats";
@@ -22,8 +22,9 @@ const Navbar: React.FC = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const { user } = useUser();
+  const pathname = usePathname();
 
-  const [logout, {isSuccess: isLogout, isLoading}] = useLogoutMutation();
+  const [logout, { isSuccess: isLogout, isLoading }] = useLogoutMutation();
   const router = useRouter();
 
   const handleMenuToggle = () => {
@@ -76,9 +77,9 @@ const Navbar: React.FC = () => {
   return (
     <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-20">
       <div className="flex items-center justify-between p-4">
-      <Link href="/homepage">
-        <h2 className="text-2xl font-bold">Nexo</h2>
-      </Link>
+        <Link href="/homepage">
+          <h2 className="text-2xl font-bold">Nexo</h2>
+        </Link>
         <button
           onClick={handleMenuToggle}
           className="md:hidden"
@@ -94,32 +95,48 @@ const Navbar: React.FC = () => {
       >
         <ul className="flex flex-col space-y-4 p-4">
           <Link href="/homepage">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
+            <li
+              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+                pathname === "/homepage" ? "bg-white text-liquidLava" : ""
+              }`}
+            >
               <IoHomeSharp className="text-xl" />
               <span>Inicio</span>
             </li>
           </Link>
           <li
-            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+            className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+              pathname === "/search" ? "bg-white text-liquidLava" : ""
+            }`}
             onClick={handleSearchClick}
           >
             <FaSearch className="text-xl" />
             <span>Buscar</span>
           </li>
-          <button onClick={() => setIsChatModalOpen(prevState => !prevState)}>
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
+          <button onClick={() => setIsChatModalOpen((prevState) => !prevState)}>
+            <li
+              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+                pathname === "/chats" ? "bg-white text-liquidLava" : ""
+              }`}
+            >
               <IoChatbubbleEllipses className="text-xl" />
               <span>Chats</span>
             </li>
           </button>
           <Link href="/create">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
+            <li
+              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+                pathname === "/create" ? "bg-white text-liquidLava" : ""
+              }`}
+            >
               <IoIosAddCircle className="text-xl" />
               <span>Crear</span>
             </li>
           </Link>
           <li
-            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+            className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+              pathname === "/notifications" ? "bg-white text-liquidLava" : ""
+            }`}
             onClick={() => {
               handleNotifToggle();
               setIsOpen(false);
@@ -129,19 +146,29 @@ const Navbar: React.FC = () => {
             <span>Notificaciones</span>
           </li>
           <Link href={`/profile/${user?.userName}`}>
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
+            <li
+              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+                pathname === `/profile/${user?.userName}`
+                  ? "bg-white text-liquidLava"
+                  : ""
+              }`}
+            >
               <FaUser className="text-xl" />
               <span>Perfil</span>
             </li>
           </Link>
           <Link href="/settings">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
+            <li
+              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
+                pathname === "/settings" ? "bg-white text-liquidLava" : ""
+              }`}
+            >
               <IoMdSettings className="text-xl" />
               <span>Configuración</span>
             </li>
           </Link>
           <li
-            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md"
             onClick={handleLogout}
           >
             <IoLogOutOutline className="text-xl" />
@@ -173,9 +200,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       )}
-      {
-        isChatModalOpen && <Chats />
-      }
+      {isChatModalOpen && <Chats />}
     </div>
   );
 };
