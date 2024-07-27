@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react';
+import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useGetCurrentUserQuery, useSetDarkModeMutation } from '@/store/services/authApi';
 import { User, UserWithToken } from '@/types/user';
@@ -18,20 +18,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<UserWithToken | null>(null);
     const [loading, setLoading] = useState(true);
     const [newTheme, setNewTheme] = useState<boolean>(false);
-    const { data, error, isLoading } = useGetCurrentUserQuery();
+    const { data, error } = useGetCurrentUserQuery();
     const [setDarkMode, { isSuccess, isLoading: isChangingTheme }] = useSetDarkModeMutation();
     const router = useRouter();
 
-    useEffect(() => {
-        if (isSuccess && user) {
-            setUser({ ...user, darkMode: newTheme });
-            document.body.classList.remove('light', 'dark');
-            document.body.classList.add(newTheme ? 'dark' : 'light');
-            toast.dismiss();
-            toast.success('Theme changed successfully');
-        }
-    }, [isSuccess, newTheme, user]);
-
+    // Effect to handle setting user and theme
     useEffect(() => {
         if (data) {
             setUser(data);
@@ -42,6 +33,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [data, error]);
 
+    // Effect to handle theme changes
+    useEffect(() => {
+        if (isSuccess && user) {
+            document.body.classList.remove('light', 'dark');
+            document.body.classList.add(newTheme ? 'dark' : 'light');
+            toast.dismiss();
+            toast.success('Theme changed successfully');
+            setUser({ ...user, darkMode: newTheme });
+        }
+    }, [isSuccess]);
+
+    // Effect to apply the theme based on user state
     useEffect(() => {
         if (user) {
             document.body.classList.remove('light', 'dark');
