@@ -100,7 +100,7 @@ const HomePage: React.FC = () => {
           {error && <p>Error al cargar los posts.</p>}
           {Array.isArray(displayedPosts) && displayedPosts.map((post, index) => (
             <Post
-              
+              key={index}
               userId={post.userId}
               title={post.title}
               description={post.description}

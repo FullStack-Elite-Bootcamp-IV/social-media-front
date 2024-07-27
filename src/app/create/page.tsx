@@ -9,7 +9,7 @@ import {useCreatePostMutation, useUploadImageMutation} from "@/store/services/po
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
 
-const CreatePost = () => {
+const CreatePostPage = () => {
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
   const [media, setMedia] = useState<File | null>(null);
@@ -152,4 +152,4 @@ const CreatePost = () => {
   );
 }
 
-export default CreatePost;
+export default CreatePostPage;
