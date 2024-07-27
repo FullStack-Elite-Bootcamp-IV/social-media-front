@@ -10,10 +10,12 @@ import { IoMdSettings } from "react-icons/io";
 import SearchBar from "../search/Search";
 import NotificationModal from "../notification/NotificationModal";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/store/services/authApi";
 import { useUser } from "@/context/UserContext";
 import Chats from "../chat/Chats";
+import NavItem from "./NavItem";
+import NavButton from "./NavButton";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,7 +25,7 @@ const Navbar: React.FC = () => {
 
   const { user } = useUser();
 
-  const [logout, {isSuccess: isLogout, isLoading}] = useLogoutMutation();
+  const [logout, { isSuccess: isLogout, isLoading }] = useLogoutMutation();
   const router = useRouter();
 
   const handleMenuToggle = () => {
@@ -76,7 +78,9 @@ const Navbar: React.FC = () => {
   return (
     <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-20">
       <div className="flex items-center justify-between p-4">
-        <h2 className="text-2xl font-bold">Nexo</h2>
+        <Link href="/homepage">
+          <h2 className="text-2xl font-bold">Nexo</h2>
+        </Link>
         <button
           onClick={handleMenuToggle}
           className="md:hidden"
@@ -90,61 +94,53 @@ const Navbar: React.FC = () => {
           isOpen ? "block" : "hidden"
         } fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
       >
-        <ul className="flex flex-col space-y-4 p-4">
-          <Link href="/homepage">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <IoHomeSharp className="text-xl" />
-              <span>Inicio</span>
-            </li>
-          </Link>
-          <li
-            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+        <ul className="flex flex-col space-y-2 p-4">
+          <NavItem
+            href="/homepage"
+            icon={<IoHomeSharp className="text-xl" />}
+            label="Inicio"
+          />
+
+          <NavItem
+            href="/create"
+            icon={<IoIosAddCircle className="text-xl" />}
+            label="Crear"
+          />
+
+          <NavItem
+            href={`/profile/${user?.userName}`}
+            icon={<FaUser className="text-xl" />}
+            label="Perfil"
+          />
+          <NavItem
+            href="/settings"
+            icon={<IoMdSettings className="text-xl" />}
+            label="Configuración"
+          />
+          <NavButton
+            icon={<FaSearch className="text-xl" />}
+            label="Buscar"
             onClick={handleSearchClick}
-          >
-            <FaSearch className="text-xl" />
-            <span>Buscar</span>
-          </li>
-          <button onClick={() => setIsChatModalOpen(prevState => !prevState)}>
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <IoChatbubbleEllipses className="text-xl" />
-              <span>Chats</span>
-            </li>
-          </button>
-          <Link href="/create">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <IoIosAddCircle className="text-xl" />
-              <span>Crear</span>
-            </li>
-          </Link>
-          <li
-            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+          />
+          <NavButton
+            icon={<IoChatbubbleEllipses className="text-xl" />}
+            label="Chats"
+            onClick={() => setIsChatModalOpen((prevState) => !prevState)}
+            isActive={isChatModalOpen}
+          />
+          <NavButton
+            icon={<MdNotificationsActive className="text-xl" />}
+            label="Notificaciones"
             onClick={() => {
               handleNotifToggle();
               setIsOpen(false);
             }}
-          >
-            <MdNotificationsActive className="text-xl" />
-            <span>Notificaciones</span>
-          </li>
-          <Link href={`/profile/${user?.userName}`}>
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <FaUser className="text-xl" />
-              <span>Perfil</span>
-            </li>
-          </Link>
-          <Link href="/settings">
-            <li className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray">
-              <IoMdSettings className="text-xl" />
-              <span>Configuración</span>
-            </li>
-          </Link>
-          <li
-            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray"
+          />
+          <NavButton
+            icon={<IoLogOutOutline className="text-xl" />}
+            label="Cerrar sesión"
             onClick={handleLogout}
-          >
-            <IoLogOutOutline className="text-xl" />
-            <span>Cerrar sesión</span>
-          </li>
+          />
         </ul>
       </nav>
       {isOpen && (
@@ -171,9 +167,7 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       )}
-      {
-        isChatModalOpen && <Chats />
-      }
+      {isChatModalOpen && <Chats />}
     </div>
   );
 };

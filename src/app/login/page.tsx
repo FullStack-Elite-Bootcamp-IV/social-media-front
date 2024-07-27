@@ -10,15 +10,15 @@ import Link from "next/link";
 import { useLoginMutation } from "@/store/services/authApi";
 
 import { useRouter } from 'next/navigation';
-import {useEffect} from "react";
-import {toast} from "sonner";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
 // The type of the form inputs is inferred from the schema
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  
-  const { setUser  } = useUser();
+
+  const { setUser } = useUser();
   const router = useRouter();
 
   // useForm hook with zodResolver to validate the form
@@ -29,18 +29,23 @@ const Login = () => {
   } = useForm<LoginFormInputs>({
     resolver: zodResolver(loginSchema),
   });
-  
+
   // Llama al hook aquí
   const [login, { isLoading, error, isSuccess, data }] = useLoginMutation();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && data) {
       setUser(data.user);
       toast.success("Has iniciado sesión");
-      return router.push("/homepage");
+      router.push("/homepage");
     }
 
-  }, [isSuccess, router, data, setUser]);
+    if (error) {
+      toast.error("Error al iniciar sesión");
+    }
+
+  }, [isSuccess, data, error, router, setUser]);
+
   // Función de manejo del envío del formulario
   const onSubmit = (data: LoginFormInputs) => {
     login(data);
@@ -101,7 +106,7 @@ const Login = () => {
         </p>
       </div>
     </main>
-  );
+  ); 
 };
 
 export default Login;

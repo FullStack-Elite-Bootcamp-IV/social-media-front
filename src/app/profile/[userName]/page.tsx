@@ -18,7 +18,7 @@ interface PostData {
   postId: string;
   publicationDate: Date;
   title: string;
-  updateDate: string;
+  updateDate: Date;
   userId: string;
   userName: string;
   comments: number;
@@ -54,7 +54,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   };
 
   const { data, currentData, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
-  console.log(currentData);
+
 
   let datos: UserData = data
 
@@ -151,7 +151,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
             {posts?.map((post, index) => (
               <div key={index} className="bg-gray-200 dark:bg-gray-800 rounded-lg shadow-lg p-4">
                 <Post
-                  userid={post?.userId}
+                  userId={post?.userId}
                   title={post?.title}
                   description={post?.description}
                   media={post?.media}

@@ -7,7 +7,7 @@ import { useGetAllPublicsPostsQuery } from '@/store/services/postsApi';
 import { useUser } from '@/context/UserContext';
 
 interface PostData {
-  userid: string;
+  userId: string;
   title: string;
   description: string;
   media: string;
@@ -22,6 +22,7 @@ interface PostData {
 
 const HomePage: React.FC = () => {
   const { user } = useUser();
+  console.log(user);
   const id = user?.userId;
   const { data, isLoading, error } = useGetAllPublicsPostsQuery(id);
 
@@ -34,6 +35,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     if (data) {
       setPosts(data);
+
     }
   }, [data]);
 
@@ -98,8 +100,8 @@ const HomePage: React.FC = () => {
           {error && <p>Error al cargar los posts.</p>}
           {Array.isArray(displayedPosts) && displayedPosts.map((post, index) => (
             <Post
-              
-              userid={post.userid}
+              key={index}
+              userId={post.userId}
               title={post.title}
               description={post.description}
               media={post.media}

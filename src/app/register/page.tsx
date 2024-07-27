@@ -34,28 +34,27 @@ const Register = () => {
       "gender": data.gender
   });
     console.log(result);
-    console.log(data);
   };
 
   return (
-    <main className="flex bg-slateGray justify-center items-center h-screen">
+    <main className="flex bg-slateGray justify-center items-center min-h-screen">
       <section
-        className="flex p-8 flex-col justify-center items-center gap-4 flex-1  rounded-[32px] bg-darkVoid
-        max-w-[639px] max-sm:rounded-none max-sm:w-screen max-sm:h-screen "
+        className="flex flex-col p-8 justify-center items-center gap-4 flex-1 rounded-[32px] bg-darkVoid
+        max-w-[639px] max-sm:rounded-none max-sm:w-screen max-sm:min-h-screen"
       >
         <h1 className="text-blancoHueso text-center text-5xl font-normal leading-[52px] max-[320px]:text-3xl mt-5">
           Nexo
         </h1>
-        <div className="flex flex-col justify-center items-center gap-2 self-stretch">
-          <p className="text-blancoHueso items-center text-sm font-normal leading-[27px] max-[320px]:text-sm">
+        <div className="flex flex-col justify-center items-center gap-2 w-full">
+          <p className="text-blancoHueso text-sm font-normal leading-[27px] max-[320px]:text-xs">
             Sign up to see posts from your friends.
           </p>
         </div>
         <form
-          className="flex flex-col items-center gap-3 self-stretch"
+          className="flex flex-col gap-3 w-full"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="flex flex-col justify-center items-start gap-1 self-stretch">
+          <div className="flex flex-col justify-center gap-1 w-full">
             <label htmlFor="userName" className="text-blancoHueso text-sm font-normal">
               Username
             </label>
@@ -63,74 +62,72 @@ const Register = () => {
               type="text"
               id="userName"
               {...register("userName")}
-              className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray  max-[320px]:h-10 text-blancoHueso"
+              className="h-14 p-4 bg-slateGray text-blancoHueso placeholder:text-blancoHueso rounded-lg w-full max-[320px]:h-10"
               required
               placeholder="eliteBootcamp"
             />
           </div>
-          <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="email" className="text-blancoHueso text-sm  font-normal">
+          <div className="flex flex-col justify-center gap-1 w-full">
+            <label htmlFor="email" className="text-blancoHueso text-sm font-normal">
               Email
             </label>
             <input
               type="email"
               id="email"
               {...register("email")}
-              className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
+              className="h-14 p-4 bg-slateGray text-blancoHueso placeholder:text-blancoHueso rounded-lg w-full max-[320px]:h-10"
               required
               placeholder="elite@example.com"
             />
           </div>
-          <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="password" className="text-blancoHueso text-sm  font-normal">
+          <div className="flex flex-col justify-center gap-1 w-full">
+            <label htmlFor="password" className="text-blancoHueso text-sm font-normal">
               Password
             </label>
             <input
               type="password"
               id="password"
               {...register("password")}
-              className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
+              className="h-14 p-4 bg-slateGray text-blancoHueso placeholder:text-blancoHueso rounded-lg w-full max-[320px]:h-10"
               required
               placeholder="isasecret"
             />
           </div>
-          <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="gender" className="text-blancoHueso text-sm  font-normal">
+          <div className="flex flex-col justify-center gap-1 w-full">
+            <label htmlFor="gender" className="text-blancoHueso text-sm font-normal">
               Gender
             </label>
             <input
               type="text"
               id="gender"
               {...register("gender")}
-              className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
+              className="h-14 p-4 bg-slateGray text-blancoHueso placeholder:text-blancoHueso rounded-lg w-full max-[320px]:h-10"
               required
               placeholder="male or female"
             />
           </div>
-          <div className="flex flex-col justify-center items-start gap-1 self-stretch">
-            <label htmlFor="fullName" className="text-blancoHueso text-sm font-normal ">
-              fullName
+          <div className="flex flex-col justify-center gap-1 w-full">
+            <label htmlFor="fullName" className="text-blancoHueso text-sm font-normal">
+              Full Name
             </label>
             <input
               type="text"
               id="fullName"
               {...register("fullName")}
-              className="flex h-14 p-4 items-center gap-1 self-stretch bg-slateGray max-[320px]:h-10 text-blancoHueso"
+              className="h-14 p-4 bg-slateGray text-blancoHueso placeholder:text-blancoHueso rounded-lg w-full max-[320px]:h-10"
               required
               placeholder="Your Name"
             />
-            <button className="flex py-4 px-6 justify-center items-center gap-1 self-stretch rounded-lg bg-liquidLava mt-2 hover:bg-ligthPurple transition-colors">
-              <div className="flex h-[22px] px-1 justify-center items-center gap-2">
-                <p className="text-blancoHueso text-center text-md font-normal">
-                  Sign up with Email
-                </p>
-              </div>
+            <button className="py-4 px-6 rounded-lg bg-liquidLava mt-2 hover:bg-lightPurple transition-colors w-full text-blancoHueso">
+              <p className="text-md font-normal text-center">
+                Sign up with Email
+              </p>
             </button>
           </div>
         </form>
-        <div>
+        <div className="w-full flex justify-center mt-4">
           <p className="text-center text-blancoHueso font-normal text-sm">
-            Have and account? 
+            Have an account? 
             <Link href="/login">
               <strong>Log in</strong>
             </Link>
@@ -139,6 +136,7 @@ const Register = () => {
       </section>
     </main>
   );
+  
 };
 
 export default Register;
