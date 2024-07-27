@@ -7,7 +7,7 @@ import { useGetAllPublicsPostsQuery } from '@/store/services/postsApi';
 import { useUser } from '@/context/UserContext';
 
 interface PostData {
-  userid: string;
+  userId: string;
   title: string;
   description: string;
   media: string;
@@ -35,6 +35,7 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     if (data) {
       setPosts(data);
+
     }
   }, [data]);
 
@@ -100,7 +101,7 @@ const HomePage: React.FC = () => {
           {Array.isArray(displayedPosts) && displayedPosts.map((post, index) => (
             <Post
               
-              userid={post.userid}
+              userId={post.userId}
               title={post.title}
               description={post.description}
               media={post.media}

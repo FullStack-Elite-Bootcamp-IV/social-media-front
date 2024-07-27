@@ -4,20 +4,21 @@ import React, { useState, useEffect } from 'react';
 import Comments from '../comments/Comments';
 import { useDeleteFavouriteMutation, useAddFavouriteMutation } from '@/store/services/favouritesApi';
 import { useCreateLikeMutation, useDeleteLikeMutation } from '@/store/services/likesApi';
+import { useGetUserByIdQuery } from '@/store/services/usersApi';
 
 interface PostProps {
-  userid: string;
+  userId: string;
   title: string;
   description: string;
   likes: number;
-  updateDate: string;
+  updateDate: Date;
   media: string;
   comments: number;
   favorites: number;
   postId: string;
 }
 
-const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments, description, favorites, postId }) => {
+const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments, description, favorites, postId }) => {
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -28,25 +29,27 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
   const [createLike, { isLoading: isLoadingAddLike, error: errorAddLike }] = useCreateLikeMutation();
   const [deleteLike, { isLoading: isLoadingDelLike, error: errorDelLike }] = useDeleteLikeMutation();
 
+  const { data: userData } = useGetUserByIdQuery(userId);
+  const userName = userData?.userName;
+
   useEffect(() => {
     setDate(new Date(updateDate)); // Convert the updateDate string to a Date object
-  }, [updateDate]);
+  }, [updateDate, userData]);
 
   const handleLikeClick = async () => {
     const data = {
-      userid,
+      userId,
       postId,
       date: new Date(),
       action: isLiked ? 'unlike' : 'like'
     };
-    console.log(data);
 
     try {
       if (isLiked) {
-        await deleteLike({ userid, postId, date: new Date() });
+        await deleteLike({ userId, postId, date: new Date() });
         setIsLiked(false);
       } else {
-        await createLike({ userid, postId, date: new Date() });
+        await createLike({ userId, postId, date: new Date() });
         setIsLiked(true);
       }
     } catch (error) {
@@ -56,19 +59,17 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
 
   const handleFavoriteClick = async () => {
     const data = {
-      userid,
+      userId,
       postId,
       date: new Date(),
       action: isFavorited ? 'unfavorite' : 'favorite'
     };
-    console.log(data);
-
     try {
       if (isFavorited) {
-        await deleteFavourite({ userid, postId, date: new Date() });
+        await deleteFavourite({ userId, postId, date: new Date() });
         setIsFavorited(false);
       } else {
-        await addFavourite({ userid, postId, date: new Date() });
+        await addFavourite({ userId, postId, date: new Date() });
         setIsFavorited(true);
       }
     } catch (error) {
@@ -86,10 +87,10 @@ const Post: React.FC<PostProps> = ({ userid, updateDate, media, likes, comments,
         <div className="flex items-center">
           <div className="text-black dark:text-white bg-white dark:bg-black rounded-full w-8 h-8 flex items-center justify-center">
             <span className="text-lg font-bold">
-              {userid ? userid[0].toUpperCase() : '?'}
+              {userId ? userId[0] : '?'}
             </span>
           </div>
-          <h1 className="ml-2">{userid || 'Usuario Desconocido'}</h1>
+          <h1 className="ml-2">{userName || 'Usuario NN'}</h1>
         </div>
         <div className="text-black dark:text-white bg-white dark:bg-black px-2 py-1 rounded">
           {date.toDateString()}
