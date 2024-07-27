@@ -14,6 +14,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useLogoutMutation } from "@/store/services/authApi";
 import { useUser } from "@/context/UserContext";
 import Chats from "../chat/Chats";
+import NavItem from "./NavItem";
+import NavButton from "./NavButton";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +24,6 @@ const Navbar: React.FC = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
 
   const { user } = useUser();
-  const pathname = usePathname();
 
   const [logout, { isSuccess: isLogout, isLoading }] = useLogoutMutation();
   const router = useRouter();
@@ -93,87 +94,53 @@ const Navbar: React.FC = () => {
           isOpen ? "block" : "hidden"
         } fixed top-16 left-0 w-full z-20 bg-liquidLava md:block md:w-64`}
       >
-        <ul className="flex flex-col space-y-4 p-4">
-          <Link href="/homepage">
-            <li
-              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
-                pathname === "/homepage" ? "bg-white text-liquidLava" : ""
-              }`}
-            >
-              <IoHomeSharp className="text-xl" />
-              <span>Inicio</span>
-            </li>
-          </Link>
-          <li
-            className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
-              pathname === "/search" ? "bg-white text-liquidLava" : ""
-            }`}
+        <ul className="flex flex-col space-y-2 p-4">
+          <NavItem
+            href="/homepage"
+            icon={<IoHomeSharp className="text-xl" />}
+            label="Inicio"
+          />
+
+          <NavItem
+            href="/create"
+            icon={<IoIosAddCircle className="text-xl" />}
+            label="Crear"
+          />
+
+          <NavItem
+            href={`/profile/${user?.userName}`}
+            icon={<FaUser className="text-xl" />}
+            label="Perfil"
+          />
+          <NavItem
+            href="/settings"
+            icon={<IoMdSettings className="text-xl" />}
+            label="Configuración"
+          />
+          <NavButton
+            icon={<FaSearch className="text-xl" />}
+            label="Buscar"
             onClick={handleSearchClick}
-          >
-            <FaSearch className="text-xl" />
-            <span>Buscar</span>
-          </li>
-          <button onClick={() => setIsChatModalOpen((prevState) => !prevState)}>
-            <li
-              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
-                pathname === "/chats" ? "bg-white text-liquidLava" : ""
-              }`}
-            >
-              <IoChatbubbleEllipses className="text-xl" />
-              <span>Chats</span>
-            </li>
-          </button>
-          <Link href="/create">
-            <li
-              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
-                pathname === "/create" ? "bg-white text-liquidLava" : ""
-              }`}
-            >
-              <IoIosAddCircle className="text-xl" />
-              <span>Crear</span>
-            </li>
-          </Link>
-          <li
-            className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
-              pathname === "/notifications" ? "bg-white text-liquidLava" : ""
-            }`}
+          />
+          <NavButton
+            icon={<IoChatbubbleEllipses className="text-xl" />}
+            label="Chats"
+            onClick={() => setIsChatModalOpen((prevState) => !prevState)}
+            isActive={isChatModalOpen}
+          />
+          <NavButton
+            icon={<MdNotificationsActive className="text-xl" />}
+            label="Notificaciones"
             onClick={() => {
               handleNotifToggle();
               setIsOpen(false);
             }}
-          >
-            <MdNotificationsActive className="text-xl" />
-            <span>Notificaciones</span>
-          </li>
-          <Link href={`/profile/${user?.userName}`}>
-            <li
-              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
-                pathname === `/profile/${user?.userName}`
-                  ? "bg-white text-liquidLava"
-                  : ""
-              }`}
-            >
-              <FaUser className="text-xl" />
-              <span>Perfil</span>
-            </li>
-          </Link>
-          <Link href="/settings">
-            <li
-              className={`flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md ${
-                pathname === "/settings" ? "bg-white text-liquidLava" : ""
-              }`}
-            >
-              <IoMdSettings className="text-xl" />
-              <span>Configuración</span>
-            </li>
-          </Link>
-          <li
-            className="flex items-center space-x-2 cursor-pointer hover:text-dustyGray p-2 rounded-md"
+          />
+          <NavButton
+            icon={<IoLogOutOutline className="text-xl" />}
+            label="Cerrar sesión"
             onClick={handleLogout}
-          >
-            <IoLogOutOutline className="text-xl" />
-            <span>Cerrar sesión</span>
-          </li>
+          />
         </ul>
       </nav>
       {isOpen && (
