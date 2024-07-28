@@ -13,7 +13,7 @@ interface PostData {
   media: string;
   likes: number;
   updateDate: Date;
-  publicationDate: Date;
+  publicationDate: Date; // Asegúrate de que esta propiedad es un objeto Date
   comments: number;
   favorites: number;
   postId: string;
@@ -22,7 +22,6 @@ interface PostData {
 
 const HomePage: React.FC = () => {
   const { user } = useUser();
-  console.log(user);
   const id = user?.userId;
   const { data, isLoading, error } = useGetAllPublicsPostsQuery(id);
 
@@ -34,8 +33,12 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      setPosts(data);
-
+      // Verifica si publicationDate es una cadena y conviértela en Date
+      const processedPosts = data.map((post: any) => ({
+        ...post,
+        publicationDate: new Date(post.publicationDate) // Convierte publicationDate a Date
+      }));
+      setPosts(processedPosts);
     }
   }, [data]);
 
@@ -68,19 +71,25 @@ const HomePage: React.FC = () => {
   };
 
   const filterPosts = () => {
+    let filteredPosts = posts;
+
     if (liked) {
-      return posts.filter(post => post.likes > 0);
+      filteredPosts = filteredPosts.filter(post => post.likes > 0);
     }
     if (favorite) {
-      return posts.filter(post => post.favorites > 0);
+      filteredPosts = filteredPosts.filter(post => post.favorites > 0);
     }
     if (publics) {
-      return posts.filter(post => post.isPublic);
+      filteredPosts = filteredPosts.filter(post => post.isPublic);
     }
     if (privates) {
-      return posts.filter(post => !post.isPublic);
+      filteredPosts = filteredPosts.filter(post => !post.isPublic);
     }
-    return posts;
+
+    // Ordenar los posts por fecha de publicación (de más reciente a más antiguo)
+    filteredPosts.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
+
+    return filteredPosts;
   };
 
   const displayedPosts = filterPosts();
