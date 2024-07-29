@@ -47,7 +47,7 @@ const Register = () => {
         </h1>
         <div className="flex flex-col justify-center items-center gap-2 w-full">
           <p className="text-blancoHueso text-sm font-normal leading-[27px] max-[320px]:text-xs">
-            Sign up to see posts from your friends.
+            Sign up to share experiences.
           </p>
         </div>
         <form
