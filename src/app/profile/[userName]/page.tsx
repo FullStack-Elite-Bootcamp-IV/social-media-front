@@ -67,9 +67,8 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   // Cuando llegan los datos se setean en el estado
   useEffect(() => {
     if (isSuccess) {
-      console.log("entra")
       setPosts(postsArray);
-      console.log('posts', posts);
+      console.log('posts', postsArray);
     }
   }, [isSuccess, data])
   
@@ -79,13 +78,12 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
       <Navbar />
       <main className="flex md:ml-64 min-h-screen">
         <div className="w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0">
-          <section
-            className="relative w-full bg-cover bg-center rounded-lg shadow-lg overflow-hidden mb-8 md:mb-12"
-            style={{
-              backgroundImage: `url(${datos?.coverImage})`,
-              height: "200px",
-            }}
-          >
+          <section className="relative w-full bg-cover bg-center rounded-lg shadow-lg overflow-hidden mb-8 md:mb-12">
+          <img 
+            className="object-cover"
+            src={datos?.coverImage}
+            alt="cover image"
+          />
             <div className="absolute inset-0 flex justify-center items-center dark:bg-black bg-opacity-50">
               <img
                 className="rounded-full border-4 border-white w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48"

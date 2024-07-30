@@ -8,7 +8,7 @@ export const editProfileApi = createApi({
         credentials: 'include',
     }),
     endpoints: (builder) => ({
-        editProfilev2: builder.mutation({
+        editProfile: builder.mutation({
             query: ({ body, id }) => ({
                 url: `/users/${id}`,
                 method: 'PATCH',
@@ -20,6 +20,6 @@ export const editProfileApi = createApi({
 
 
 export const {
-    useEditProfilev2Mutation
+    useEditProfileMutation
 }= editProfileApi;
 

@@ -4,37 +4,25 @@ import Navbar from "../../../../components/navbar/Navbar";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { editProfileSchema } from "@/validations/editProfileSchema";
-import { useEditProfilev2Mutation } from "@/store/services/editApi";
+import { useEditProfileMutation } from "@/store/services/editApi";
+import { useGetUserByUserNameQuery } from "@/store/services/usersApi";
+import { useUploadImageMutation } from "@/store/services/postsApi";
 import { useUser } from "@/context/UserContext";
 import { User } from "@/types/user";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import axios from 'axios';
 
-const Page = ({ params: { userName } }: { params: { userName: string } }) => {
+const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
   const { user } = useUser();
   const router = useRouter();
   const [initialValues, setInitialValues] = useState<User | null>(null);
-  const [isCurrentUser, setIsCurrentUser] = useState(false);
+  const [uploadImage, { isLoading: isUploading, error: uploadError, isSuccess: isUploadSuccess }] = useUploadImageMutation();
+  const userCurrentData = useGetUserByUserNameQuery(userName);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/profile/${userName}`);
-        const fetchedUserData = response.data;
-
-        setInitialValues(fetchedUserData);
-        if (user && user.userName === userName) {
-          setIsCurrentUser(true);
-        }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, [userName, user]);
+  useEffect(() => (
+    setInitialValues(userCurrentData.data)
+  ), [userCurrentData]);
 
   const {
     register,
@@ -46,16 +34,45 @@ const Page = ({ params: { userName } }: { params: { userName: string } }) => {
     resolver: zodResolver(editProfileSchema),
   });
 
-  const [editProfile, { isSuccess }] = useEditProfilev2Mutation();
+  const [editProfile, { isSuccess }] = useEditProfileMutation();
 
   useEffect(() => {
     if (isSuccess) {
       toast.success("Profile updated successfully");
-      router.push('/homepage');
+      router.push(`/profile/${userName}`);
     }
   }, [isSuccess]);
 
   const onSubmit: SubmitHandler<User> = async (data) => {
+    
+    let profileImageUrl: string | undefined = '';
+    let coverImageUrl: string | undefined = '';
+    const coverImage = data.coverImage;
+    const profileImage = data.profileImage;
+    
+    if (profileImage) {
+      try {
+        const response = await uploadImage(profileImage).unwrap();
+        profileImageUrl = response.imageUrl;
+        console.log(profileImageUrl)
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+        return;
+      }
+    } else { profileImageUrl = initialValues?.profileImage }
+
+    if (coverImage) {
+      try {
+        const response = await uploadImage(coverImage).unwrap();
+        coverImageUrl = response.imageUrl;
+      } catch (error) {
+        console.error('Failed to upload image:', error);
+        return;
+      }
+    } else { coverImageUrl = initialValues?.coverImage }
+
+    console.log(data.fullName);
+
     const result = await editProfile({
       body: {
         userName: data.userName,
@@ -65,38 +82,52 @@ const Page = ({ params: { userName } }: { params: { userName: string } }) => {
         location: data.location,
         personalWebSite: data.personalWebSite,
         workPlace: data.workPlace,
+        profileImage: profileImageUrl,
+        coverImage: coverImageUrl,
       },
       id: user?.userId,
     });
     console.log("Edit profile result, ", result);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleProfileFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
-    setValue("media", file as any);
+    setValue("profileImage", file as any);
+  };
+
+  const handleCoverFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setValue("coverImage", file as any);
   };
 
   return (
-    <div className="grid grid-cols-12">
-      <div className="col-span-3">
-        <Navbar></Navbar>
-      </div>
-      <main className="col-span-9 dark:bg-black bg-white w-80vh p-8 h-screen overflow-auto">
-        {isCurrentUser ? (
-          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-            <h1 className="text-2xl dark:text-white text-black mb-6 text-left">
+    <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
+        <Navbar />
+      <main className="flex md:ml-64 min-h-screen">
+          <form className="space-y-4 w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0" onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="text-2xl dark:text-white text-black mb-6 text-left pt-4">
               Actualizar información
             </h1>
             <div className="flex justify-start flex-col">
               <label className="mb-1 text-black dark:text-white">
-                Profile imagen
+                Imagen de perfìl
               </label>
               <input
-                className={`dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg ${errors.media ? "border-red-500" : ""}`}
+                className={`dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg`}
                 type="file"
                 accept="image/png, image/jpeg"
-                onChange={handleFileChange}
-                placeholder="Select a file"
+                onChange={handleProfileFileChange}
+              />
+            </div>
+            <div className="flex justify-start flex-col">
+              <label className="mb-1 text-black dark:text-white">
+                Imagen de fondo
+              </label>
+              <input
+                className={`dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg`}
+                type="file"
+                accept="image/png, image/jpeg"
+                onChange={handleCoverFileChange}
               />
             </div>
             <div className="flex flex-col">
@@ -220,12 +251,9 @@ const Page = ({ params: { userName } }: { params: { userName: string } }) => {
               </button>
             </div>
           </form>
-        ) : (
-          <p className="text-white">No tienes permisos para editar este perfil.</p>
-        )}
       </main>
     </div>
   );
 };
 
-export default Page;
+export default Edit;

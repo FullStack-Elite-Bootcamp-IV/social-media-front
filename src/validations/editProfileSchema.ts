@@ -13,5 +13,6 @@ export const editProfileSchema = z.object({
             message: 'Invalid URL format',
         }),
     workPlace: z.string().optional(),
-    profilePicture: z.instanceof(File).optional(),
+    profileImage: z.instanceof(File).optional(),
+    coverImage: z.instanceof(File).optional(),
 });

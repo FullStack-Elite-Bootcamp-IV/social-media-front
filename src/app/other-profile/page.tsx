@@ -1,15 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { useAuth } from "../../context/UserContext";
 import Navbar from "@/components/navbar/Navbar";
 
 const Profile = () => {
-  const { loginToken } = useAuth();
-
-  useEffect(() => {
-    console.log(loginToken);
-  }, []);
 
   let id = 0;
   let datos = [
@@ -38,7 +31,7 @@ const Profile = () => {
         <Navbar />
     <div className="flex min-h-screen">
       <div className="flex-grow bg-darkVoid text-white md:ml-64">
-        <div className="relative w-full max-w-screen-xl flex flex-col items-center lg:mt-0">
+        <div className="relative w-full flex flex-col items-center lg:mt-0">
           <section className="relative w-full">
             <div
               className="imagen-portada bg-cover bg-center bg-no-repeat relative"
