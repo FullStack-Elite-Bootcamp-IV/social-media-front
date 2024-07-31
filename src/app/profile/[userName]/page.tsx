@@ -60,15 +60,12 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
 
   const postsArray: PostData[] = datos?.userPost;
 
-  console.log("datos:", datos)
-
   const [posts, setPosts] = useState<PostData[]>(postsArray);
 
   // Cuando llegan los datos se setean en el estado
   useEffect(() => {
     if (isSuccess) {
       setPosts(postsArray);
-      console.log('posts', postsArray);
     }
   }, [isSuccess, data])
   
@@ -79,13 +76,13 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
       <main className="flex md:ml-64 min-h-screen">
         <div className="w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0">
           <section
-            className="relative w-full bg-cover bg-center rounded-lg shadow-lg overflow-hidden mb-8 md:mb-12"
+            className="relative w-full bg-cover bg-center rounded-lg shadow-lg mb-8 md:mb-12"
             style={{
               backgroundImage: `url("${datos?.coverImage}")`,
               height: "200px",
             }}
           >
-            <div className="absolute inset-0 flex justify-center items-center dark:bg-black bg-opacity-50">
+            <div className="absolute inset-0 flex justify-center items-center mt-20">
               <img
                 className="rounded-full border-4 border-white w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48"
                 src={datos?.profileImage}
@@ -94,7 +91,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
             </div>
           </section>
 
-          <div className="text-center text-darkVoid dark: dark:text-blancoHueso mb-8">
+          <div className="text-center text-darkVoid dark: dark:text-blancoHueso mt-30 mb-8">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
               {datos?.userName}
             </h1>
