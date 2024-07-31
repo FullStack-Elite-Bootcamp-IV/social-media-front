@@ -22,11 +22,6 @@ interface PostData {
   favorites: number;
 }
 
-interface FollowData {
-  followerId: string;
-  followingId: string;
-}
-
 const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const { user } = useUser();
   const { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
@@ -37,13 +32,13 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const [posts, setPosts] = useState<PostData[]>();
 
   useEffect(() => {
-    if (isSuccessFollowers) {
-      const isFollow = followersData?.some((follow: FollowData) => {
-        return data?.userId === follow.followerId;
+    if (isSuccessFollowers && isSuccess) {
+      const isFollow = followersData?.some((follow:any) => {
+        return data?.userId === follow;
       });
       setFollow(isFollow ? "Unfollow" : "Follow");
     }
-  }, [isSuccessFollowers]);
+  }, [isSuccess, isSuccessFollowers]);
 
   useEffect(() => {
     if (isSuccess) {

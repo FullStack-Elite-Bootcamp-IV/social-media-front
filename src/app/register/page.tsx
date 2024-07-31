@@ -24,7 +24,7 @@ const Register = () => {
   
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data)
+    (data)
     const result = await registerUser({
       "userName": data.userName,
       "email": data.email,
@@ -32,7 +32,7 @@ const Register = () => {
       "fullName": data.fullName,
       "gender": data.gender
   });
-    console.log(result);
+    (result);
   };
 
   return (

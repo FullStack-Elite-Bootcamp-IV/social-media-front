@@ -54,7 +54,6 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
       try {
         const response = await uploadImage(profileImage).unwrap();
         profileImageUrl = response.imageUrl;
-        console.log(profileImageUrl)
       } catch (error) {
         console.error('Failed to upload image:', error);
         return;
@@ -71,7 +70,6 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
       }
     } else { coverImageUrl = initialValues?.coverImage }
 
-    console.log(data.fullName);
 
     const result = await editProfile({
       body: {
@@ -87,7 +85,6 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
       },
       id: user?.userId,
     });
-    console.log("Edit profile result, ", result);
   };
 
   const handleProfileFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

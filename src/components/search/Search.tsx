@@ -61,13 +61,11 @@ const SearchBar: React.FC = () => {
         const cachedResults = localStorage.getItem(cacheKey);
 
         if (cachedResults) {
-            console.log('Resultados desde el caché:', JSON.parse(cachedResults));
             setResults(JSON.parse(cachedResults));
             return;
         }
 
         if (filter === 'people' && usersData) {
-            console.log('Datos de usuarios obtenidos:', usersData);
             const filteredUsers: User[] = usersData.map((user: any) => ({
                 age: user.age,
                 fullName: user.fullName,
@@ -78,7 +76,6 @@ const SearchBar: React.FC = () => {
             localStorage.setItem(cacheKey, JSON.stringify(filteredUsers));
             setResults(filteredUsers);
         } else if (filter === 'posts' && postsData) {
-            console.log('Datos de publicaciones obtenidos:', postsData);
             const filteredPosts: Post[] = postsData.map((post: any) => ({
                 postId: post.postId,
                 title: post.title,
@@ -157,7 +154,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
     };
 
     const handlePostClick = (postId: string) => {
-        console.log(`Redirecting to /post/${postId}`);
+        (`Redirecting to /post/${postId}`);
         router.push(`/post/${postId}`);
     };
 

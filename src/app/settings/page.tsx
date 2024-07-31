@@ -49,7 +49,6 @@ export default function SettingsForm() {
       "id": user?.userId,
     });
     handleLogout();
-    console.log("Edit profile result, ", result);
   };
 
   const handleLogout = async () => {

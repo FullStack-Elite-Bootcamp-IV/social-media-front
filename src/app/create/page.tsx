@@ -27,16 +27,12 @@ const CreatePostPage = () => {
 
     const date = new Date();
 
-    console.log("user:", user);
-    console.log("media:", media);
-
     let imageUrl = '';
 
     if (media) {
       try {
         const response = await uploadImage(media).unwrap();
         imageUrl = response.imageUrl;
-        console.log('Image URL:', imageUrl);
       } catch (error) {
         console.error('Failed to upload image:', error);
         return; // Salir si la subida de la imagen falla
@@ -51,8 +47,6 @@ const CreatePostPage = () => {
       media: imageUrl,
     });
 
-    console.log(result)
-    
     try {
       postSchema.parse({
         title,

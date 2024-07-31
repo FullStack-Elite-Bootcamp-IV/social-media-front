@@ -1,3 +1,9 @@
+
+import { useEffect, useState } from "react";
+import { useUser } from "@/context/UserContext";
+import Link from "next/link";
+import { useGetChatsQuery } from "@/store/services/chatApi";
+
 const CHATS_EXAMPLE = [
     {
       chatId: '41a623cc-de61-4b71-973f-67054249af9e',
@@ -56,13 +62,6 @@ const CHATS_EXAMPLE = [
     lastMessage: string | null;
   }
 
-import { useEffect, useState } from "react";
-
-import { useUser } from "@/context/UserContext";
-import Link from "next/link";
-
-import { useGetChatsQuery } from "@/store/services/chatApi";
-
   function Chat({ chatId, user1Id, user2Id, lastMessage }: { chatId: string; user1Id: string; user2Id: string; lastMessage: string | null }) {
     const { user } = useUser();
     return (
@@ -88,7 +87,7 @@ export default function Chats() {
     return (
       <div className="flex absolute t-0 p-4 gap-4 flex-col min-h-dvh md:ml-64 md:w-min mt-16 md:mt-0 bg-ligthPurple overflow-y-scroll w-full">
         {
-        chats ? chats.map(chat => (
+        chats ? chats.map((chat:any) => (
           <Chat key={chat.chatId} {...chat} />
         )) : <p>No chats yet</p>
         }
