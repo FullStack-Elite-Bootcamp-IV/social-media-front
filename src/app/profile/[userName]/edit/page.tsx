@@ -17,7 +17,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
   const { user } = useUser();
   const router = useRouter();
   const [initialValues, setInitialValues] = useState<User | null>(null);
-  const [uploadImage, { isLoading: isUploading, error: uploadError, isSuccess: isUploadSuccess }] = useUploadImageMutation();
+  const [uploadImage] = useUploadImageMutation();
   const userCurrentData = useGetUserByUserNameQuery(userName);
 
   useEffect(() => (
