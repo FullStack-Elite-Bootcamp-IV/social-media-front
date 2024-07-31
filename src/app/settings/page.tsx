@@ -11,7 +11,8 @@ import { useEditProfileMutation, useGetUserByIdQuery } from "@/store/services/us
 import { User } from "@/types/user";
 import { toast } from "sonner";
 import { editProfileSchema } from "@/validations/editProfileSchema";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import { useLogoutMutation } from "@/store/services/authApi";
 
 type SettingsFormInputs = z.infer<typeof settingsSchema>;
 
@@ -19,43 +20,43 @@ type SettingsFormInputs = z.infer<typeof settingsSchema>;
 export default function SettingsForm() {
   const { toggleTheme, user } = useUser();
   const router = useRouter();
-  const [initialValues, setInitialValues] = useState<User | null>(null);
+  const [logout, { isSuccess }] = useLogoutMutation();
   const darkMode = user?.darkMode || false;
   
-  const [editProfile, { isSuccess }] = useEditProfileMutation();
+  const [editProfile] = useEditProfileMutation();
 
   useEffect(() => {
     if (isSuccess) {
       toast.success("Profile updated successfully");
-      router.push(`/homepage`);
+      router.push(`/login`);
     }
   }, [isSuccess]);
-
-  const userCurrentData = useGetUserByIdQuery(user?.userId);
-
-  useEffect(() => (
-    setInitialValues(userCurrentData.data)
-  ), [userCurrentData]);
 
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<SettingsFormInputs>({
-    values: initialValues || ({} as User),
     resolver: zodResolver(editProfileSchema),
   });
 
   const onSubmit = async (data: SettingsFormInputs) => {
     const result = await editProfile({
       body: {
-        userName: data.userName,
-        password: data.password,
+        "userName": data.userName,
+        "password": data.password,
       },
-      id: user?.userId,
+      "id": user?.userId,
     });
+    handleLogout();
     console.log("Edit profile result, ", result);
+  };
+
+  const handleLogout = async () => {
+    logout({
+      date: new Date(),
+      email: `${user?.email}`,
+    });
   };
 
   useEffect(() => {

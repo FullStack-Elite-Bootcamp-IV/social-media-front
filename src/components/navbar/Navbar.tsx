@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
 
   const { user } = useUser();
 
-  const [logout, { isSuccess: isLogout, isLoading }] = useLogoutMutation();
+  const [logout, { isSuccess: isLogout }] = useLogoutMutation();
   const router = useRouter();
 
   const handleMenuToggle = () => {
