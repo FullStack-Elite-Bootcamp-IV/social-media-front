@@ -33,7 +33,6 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      // Verifica si publicationDate es una cadena y conviértela en Date
       const processedPosts = data.map((post: any) => ({
         ...post,
         publicationDate: new Date(post.publicationDate) // Convierte publicationDate a Date

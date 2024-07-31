@@ -39,7 +39,6 @@ interface UserData {
 }
 
 const Profile = ({ params: userName }: { params: { userName: string } }) => {
-  console.log(userName);
   const [isOpenFollowers, setIsOpenFollowers] = useState(false);
   const [isOpenFollowed, setIsOpenFollowed] = useState(false);
 

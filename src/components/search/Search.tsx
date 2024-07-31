@@ -148,8 +148,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
     const router = useRouter();
 
     const handleUserClick = (userName: string) => {
-        console.log(`Redirecting to /profile/${userName}/edit`);
-        router.push(`/profile/${userName}`);
+        router.push(`/${userName}`);
     };
 
     const handlePostClick = (postId: string) => {
