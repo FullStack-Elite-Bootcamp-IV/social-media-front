@@ -6,24 +6,56 @@ import { useUser } from "@/context/UserContext";
 import Navbar from "../../components/navbar/Navbar";
 import { settingsSchema } from "@/validations/settingsSchema";
 import { z } from "zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useEditProfileMutation, useGetUserByIdQuery } from "@/store/services/usersApi";
+import { User } from "@/types/user";
+import { toast } from "sonner";
+import { editProfileSchema } from "@/validations/editProfileSchema";
+import { useRouter } from "next/router";
 
 type SettingsFormInputs = z.infer<typeof settingsSchema>;
 
+
 export default function SettingsForm() {
   const { toggleTheme, user } = useUser();
+  const router = useRouter();
+  const [initialValues, setInitialValues] = useState<User | null>(null);
   const darkMode = user?.darkMode || false;
+  
+  const [editProfile, { isSuccess }] = useEditProfileMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Profile updated successfully");
+      router.push(`/homepage`);
+    }
+  }, [isSuccess]);
+
+  const userCurrentData = useGetUserByIdQuery(user?.userId);
+
+  useEffect(() => (
+    setInitialValues(userCurrentData.data)
+  ), [userCurrentData]);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<SettingsFormInputs>({
-    resolver: zodResolver(settingsSchema),
+    values: initialValues || ({} as User),
+    resolver: zodResolver(editProfileSchema),
   });
 
-  const onSubmit = (data: SettingsFormInputs) => {
-    console.log(data);
+  const onSubmit = async (data: SettingsFormInputs) => {
+    const result = await editProfile({
+      body: {
+        userName: data.userName,
+        password: data.password,
+      },
+      id: user?.userId,
+    });
+    console.log("Edit profile result, ", result);
   };
 
   useEffect(() => {

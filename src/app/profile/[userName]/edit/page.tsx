@@ -75,8 +75,9 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
 
     const result = await editProfile({
       body: {
-        fullName: data.fullName,
+        userName: user?.userName,
         description: data.description,
+        fullName: data.fullName,
         gender: data.gender,
         location: data.location,
         personalWebSite: data.personalWebSite,
