@@ -40,18 +40,19 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   };
 
   const { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
-  const postsArray: PostData[] = data?.userPost;
 
-  const [posts, setPosts] = useState<PostData[]>(postsArray);
-
-  // Cuando llegan los datos se setean en el estado
-  useEffect(() => {
-    if (isSuccess) {
-      setPosts(postsArray);
-    }
-  }, [isSuccess, data])
+  const [posts, setPosts] = useState<PostData[]>();
   
-
+  useEffect(() => {
+    const processedPosts = data?.userPost.map((post: PostData) => ({
+      ...post,
+      publicationDate: new Date(post.publicationDate)
+    }));
+    setPosts(processedPosts);
+  }, [isSuccess])
+  
+  posts?.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
+  
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
       <Navbar />

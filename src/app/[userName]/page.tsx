@@ -55,16 +55,19 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
     },
   ]; */
 
-  let { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
-  const postsArray: PostData[] = data?.userPost;
-  const [posts, setPosts] = useState<PostData[]>(postsArray);
+  const { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
 
-  // Cuando llegan los datos se setean en el estado
+  const [posts, setPosts] = useState<PostData[]>();
+  
   useEffect(() => {
-    if (isSuccess) {
-      setPosts(postsArray);
-    }
-  }, [isSuccess, data])
+    const processedPosts = data?.userPost.map((post: PostData) => ({
+      ...post,
+      publicationDate: new Date(post.publicationDate)
+    }));
+    setPosts(processedPosts);
+  }, [isSuccess])
+  
+  posts?.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
 
   return (
     <main>
@@ -129,7 +132,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                 <p>{data?.genre}</p>
               </div>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 3xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-6">
               {posts?.map((post, index) => (
                 <div key={index} className="bg-gray-200 dark:bg-gray-800 rounded-lg shadow-lg p-4">
                   <Post

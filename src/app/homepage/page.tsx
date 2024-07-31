@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     if (data) {
-      const processedPosts = data.map((post: any) => ({
+      const processedPosts = data.map((post: PostData) => ({
         ...post,
         publicationDate: new Date(post.publicationDate) // Convierte publicationDate a Date
       }));
