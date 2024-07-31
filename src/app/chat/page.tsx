@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import { redirect, useSearchParams } from "next/navigation";
 import Messages from "@/components/chat/Messages";
-import { useUser } from "@/context/UserContext";
 import Navbar from "@/components/navbar/Navbar";
 
 interface Message {

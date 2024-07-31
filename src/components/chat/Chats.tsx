@@ -4,58 +4,7 @@ import { useUser } from "@/context/UserContext";
 import Link from "next/link";
 import { useGetChatsQuery } from "@/store/services/chatApi";
 
-const CHATS_EXAMPLE = [
-    {
-      chatId: '41a623cc-de61-4b71-973f-67054249af9e',
-      user1Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-      user2Id: 'e8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c1b',
-      lastMessage: null
-    },
-    {
-      chatId: 'e8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c',
-      user1Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-      user2Id: '41a623cc-de61-4b71-973f-67054249af9e',
-      lastMessage: null
-    },
-    {
-      chatId: 'f8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c1b',
-      user1Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-      user2Id: '43a623cc-de61-4b71-973f-67054249af9e',
-      lastMessage: null
-    },
-    {
-      chatId: 'g8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c',
-      user1Id: '92b6697f-88a3-44e2-a878-5f5244a41018',
-      user2Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-      lastMessage: null
-    },
-    {
-      chatId: 'h8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c',
-      user1Id: '7b6697f-88a3-44e2-a878-5f5244a41018',
-      user2Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-      lastMessage: null
-    },
-    {
-      chatId: 'i8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c',
-        user1Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-        user2Id: 'e8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c1b',
-        lastMessage: 'Hello'
-    },
-    {
-      chatId: 'j8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c',
-        user1Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-        user2Id: '41a623cc-de61-4b71-973f-67054249af9e',
-        lastMessage: 'Hi'
-    },
-    {
-        chatId: 'k8b5f7b9-1f5f-4d1b-8e1d-4b1e4c4b1c1',
-        user1Id: '8426697f-88a3-44e2-a878-5f5244a41018',
-        user2Id: '43a623cc-de61-4b71-973f-67054249af9e',
-        lastMessage: 'Hey'
-    }
-  ]
-
-  interface Chat {
+interface Chat {
     chatId: string;
     user1Id: string;
     user2Id: string;
