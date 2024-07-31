@@ -9,25 +9,26 @@ export const followersApi = createApi ({
   endpoints: (builder) => ({ 
     followers: builder.mutation({
       query: (body) => ({
-        url: `/followers`,
+        url: `/followers/`,
         method: 'POST',
         body,
       }),
     }),
-    getfollowed: builder.query({
+    getFollowed: builder.query({
       query: (id) => ({
         url: `/followers/followings/${id}`,
       }),
     }),
-    getfollowers: builder.query({
+    getFollowers: builder.query({
       query: (id) => ({
-        url: `/followers/followers/${id}`,
+        url: `/followers/user/${id}`,
       }),
     }),
     deleteFollower: builder.mutation({
-      query: (id) => ({
-        url: `/followers/${id}`,
+      query: (body) => ({
+        url: `/followers/delete`,
         method: 'DELETE',
+        body,
       }),
     }),
   })
@@ -35,9 +36,7 @@ export const followersApi = createApi ({
 
 export const { 
   useFollowersMutation, 
-
-  useGetfollowedQuery, 
-  useGetfollowersQuery, 
-  
+  useGetFollowedQuery, 
+  useGetFollowersQuery, 
   useDeleteFollowerMutation 
 } = followersApi

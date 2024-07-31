@@ -145,10 +145,15 @@ const SearchBar: React.FC = () => {
 };
 
 const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, currentPage, setCurrentPage, filter }) => {
+    const { user } = useUser();
     const router = useRouter();
 
     const handleUserClick = (userName: string) => {
-        router.push(`/${userName}`);
+        if ( userName == user?.userName ) {
+            router.push(`/profile/${user?.userName}`)
+        } else {
+            router.push(`/${userName}`);
+        }
     };
 
     const handlePostClick = (postId: string) => {

@@ -7,7 +7,7 @@ import Post from "@/components/post/Post";
 import Link from 'next/link';
 
 import UserList from "@/components/userlist/Userlist";
-import {useUser} from "@/context/UserContext";
+import { useUser } from "@/context/UserContext";
 import { useGetUserWithPostsByUserNameQuery }  from "@/store/services/usersApi";
 
 interface PostData {

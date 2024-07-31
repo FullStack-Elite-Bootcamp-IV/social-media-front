@@ -5,6 +5,7 @@ import Comments from '../comments/Comments';
 import { useDeleteFavouriteMutation, useAddFavouriteMutation } from '@/store/services/favouritesApi';
 import { useCreateLikeMutation, useDeleteLikeMutation } from '@/store/services/likesApi';
 import { useGetUserByIdQuery } from '@/store/services/usersApi';
+import { useUser } from '@/context/UserContext';
 
 interface PostProps {
   userId: string;
@@ -19,6 +20,7 @@ interface PostProps {
 }
 
 const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments, description, favorites, postId }) => {
+  const { user } = useUser();
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isFavorited, setIsFavorited] = useState(false);
@@ -85,9 +87,9 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
     <div className="border border-gray-700 p-4 m-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
-          <a href={`/${userName}`}>
+          <a href={ userName == user?.userName ? `/profile/${user?.userName}` : `/${userName}`}>
             <h1 className="ml-2">
-              {userName || 'Usuario NN'}
+              { userName || 'Usuario NN' }
             </h1>
           </a>
         </div>
@@ -102,7 +104,11 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
         </div>
       )}
 
-      <div className="flex justify-around mb-4">
+      <div className="text-black dark:text-white bg-white dark:bg-black p-4 rounded">
+        <p>{description}</p>
+      </div>
+
+      <div className="flex justify-around mt-4">
         <section className="flex items-center">
           <button
             className={`flex items-center ${isLiked ? 'text-red-500' : 'text-gray-500'}`}
@@ -126,10 +132,6 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
             {favorites} <span className="ml-1">⭐</span>
           </button>
         </section>
-      </div>
-
-      <div className="text-black dark:text-white bg-white dark:bg-black p-4 rounded">
-        <p>{description}</p>
       </div>
 
       {showComments && <Comments postId={postId} />}

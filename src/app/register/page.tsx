@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/validations/registerSchema";
 import { useRegisterMutation } from "@/store/services/usersApi";
-import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 
 
