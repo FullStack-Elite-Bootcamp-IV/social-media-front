@@ -71,7 +71,7 @@ const Navbar: React.FC = () => {
   const handleLogout = async () => {
     logout({
       date: new Date(),
-      email: "jhanssss@gmail.com",
+      email: `${user?.email}`,
     });
   };
 
