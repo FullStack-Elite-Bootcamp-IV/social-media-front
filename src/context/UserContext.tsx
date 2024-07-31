@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 interface UserContextProps {
     user: User | null;
-    setUser: (user: User) => void;
+    setUser: (user: UserWithToken) => void;
     toggleTheme: () => void;
     loading: boolean;
     setLoading: (loading: boolean) => void;

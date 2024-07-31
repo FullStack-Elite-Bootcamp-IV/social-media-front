@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { io, Socket } from "socket.io-client";
 import { redirect, useSearchParams } from "next/navigation";
 import Messages from "@/components/chat/Messages";
+import { useUser } from "@/context/UserContext";
 import Navbar from "@/components/navbar/Navbar";
 
 interface Message {
@@ -17,12 +18,14 @@ let socket: undefined | Socket;
 function useChatSocket(chatId: string | null, setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
     useEffect(() => {
         if (typeof window === 'undefined' || !chatId) return;
+        console.log(localStorage.getItem('loginToken'));
         socket = io('https://dwhj9dsl-5002.use2.devtunnels.ms/chat', {
             auth: { token: localStorage.getItem('loginToken') },
         });
 
         socket.on('connect', () => console.log('Connected to server'));
         socket.on('receiveMessage', (messageData: Message) => {
+            console.log(messageData )
             if (messageData.message) {
                 setMessages(prevMessages => [...prevMessages, messageData]);
             }
@@ -50,6 +53,7 @@ export default function Chat() {
         const messageInput = form.elements.namedItem('message') as HTMLInputElement;
         if (!messageInput || !messageInput.value) return;
         const message = messageInput.value;
+        console.log(chatId)
         socket?.emit('message', message, chatId);
         messageInput.value = '';
     }, [chatId, socket]);
