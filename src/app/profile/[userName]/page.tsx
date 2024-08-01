@@ -53,6 +53,8 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   
   posts?.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
   
+  const defaultProfileImage = 'https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain';
+
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
       <Navbar />
@@ -68,7 +70,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
             <div className="absolute inset-0 flex justify-center items-center mt-20">
               <img
                 className="rounded-full border-4 border-white w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48"
-                src={data?.profileImage}
+                src={data?.profileImage || defaultProfileImage}
                 alt="perfil"
               />
             </div>
