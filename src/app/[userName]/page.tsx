@@ -33,7 +33,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
 
   useEffect(() => {
     if (isSuccessFollowers && isSuccess) {
-      const isFollow = followersData?.some((follow:any) => {
+      const isFollow = followersData?.some((follow: string) => {
         return data?.userId === follow;
       });
       setFollow(isFollow ? "Unfollow" : "Follow");

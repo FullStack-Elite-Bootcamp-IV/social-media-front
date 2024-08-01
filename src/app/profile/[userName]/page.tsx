@@ -89,7 +89,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                   onClick={openFollowedList}
                   className="text-blue-400 hover:text-blue-300"
                 >
-                  seguidores
+                  Followers
                 </button>
                 {isOpenFollowed && <UserList title="Followers List" />}
               </div>
@@ -99,7 +99,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                   onClick={openFollowersList}
                   className="text-blue-400 hover:text-blue-300"
                 >
-                  seguidos
+                  Followed
                 </button>
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>

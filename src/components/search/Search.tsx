@@ -41,8 +41,6 @@ const SearchBar: React.FC = () => {
     const [results, setResults] = useState<User[] | Post[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
 
-    const router = useRouter();
-
     const { data: usersData, error: usersError } = useSearchUsersQuery(searchParameter, {
         skip: filter !== 'people',
     });
