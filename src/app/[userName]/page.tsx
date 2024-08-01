@@ -62,6 +62,8 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
     }
   };
 
+  const defaultProfileImage = 'https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain';
+
   return (
     <main>
       <Navbar />
@@ -79,7 +81,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                 <div className="absolute z-10 flex flex-col px-2 py-20 mt-10 mx-6 lg:py-6 justify-center items-center">
                   <img
                     className="rounded-full border-2 w-32 h-32 sm:w-20 sm:h-20 lg:w-48 lg:h-48"
-                    src={data?.profileImage}
+                    src={data?.profileImage || defaultProfileImage }
                     alt="imagen"
                   />
                   <h3 className="mx-auto text-2xl">{data?.userName}</h3>
