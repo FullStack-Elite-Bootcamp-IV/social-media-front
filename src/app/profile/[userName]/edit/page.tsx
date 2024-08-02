@@ -19,7 +19,6 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
   const userCurrentData = useGetUserByUserNameQuery(userName);
 
   useEffect(() =>{ 
-    console.log("User data:", userCurrentData.data)
     setInitialValues(userCurrentData.data)
   }, [userCurrentData]);
 
@@ -57,13 +56,9 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
         const response = await uploadImage(profileImage).unwrap();
         profileImageUrl = response.imageUrl;
       } catch (error) {
-        console.error('Failed to upload image:', error);
         //return;
       }
-      console.log(profileImage)
     } else {
-      
-      console.log("profile image", initialValues)
       profileImageUrl = initialValues?.profileImage }
 
     if (coverImage) {
@@ -71,10 +66,8 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
         const response = await uploadImage(coverImage).unwrap();
         coverImageUrl = response.imageUrl;
       } catch (error) {
-        console.error('Failed to upload image:', error);
         //return;
       }
-      console.log(coverImage)
     } else {
       coverImageUrl = initialValues?.coverImage }
 
