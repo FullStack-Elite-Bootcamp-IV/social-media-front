@@ -20,9 +20,12 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
   const [uploadImage] = useUploadImageMutation();
   const userCurrentData = useGetUserByUserNameQuery(userName);
 
-  useEffect(() => (
+  useEffect(() =>{ 
+    console.log("User data:", userCurrentData.data)
     setInitialValues(userCurrentData.data)
-  ), [userCurrentData]);
+  }, [userCurrentData]);
+
+  
 
   const {
     register,
@@ -31,7 +34,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
     formState: { errors },
   } = useForm<User>({
     values: initialValues || ({} as User),
-    resolver: zodResolver(editProfileSchema),
+    /* resolver: zodResolver(editProfileSchema), */
   });
 
   const [editProfile, { isSuccess }] = useEditProfileMutation();
@@ -43,8 +46,8 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
     }
   }, [isSuccess]);
 
-  const onSubmit: SubmitHandler<User> = async (data) => {
-    
+  const onSubmitData: SubmitHandler<User> = async (data) => {
+
     let profileImageUrl: string | undefined = '';
     let coverImageUrl: string | undefined = '';
     const coverImage = data.coverImage;
@@ -56,9 +59,13 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
         profileImageUrl = response.imageUrl;
       } catch (error) {
         console.error('Failed to upload image:', error);
-        return;
+        //return;
       }
-    } else { profileImageUrl = initialValues?.profileImage }
+      console.log(profileImage)
+    } else {
+      
+      console.log("profile image", initialValues)
+      profileImageUrl = initialValues?.profileImage }
 
     if (coverImage) {
       try {
@@ -66,12 +73,14 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
         coverImageUrl = response.imageUrl;
       } catch (error) {
         console.error('Failed to upload image:', error);
-        return;
+        //return;
       }
-    } else { coverImageUrl = initialValues?.coverImage }
+      console.log(coverImage)
+    } else {
+      coverImageUrl = initialValues?.coverImage }
 
 
-    const result = await editProfile({
+    await editProfile({
       body: {
         userName: user?.userName,
         description: data.description,
@@ -87,6 +96,8 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
     });
   };
 
+  //-----------------------------------------------------------------//
+
   const handleProfileFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     setValue("profileImage", file as any);
@@ -97,11 +108,13 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
     setValue("coverImage", file as any);
   };
 
+  //-----------------------------------------------------------------//
+
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
         <Navbar />
       <main className="flex md:ml-64 min-h-screen">
-          <form className="space-y-4 w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-4 w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0" onSubmit={handleSubmit(onSubmitData)}>
             <h1 className="text-2xl dark:text-white text-black mb-6 text-left pt-4">
               Actualizar información
             </h1>
