@@ -1,14 +1,14 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
-import Link from 'next/link';
-
+import Link from "next/link";
 import UserList from "@/components/userlist/Userlist";
 import { useUser } from "@/context/UserContext";
-import { useGetUserWithPostsByUserNameQuery }  from "@/store/services/usersApi";
+import { useGetUserWithPostsByUserNameQuery } from "@/store/services/usersApi";
+import { useRouter } from "next/navigation";
 
 interface PostData {
   description: string;
@@ -25,35 +25,31 @@ interface PostData {
   favorites: number;
 }
 
-const Profile = ({ params: userName }: { params: { userName: string } }) => {
+const Profile = ({ params: { userName } }: { params: { userName: string } }) => {
   const [isOpenFollowers, setIsOpenFollowers] = useState(false);
   const [isOpenFollowed, setIsOpenFollowed] = useState(false);
 
-  const { user, setLoading } = useUser();
+  const { user } = useUser();
 
-
-  const openFollowersList = () => {
-    setIsOpenFollowers(!isOpenFollowers);
-  };
-  const openFollowedList = () => {
-    setIsOpenFollowed(!isOpenFollowed);
-  };
-
-  const { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
-
+  const { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName);
   const [posts, setPosts] = useState<PostData[]>();
-  
+
   useEffect(() => {
-    const processedPosts = data?.userPost.map((post: PostData) => ({
-      ...post,
-      publicationDate: new Date(post.publicationDate)
-    }));
-    setPosts(processedPosts);
-  }, [isSuccess])
-  
+    if (isSuccess && data) {
+      const processedPosts = data.userPost.map((post: PostData) => ({
+        ...post,
+        publicationDate: new Date(post.publicationDate),
+      }));
+      setPosts(processedPosts);
+    }
+  }, [isSuccess, data]);
+
+
+
   posts?.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
-  
-  const defaultProfileImage = 'https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain';
+
+  const defaultProfileImage =
+    "https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain";
 
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
@@ -76,7 +72,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
             </div>
           </section>
 
-          <div className="text-center text-darkVoid dark: dark:text-blancoHueso mt-30 mb-8">
+          <div className="text-center text-darkVoid dark:text-blancoHueso mt-30 mb-8">
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">
               {data?.userName}
             </h1>
@@ -88,7 +84,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
               <div className="flex flex-col items-center mb-4 sm:mb-0">
                 <p className="text-xl">{data?.followers}</p>
                 <button
-                  onClick={openFollowedList}
+                  onClick={() => setIsOpenFollowed(!isOpenFollowed)}
                   className="text-blue-400 hover:text-blue-300"
                 >
                   Followers
@@ -98,7 +94,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
               <div className="flex flex-col items-center mb-4 sm:mb-0">
                 <p className="text-xl">{data?.followings}</p>
                 <button
-                  onClick={openFollowersList}
+                  onClick={() => setIsOpenFollowers(!isOpenFollowers)}
                   className="text-blue-400 hover:text-blue-300"
                 >
                   Followed
@@ -106,7 +102,10 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <Link href={`/profile/${user?.userName}/edit`} className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-liquidLava text-white rounded-md hover:bg-purple-800 transition duration-200">
+            <Link
+              href={`/profile/${user?.userName}/edit`}
+              className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-liquidLava text-white rounded-md hover:bg-purple-800 transition duration-200"
+            >
               <FaPencilAlt className="mr-2" /> Editar perfil
             </Link>
           </div>
@@ -125,7 +124,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                 <p className="font-semibold text-darkVoid dark:text-gray-400">Género</p>
                 <p className="text-darkVoid dark:text-white">{data?.gender}</p>
               </div>
-            </div>  
+            </div>
           </section>
 
           <section className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">

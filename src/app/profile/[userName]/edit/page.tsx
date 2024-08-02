@@ -2,8 +2,6 @@
 
 import Navbar from "../../../../components/navbar/Navbar";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { editProfileSchema } from "@/validations/editProfileSchema";
 import { useEditProfileMutation } from "@/store/services/editApi";
 import { useGetUserByUserNameQuery } from "@/store/services/usersApi";
 import { useUploadImageMutation } from "@/store/services/postsApi";
@@ -34,7 +32,6 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
     formState: { errors },
   } = useForm<User>({
     values: initialValues || ({} as User),
-    /* resolver: zodResolver(editProfileSchema), */
   });
 
   const [editProfile, { isSuccess }] = useEditProfileMutation();
@@ -42,7 +39,9 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
   useEffect(() => {
     if (isSuccess) {
       toast.success("Profile updated successfully");
-      router.push(`/profile/${userName}`);
+      window.location.href = `/profile/${userName}`;
+      
+      
     }
   }, [isSuccess]);
 
