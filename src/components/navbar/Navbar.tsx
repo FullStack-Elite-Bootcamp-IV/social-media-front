@@ -67,7 +67,7 @@ const Navbar: React.FC = () => {
     setIsNotifModalOpen(!isNotifModalOpen);
   };
 
-  //Logout
+  // Logout
   const handleLogout = async () => {
     logout({
       date: new Date(),
@@ -98,28 +98,28 @@ const Navbar: React.FC = () => {
           <NavItem
             href="/homepage"
             icon={<IoHomeSharp className="text-xl" />}
-            label="Inicio"
+            label="Home"
           />
 
           <NavItem
             href="/create"
             icon={<IoIosAddCircle className="text-xl" />}
-            label="Crear"
+            label="Create"
           />
 
           <NavItem
             href={`/profile/${user?.userName}`}
             icon={<FaUser className="text-xl" />}
-            label="Perfil"
+            label="Profile"
           />
           <NavItem
             href="/settings"
             icon={<IoMdSettings className="text-xl" />}
-            label="Configuración"
+            label="Settings"
           />
           <NavButton
             icon={<FaSearch className="text-xl" />}
-            label="Buscar"
+            label="Search"
             onClick={handleSearchClick}
           />
           <NavButton
@@ -130,7 +130,7 @@ const Navbar: React.FC = () => {
           />
           <NavButton
             icon={<MdNotificationsActive className="text-xl" />}
-            label="Notificaciones"
+            label="Notifications"
             onClick={() => {
               handleNotifToggle();
               setIsOpen(false);
@@ -138,7 +138,7 @@ const Navbar: React.FC = () => {
           />
           <NavButton
             icon={<IoLogOutOutline className="text-xl" />}
-            label="Cerrar sesión"
+            label="Log Out"
             onClick={handleLogout}
           />
         </ul>
@@ -151,7 +151,7 @@ const Navbar: React.FC = () => {
       )}
       {isNotifModalOpen && (
         <div className="">
-          ,<NotificationModal setIsNotifModalOpen={setIsNotifModalOpen} />
+          <NotificationModal setIsNotifModalOpen={setIsNotifModalOpen} />
         </div>
       )}
       {isSearchBarVisible && (

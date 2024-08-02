@@ -44,8 +44,6 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
     }
   }, [isSuccess, data]);
 
-
-
   posts?.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
 
   const defaultProfileImage =
@@ -67,7 +65,7 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
               <img
                 className="rounded-full border-4 border-white w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48"
                 src={data?.profileImage || defaultProfileImage}
-                alt="perfil"
+                alt="profile"
               />
             </div>
           </section>
@@ -99,29 +97,29 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
                 >
                   Followed
                 </button>
-                {isOpenFollowers && <UserList title="Followeds List" />}
+                {isOpenFollowers && <UserList title="Followings List" />}
               </div>
             </div>
             <Link
               href={`/profile/${user?.userName}/edit`}
               className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-liquidLava text-white rounded-md hover:bg-purple-800 transition duration-200"
             >
-              <FaPencilAlt className="mr-2" /> Editar perfil
+              <FaPencilAlt className="mr-2" /> Edit Profile
             </Link>
           </div>
 
           <section className="text-white mb-8">
             <div className="flex flex-col sm:flex-row sm:justify-around text-base sm:text-lg">
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold text-darkVoid dark:text-gray-400">Nombre</p>
+                <p className="font-semibold text-darkVoid dark:text-gray-400">Name</p>
                 <p className="text-darkVoid dark:text-white">{data?.fullName}</p>
               </div>
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold text-darkVoid dark:text-gray-400">Edad</p>
+                <p className="font-semibold text-darkVoid dark:text-gray-400">Age</p>
                 <p className="text-darkVoid dark:text-white">{data?.age}</p>
               </div>
               <div className="mb-4 sm:mb-0">
-                <p className="font-semibold text-darkVoid dark:text-gray-400">Género</p>
+                <p className="font-semibold text-darkVoid dark:text-gray-400">Gender</p>
                 <p className="text-darkVoid dark:text-white">{data?.gender}</p>
               </div>
             </div>

@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 
 const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
   const { user } = useUser();
-  const router = useRouter();
   const [initialValues, setInitialValues] = useState<User | null>(null);
   const [uploadImage] = useUploadImageMutation();
   const userCurrentData = useGetUserByUserNameQuery(userName);
@@ -71,16 +70,20 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
     } else {
       coverImageUrl = initialValues?.coverImage }
 
+console.log(data)
+console.log(initialValues)
+
+const age = parseInt(data.age as any, 10);
 
     await editProfile({
       body: {
         userName: user?.userName,
-        description: data.description,
         fullName: data.fullName,
+        age: isNaN(age) ? undefined : age,
         gender: data.gender,
         location: data.location,
-        personalWebSite: data.personalWebSite,
-        workPlace: data.workPlace,
+/*         personalWebSite: data.personalWebSite,
+        workPlace: data.workPlace, */
         profileImage: profileImageUrl,
         coverImage: coverImageUrl,
       },
@@ -108,11 +111,11 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
       <main className="flex md:ml-64 min-h-screen">
           <form className="space-y-4 w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0" onSubmit={handleSubmit(onSubmitData)}>
             <h1 className="text-2xl dark:text-white text-black mb-6 text-left pt-4">
-              Actualizar información
+              Change information
             </h1>
             <div className="flex justify-start flex-col">
               <label className="mb-1 text-black dark:text-white">
-                Imagen de perfìl
+                Profile image
               </label>
               <input
                 className={`dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg`}
@@ -123,7 +126,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
             </div>
             <div className="flex justify-start flex-col">
               <label className="mb-1 text-black dark:text-white">
-                Imagen de fondo
+                Cover image
               </label>
               <input
                 className={`dark:text-white bg-lightGray dark:text-e dark:bg-slateGray p-1 rounded-lg`}
@@ -134,7 +137,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
             </div>
             <div className="flex flex-col">
               <label className="mb-1 text-black dark:text-white">
-                Nombre completo
+                Full name
               </label>
               <input
                 className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.fullName ? "border-red-500" : ""}`}
@@ -158,7 +161,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
                     className={`mr-2 dark:text-white text-black ${errors.gender ? "border-red-500" : ""}`}
                     {...register("gender")}
                   />
-                  Hombre
+                  Male
                 </label>
                 <label className="flex items-center dark:text-white text-black">
                   <input
@@ -167,7 +170,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
                     className="mr-2 dark:text-white text-black"
                     {...register("gender")}
                   />
-                  Mujer
+                  Female
                 </label>
                 <label className="flex items-center dark:text-white text-black">
                   <input
@@ -176,19 +179,19 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
                     className="mr-2 dark:text-white text-black"
                     {...register("gender")}
                   />
-                  Otro
+                  Other
                 </label>
               </div>
             </div>
             <div className="flex flex-col">
               <label className="mb-1 dark:text-white text-black">
-                Descripcion
+                Age
               </label>
               <input
-                className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.description ? "border-red-500" : ""}`}
-                type="text"
-                placeholder="Enter a description"
-                {...register("description")}
+                className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.age ? "border-red-500" : ""}`}
+                type="number"
+                placeholder="Enter a age"
+                {...register("age")}
               />
               {errors.description && (
                 <p className="text-red-500 text-xs italic">
@@ -198,7 +201,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
             </div>
             <div className="flex flex-col">
               <label className="mb-1 dark:text-white text-black">
-                Localizacion
+                Localization
               </label>
               <input
                 className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.location ? "border-red-500" : ""}`}
@@ -209,38 +212,6 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
               {errors.location && (
                 <p className="text-red-500 text-xs italic">
                   {errors.location?.message}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <label className="mb-1 dark:text-white text-black">
-                Lugar de trabajo
-              </label>
-              <input
-                className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.workPlace ? "border-red-500" : ""}`}
-                type="text"
-                placeholder="Enter a workplace"
-                {...register("workPlace")}
-              />
-              {errors.workPlace && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.workPlace?.message}
-                </p>
-              )}
-            </div>
-            <div className="flex flex-col">
-              <label className="mb-1 dark:text-white text-black">
-                Sitio Web personal
-              </label>
-              <input
-                className={`dark:placeholder-lightGray placeholder-slateGray bg-lightGray text-black dark:bg-slateGray rounded-lg px-3 py-2 w-50 focus:outline-none focus:ring-2 focus:ring-purple-600 dark:text-white ${errors.personalWebSite ? "border-red-500" : ""}`}
-                type="text"
-                placeholder="Enter a link"
-                {...register("personalWebSite")}
-              />
-              {errors.personalWebSite && (
-                <p className="text-red-500 text-xs italic">
-                  {errors.personalWebSite?.message}
                 </p>
               )}
             </div>

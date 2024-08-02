@@ -48,7 +48,7 @@ const NotificationModal = ({ setIsNotifModalOpen }: any) => {
       <div className="w-full md:w-auto mt-20 md:mt-0 px-4 overflow-auto h-screen bg-purple-900 scrollbar-hidden fixed top-0 md:left-64 z-10">
         <div className="flex justify-center text-center md:block">
           <h2 className="w-64 md:flex justify-center text-center p-4 text-blancoHueso">
-            Notificaciones
+            Notifications
           </h2>
           <button
             className="w-64 flex justify-center text-center text-blancoHueso hover:text-gray-300 p-4"
@@ -58,7 +58,7 @@ const NotificationModal = ({ setIsNotifModalOpen }: any) => {
             }}
           >
             <IoClose className="text-2xl text-blancoHueso" />
-            Cerrar
+            Close
           </button>
         </div>
         <div className="flex flex-col">

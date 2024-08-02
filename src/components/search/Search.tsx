@@ -5,7 +5,7 @@ import React, { useState, FormEvent } from 'react';
 import { useSearchPostsQuery, useSearchUsersQuery } from '@/store/services/search';
 import { useRouter } from 'next/navigation';
 
-// Definición de tipos
+// Type definitions
 interface User {
     age: number;
     fullName: string;
@@ -116,14 +116,14 @@ const SearchBar: React.FC = () => {
                             onChange={(e) => setFilter(e.target.value as 'people' | 'posts')}
                             className="ml-2 bg-transparent outline-none text-lg text-black"
                         >
-                            <option value="people">Personas</option>
-                            <option value="posts">Publicaciones</option>
+                            <option value="people">People</option>
+                            <option value="posts">Posts</option>
                         </select>
                         <input
                             type="text"
                             value={searchParameter}
                             onChange={(e) => setSearchParameter(e.target.value)}
-                            placeholder="Buscar En Nexo"
+                            placeholder="Search on Nexo"
                             className="ml-2 w-full bg-transparent outline-none text-lg text-center text-black"
                         />
                         <button type="submit" className="ml-2 p-2 bg-purple-500 text-white rounded-full">
@@ -144,7 +144,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
     const router = useRouter();
 
     const handleUserClick = (userName: string) => {
-        if ( userName == user?.userName ) {
+        if (userName === user?.userName) {
             router.push(`/profile/${user?.userName}`)
         } else {
             router.push(`/${userName}`);
@@ -152,7 +152,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
     };
 
     const handlePostClick = (postId: string) => {
-        (`Redirecting to /post/${postId}`);
+        console.log(`Redirecting to /post/${postId}`);
         router.push(`/post/${postId}`);
     };
 
@@ -199,7 +199,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
                         ))}
                     </ul>
                 ) : (
-                    <p>No hay resultados</p>
+                    <p>No results found</p>
                 )}
             </div>
             <div className="flex justify-center mt-4 items-center text-black space-x-2">
@@ -208,15 +208,15 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results, totalPages, curr
                     disabled={currentPage === 1}
                     className="px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Anterior
+                    Previous
                 </button>
-                <span className="text-sm">{currentPage} de {totalPages}</span>
+                <span className="text-sm">{currentPage} of {totalPages}</span>
                 <button
                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 bg-purple-500 text-white rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    Siguiente
+                    Next
                 </button>
             </div>
         </div>
