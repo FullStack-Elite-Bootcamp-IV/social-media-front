@@ -9,14 +9,14 @@ export const notificationsApi = createApi({
   endpoints: (builder) => ({
     createNotification: builder.mutation({
       query: (body) => ({
-        url: `/notifications`,
+        url: `/notifications/create`,
         method: 'POST',
         body,
       }),
     }),
     deleteNotification: builder.mutation({
       query: (id) => ({
-        url: `/notifications/${id}`,
+        url: `/notifications/delete/${id}`,
         method: 'DELETE',
       }),
     }),

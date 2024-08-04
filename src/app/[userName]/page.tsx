@@ -6,6 +6,7 @@ import { useDeleteFollowerMutation, useFollowersMutation, useGetFollowedQuery } 
 import { useGetUserWithPostsByUserNameQuery } from "@/store/services/usersApi";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
+import { useCreateNotificationMutation } from "@/store/services/notificationsApi";
 
 interface PostData {
   userId: string;
@@ -26,10 +27,12 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const { user } = useUser();
   const { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName?.userName);
   const { data: followersData, isSuccess: isSuccessFollowers } = useGetFollowedQuery(user?.userId);
-  const [followers] = useFollowersMutation();
-  const [deleteFollow] = useDeleteFollowerMutation();
+  const [ followers ] = useFollowersMutation();
+  const [ deleteFollow ] = useDeleteFollowerMutation();
+  const [ createNotification ] = useCreateNotificationMutation();
   const [follow, setFollow] = useState("Follow");
   const [posts, setPosts] = useState<PostData[]>();
+  const notificationTitle: string = `${user?.userName} has followed you`;
 
   useEffect(() => {
     if (isSuccessFollowers && isSuccess) {
@@ -55,6 +58,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const setFollowState = () => {
     if (follow === "Follow") {
       followers({ followerId: user?.userId, followingId: data?.userId });
+      createNotification({emisorUser: user?.userId, receptorUser: data?.userId, action: 'new_follow_request', title: notificationTitle});
       setFollow("Unfollow");
     } else {
       deleteFollow({ followerId: user?.userId, followingId: data?.userId });
@@ -126,7 +130,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                   <p>{data?.genre}</p>
                 </div>
               </div>
-              <div className="grid grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 lg:grid-cols-3 3xl:grid-cols-4 gap-6 mt-5">
                 {posts?.map((post, index) => (
                   <div key={index} className="bg-gray-200 dark:bg-gray-800 rounded-lg shadow-lg p-4">
                     <Post
