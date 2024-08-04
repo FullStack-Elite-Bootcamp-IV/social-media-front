@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import NotificationCard from "./NotificationCard";
 import { IoClose } from "react-icons/io5";
 import { useGetNotificationsByUserQuery } from "@/store/services/notificationsApi";
-import { useGetUserByIdQuery } from "@/store/services/usersApi";
 import { useUser } from "@/context/UserContext";
 
 interface Notification {
@@ -18,9 +17,9 @@ interface Notification {
 }
 const NotificationModal = ({ setIsNotifModalOpen }: any) => {
 
-  const user = useUser();
+  const { user } = useUser();
 
-  const { data: notifications } = useGetNotificationsByUserQuery(user.user?.userId);
+  const { data: notifications } = useGetNotificationsByUserQuery(user?.userId);
 
   const [notifArray, setNotifArray] = useState<Notification[]>([]);
   
@@ -37,11 +36,6 @@ const NotificationModal = ({ setIsNotifModalOpen }: any) => {
       )
     );
   };
-
-  const getUser = (notif: any): string => {
-    const { data } = useGetUserByIdQuery(notif.emisorUser) 
-    return data.userName;
-  }
 
   return (
     <>

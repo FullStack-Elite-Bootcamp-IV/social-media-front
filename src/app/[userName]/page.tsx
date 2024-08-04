@@ -32,7 +32,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const [ createNotification ] = useCreateNotificationMutation();
   const [follow, setFollow] = useState("Follow");
   const [posts, setPosts] = useState<PostData[]>();
-  const notificationTitle: string = `${user?.userName} has followed you`;
+  const notificationContent: string = `${user?.userName} has followed you`;
 
   useEffect(() => {
     if (isSuccessFollowers && isSuccess) {
@@ -58,7 +58,13 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const setFollowState = () => {
     if (follow === "Follow") {
       followers({ followerId: user?.userId, followingId: data?.userId });
-      createNotification({emisorUser: user?.userId, receptorUser: data?.userId, action: 'new_follow_request', title: notificationTitle});
+      const si = createNotification({
+        emisorUser: user?.userId, 
+        receptorUser: data?.userId, 
+        action: 'new_follow_request', 
+        title: "New Follower",
+        description: notificationContent
+      });
       setFollow("Unfollow");
     } else {
       deleteFollow({ followerId: user?.userId, followingId: data?.userId });

@@ -2,6 +2,7 @@
 import React from "react";
 import { IoClose } from "react-icons/io5";
 import { format } from "date-fns";
+import { useGetUserByIdQuery } from "@/store/services/usersApi";
 
 interface NotificationCardProps {
   id: string; 
@@ -14,13 +15,15 @@ interface NotificationCardProps {
 // Component to display a notification card
 const NotificationCard: React.FC<NotificationCardProps> = (props) => {
   const formattedDate = format(new Date(props.notificationDate), "dd MMM yyyy, HH:mm"); // Format the date using date-fns library
+  const { data: userData } = useGetUserByIdQuery(props.emisorUser);
+  const userName = userData?.userName;
 
   return (
     <div className="md:max-w-64 w-full bg-ligthPurple rounded-lg p-4 mb-4 text-blancoHueso">
       <div className="flex justify-between items-center">
         <div>
           <p className="font-bold">
-            {props.title}
+            {userName} - {props.title}
           </p>
         </div>
         <button
