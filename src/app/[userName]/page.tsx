@@ -58,13 +58,14 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const setFollowState = () => {
     if (follow === "Follow") {
       followers({ followerId: user?.userId, followingId: data?.userId });
-      const si = createNotification({
+      const notification = createNotification({
         emisorUser: user?.userId, 
         receptorUser: data?.userId, 
         action: 'new_follow_request', 
         title: "New Follower",
         description: notificationContent
       });
+      console.log(notification);
       setFollow("Unfollow");
     } else {
       deleteFollow({ followerId: user?.userId, followingId: data?.userId });

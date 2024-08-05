@@ -7,6 +7,7 @@ import { useGetUserByIdQuery } from '@/store/services/usersApi';
 import { useUser } from '@/context/UserContext';
 import { useLikePostMutation, useUnlikePostMutation } from '@/store/services/postsApi';
 import { useGetLikesByPostIdQuery } from '@/store/services/likesApi';
+import { useCreateNotificationMutation } from '@/store/services/notificationsApi';
 
 interface PostProps {
   userId: string;
@@ -37,6 +38,7 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
   const [deleteFavourite, { isLoading: isLoadingDelFav }] = useDeleteFavouriteMutation();
   const [likePost, { isLoading: isLoadingAddLike }] = useLikePostMutation();
   const [unlikePost, { isLoading: isLoadingDelLike }] = useUnlikePostMutation();
+  const [createNotification] = useCreateNotificationMutation();
 
   const { data: likePostData } = useGetLikesByPostIdQuery(postId);
   const { data: favouritesPostData } = useGetFavouritesByUserIdQuery(user?.userId);
@@ -44,7 +46,9 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
   const userLike = likePostData?.some((like: LikeAndPost) => like.userId === user?.userId);
   const userFavourite = favouritesPostData?.some((favourite: LikeAndPost) => favourite.postId === postId);
   const userName = userData?.userName;
-
+  
+  const notificationContent = `${user?.userName} Has liked one of your posts`;
+  
   useEffect(() => {
     setDate(new Date(updateDate)); // Convert the updateDate string to a Date object
   }, [updateDate, userData]);
@@ -71,6 +75,14 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
       if (isLiked) {
         await unlikePost(data);
         setInitialLikes(initialLikes - 1);
+        const notification = createNotification({
+          emisorUser: user?.userId, 
+          receptorUser: userId, 
+          action: 'likes', 
+          title: "New Liked",
+          description: notificationContent
+        });
+        console.log(notification);
       } else {
         await likePost(data);
         setInitialLikes(initialLikes + 1);
