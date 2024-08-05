@@ -1,11 +1,12 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Comments from '../comments/Comments';
 import { useDeleteFavouriteMutation, useAddFavouriteMutation } from '@/store/services/favouritesApi';
-import { useCreateLikeMutation, useDeleteLikeMutation } from '@/store/services/likesApi';
 import { useGetUserByIdQuery } from '@/store/services/usersApi';
 import { useUser } from '@/context/UserContext';
+import { useLikePostMutation, useUnlikePostMutation } from '@/store/services/postsApi';
+import { useGetLikesByPostIdQuery } from '@/store/services/likesApi';
 
 interface PostProps {
   userId: string;
@@ -19,18 +20,25 @@ interface PostProps {
   postId: string;
 }
 
+interface Like {
+  userId: string;
+  postId: string;
+}
+
 const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments, description, favorites, postId }) => {
   const { user } = useUser();
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [initialLikes, setInitialLikes ] = useState(likes);
   const [isFavorited, setIsFavorited] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
 
   const [addFavourite, { isLoading: isLoadingAddFav, error: errorAddFav }] = useAddFavouriteMutation();
   const [deleteFavourite, { isLoading: isLoadingDelFav, error: errorDelFav }] = useDeleteFavouriteMutation();
-  const [createLike, { isLoading: isLoadingAddLike, error: errorAddLike }] = useCreateLikeMutation();
-  const [deleteLike, { isLoading: isLoadingDelLike, error: errorDelLike }] = useDeleteLikeMutation();
+  const [likePost] = useLikePostMutation();
+  const [unlikePost] = useUnlikePostMutation();
 
+  const { data: likePostData, isSuccess: isLikePostSuccess } = useGetLikesByPostIdQuery(postId);
   const { data: userData } = useGetUserByIdQuery(userId);
   const userName = userData?.userName;
 
@@ -38,24 +46,30 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
     setDate(new Date(updateDate)); // Convert the updateDate string to a Date object
   }, [updateDate, userData]);
 
+  useEffect(() => {
+    if (likePostData) {
+      const userLike = likePostData.some((data: Like) => data.userId === user?.userId);
+      setIsLiked(userLike ? true : false);
+    }
+  }, [isLikePostSuccess]);
+
   const handleLikeClick = async () => {
     const data = {
-      userId,
-      postId,
-      date: new Date(),
-      action: isLiked ? 'unlike' : 'like'
+      userId: user?.userId,
+      postId: postId,
     };
 
     try {
       if (isLiked) {
-        await deleteLike({ userId, postId, date: new Date() });
-        setIsLiked(false);
+        await unlikePost(data);
+        setInitialLikes(initialLikes - 1);
       } else {
-        await createLike({ userId, postId, date: new Date() });
-        setIsLiked(true);
+        await likePost(data);
+        setInitialLikes(initialLikes + 1);
       }
+      setIsLiked(!isLiked);
     } catch (error) {
-      console.error('Error handling like action:', error);
+      console.error(error);
     }
   };
 
@@ -87,7 +101,7 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
     <div className="border border-gray-700 p-4 m-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
-          <a href={ userName == user?.userName ? `/profile/${user?.userName}` : `/${userName}`}>
+          <a href={ userName === user?.userName ? `/profile/${user?.userName}` : `/${userName}`}>
             <h1 className="ml-2">
               { userName || 'Usuario NN' }
             </h1>
@@ -113,9 +127,9 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
           <button
             className={`flex items-center ${isLiked ? 'text-red-500' : 'text-gray-500'}`}
             onClick={handleLikeClick}
-            disabled={isLoadingAddLike || isLoadingDelLike}
+            //disabled={isLoadingAddLike || isLoadingDelLike}
           >
-            {likes} <span className="ml-1">♥</span>
+            {initialLikes} <span className="ml-1">♥</span>
           </button>
         </section>
 

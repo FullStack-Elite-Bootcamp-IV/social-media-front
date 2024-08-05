@@ -32,7 +32,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
   const [ createNotification ] = useCreateNotificationMutation();
   const [follow, setFollow] = useState("Follow");
   const [posts, setPosts] = useState<PostData[]>();
-  const notificationContent: string = `${user?.userName} has followed you`;
+  const notificationContent: string = `new Followeer`;
 
   useEffect(() => {
     if (isSuccessFollowers && isSuccess) {

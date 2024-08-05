@@ -30,15 +30,17 @@ export const postsApi = createApi({
       }),
     }),
     likePost: builder.mutation({
-      query: (id) => ({
-        url: `/posts/${id}/like`,
+      query: (body) => ({
+        url: `/posts/like`,
         method: 'POST',
+        body,
       }),
     }),
     unlikePost: builder.mutation({
-      query: (id) => ({
-        url: `/posts/${id}/unlike`,
+      query: (body) => ({
+        url: `/posts/unlike`,
         method: 'POST',
+        body,
       }),
     }),
     getPostsByUser: builder.query({
