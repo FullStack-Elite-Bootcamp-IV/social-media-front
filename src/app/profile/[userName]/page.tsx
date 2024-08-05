@@ -8,7 +8,6 @@ import Link from "next/link";
 import UserList from "@/components/userlist/Userlist";
 import { useUser } from "@/context/UserContext";
 import { useGetUserWithPostsByUserNameQuery } from "@/store/services/usersApi";
-import { useRouter } from "next/navigation";
 
 interface PostData {
   description: string;
@@ -22,7 +21,7 @@ interface PostData {
   userId: string;
   userName: string;
   comments: number;
-  favorites: number;
+  favourites: number;
 }
 
 const Profile = ({ params: { userName } }: { params: { userName: string } }) => {
@@ -136,7 +135,7 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
                   likes={post?.likes}
                   updateDate={post?.updateDate}
                   comments={post?.comments}
-                  favorites={post?.favorites}
+                  favourites={post?.favourites}
                   postId={post?.postId}
                 />
               </div>

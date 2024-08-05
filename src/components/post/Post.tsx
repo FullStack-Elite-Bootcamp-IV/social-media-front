@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Comments from '../comments/Comments';
-import { useDeleteFavouriteMutation, useAddFavouriteMutation } from '@/store/services/favouritesApi';
+import { useDeleteFavouriteMutation, useAddFavouriteMutation, useGetFavouritesByUserIdQuery } from '@/store/services/favouritesApi';
 import { useGetUserByIdQuery } from '@/store/services/usersApi';
 import { useUser } from '@/context/UserContext';
 import { useLikePostMutation, useUnlikePostMutation } from '@/store/services/postsApi';
@@ -16,16 +16,16 @@ interface PostProps {
   updateDate: Date;
   media: string;
   comments: number;
-  favorites: number;
+  favourites: number;
   postId: string;
 }
 
-interface Like {
+interface LikeAndPost {
   userId: string;
   postId: string;
 }
 
-const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments, description, favorites, postId }) => {
+const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments, description, favourites, postId }) => {
   const { user } = useUser();
   const [showComments, setShowComments] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
@@ -33,14 +33,16 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
   const [isFavorited, setIsFavorited] = useState(false);
   const [date, setDate] = useState<Date>(new Date());
 
-  const [addFavourite, { isLoading: isLoadingAddFav, error: errorAddFav }] = useAddFavouriteMutation();
-  const [deleteFavourite, { isLoading: isLoadingDelFav, error: errorDelFav }] = useDeleteFavouriteMutation();
-  const [likePost] = useLikePostMutation();
-  const [unlikePost] = useUnlikePostMutation();
+  const [addFavourite, { isLoading: isLoadingAddFav }] = useAddFavouriteMutation();
+  const [deleteFavourite, { isLoading: isLoadingDelFav }] = useDeleteFavouriteMutation();
+  const [likePost, { isLoading: isLoadingAddLike }] = useLikePostMutation();
+  const [unlikePost, { isLoading: isLoadingDelLike }] = useUnlikePostMutation();
 
   const { data: likePostData } = useGetLikesByPostIdQuery(postId);
+  const { data: favouritesPostData } = useGetFavouritesByUserIdQuery(user?.userId);
   const { data: userData } = useGetUserByIdQuery(userId);
-  const userLike = likePostData?.some((like: Like) => like.userId === user?.userId);
+  const userLike = likePostData?.some((like: LikeAndPost) => like.userId === user?.userId);
+  const userFavourite = favouritesPostData?.some((favourite: LikeAndPost) => favourite.postId === postId);
   const userName = userData?.userName;
 
   useEffect(() => {
@@ -52,6 +54,12 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
       setIsLiked(userLike ? true : false);
     }
   }, [userLike]);
+
+  useEffect(() => {
+    if (favouritesPostData) {
+      setIsFavorited(userFavourite ? true : false);
+    }
+  }, [userFavourite]);
 
   const handleLikeClick = async () => {
     const data = {
@@ -75,19 +83,16 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
 
   const handleFavoriteClick = async () => {
     const data = {
-      userId,
-      postId,
-      date: new Date(),
-      action: isFavorited ? 'unfavorite' : 'favorite'
+      userId: user?.userId,
+      postId: postId,
     };
     try {
       if (isFavorited) {
-        await deleteFavourite({ userId, postId, date: new Date() });
-        setIsFavorited(false);
+        await deleteFavourite(data);
       } else {
-        await addFavourite({ userId, postId, date: new Date() });
-        setIsFavorited(true);
+        await addFavourite(data);
       }
+      setIsFavorited(!isFavorited);
     } catch (error) {
       console.error('Error handling favorite action:', error);
     }
@@ -127,7 +132,7 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
           <button
             className={`flex items-center ${isLiked ? 'text-red-500' : 'text-gray-500'}`}
             onClick={handleLikeClick}
-            //disabled={isLoadingAddLike || isLoadingDelLike}
+            disabled={isLoadingAddLike || isLoadingDelLike}
           >
             {initialLikes} <span className="ml-1">♥</span>
           </button>
@@ -139,11 +144,11 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
 
         <section className="flex items-center">
           <button
-            className={`flex items-center ${isFavorited ? 'text-yellow-500' : 'text-gray-500'}`}
+            className={`flex items-center text-xl ${isFavorited ? 'text-yellow-500' : 'text-gray-500'}`}
             onClick={handleFavoriteClick}
             disabled={isLoadingAddFav || isLoadingDelFav}
           >
-            {favorites} <span className="ml-1">⭐</span>
+            {favourites} <span className="ml-1">★</span>
           </button>
         </section>
       </div>

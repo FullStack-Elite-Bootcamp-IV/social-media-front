@@ -20,7 +20,7 @@ interface PostData {
   updateDate: Date;
   userName: string;
   comments: number;
-  favorites: number;
+  favourites: number;
 }
 
 const Profile = ({ params: userName }: { params: { userName: string } }) => {
@@ -147,7 +147,7 @@ const Profile = ({ params: userName }: { params: { userName: string } }) => {
                       likes={post?.likes}
                       updateDate={post?.updateDate}
                       comments={post?.comments}
-                      favorites={post?.favorites}
+                      favourites={post?.favourites}
                       postId={post?.postId}
                     />
                   </div>

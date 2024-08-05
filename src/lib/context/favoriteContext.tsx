@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 interface FavoriteContextProps {
     addFavorite: (postId: string) => Promise<void>;
     removeFavorite: (postId: string) => Promise<void>;
-    getFavorites: () => Promise<any[]>;
+    getFavourites: () => Promise<any[]>;
     isFavorite: (postId: string) => Promise<boolean>;
 }
 
@@ -33,11 +33,11 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({ children }) 
         }
     };
 
-    const getFavorites = async (): Promise<any[]> => {
+    const getFavourites = async (): Promise<any[]> => {
         try {
             return []; 
         } catch (err) {
-            console.error('Get favorites error:', err);
+            console.error('Get favourites error:', err);
             return [];
         }
     };
@@ -52,7 +52,7 @@ export const FavoriteProvider: React.FC<FavoriteProviderProps> = ({ children }) 
     };
 
     return (
-        <FavoriteContext.Provider value={{ addFavorite, removeFavorite, getFavorites, isFavorite }}>
+        <FavoriteContext.Provider value={{ addFavorite, removeFavorite, getFavourites, isFavorite }}>
             {children}
         </FavoriteContext.Provider>
     );

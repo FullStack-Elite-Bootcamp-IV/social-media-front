@@ -15,7 +15,7 @@ interface PostData {
   updateDate: Date;
   publicationDate: Date; // Ensure this property is a Date object
   comments: number;
-  favorites: number;
+  favourites: number;
   postId: string;
   isPublic?: boolean; // Ensure your data includes this property
 }
@@ -48,7 +48,7 @@ const HomePage: React.FC = () => {
     setPrivates(false);
   };
 
-  const setFavorites = () => {
+  const setFavourites = () => {
     setFavorite(true);
     setLiked(false);
     setPublics(false);
@@ -76,7 +76,7 @@ const HomePage: React.FC = () => {
       filteredPosts = filteredPosts.filter(post => post.likes > 0);
     }
     if (favorite) {
-      filteredPosts = filteredPosts.filter(post => post.favorites > 0);
+      filteredPosts = filteredPosts.filter(post => post.favourites > 0);
     }
     if (publics) {
       filteredPosts = filteredPosts.filter(post => post.isPublic);
@@ -98,13 +98,13 @@ const HomePage: React.FC = () => {
       <Navbar />
       <div className='items-center justify-center flex pt-20 md:pt-4 md:ml-64 gap-4 py-2 flex-wrap dark:bg-gray-900'>
         <button onClick={setLikeds} className='dark:text-blancoHueso text-darkVoid hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Likes</button>
-        <button onClick={setFavorites} className='dark:text-blancoHueso text-darkVoid hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Favorites</button>
+        <button onClick={setFavourites} className='dark:text-blancoHueso text-darkVoid hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Favourites</button>
         <button onClick={setPrivatesPost} className='dark:text-blancoHueso text-darkVoid hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Private</button>
         <button onClick={setPublices} className='dark:text-blancoHueso text-darkVoid hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Public</button>
       </div>
       <main className="flex min-h-screen dark:bg-darkVoid">
         <div className="app flex-1 ml-0 p-2 pt-16 md:ml-64 md:pt-4 sm:p-16">
-          {isLoading && <p>Loading posts...</p>}
+          {isLoading && <p className="text-white">Loading posts...</p>}
           {error && <p>Error loading posts.</p>}
           {Array.isArray(displayedPosts) && displayedPosts.map((post, index) => (
             <Post
@@ -116,7 +116,7 @@ const HomePage: React.FC = () => {
               likes={post.likes}
               updateDate={post.updateDate}
               comments={post.comments}
-              favorites={post.favorites}
+              favourites={post.favourites}
               postId={post.postId}
             />
           ))}

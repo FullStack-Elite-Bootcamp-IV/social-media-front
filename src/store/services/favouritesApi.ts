@@ -9,20 +9,21 @@ export const favouritesApi = createApi ({
   endpoints: (builder) => ({ 
     getFavouritesByUserId: builder.query({
       query: (userId) => ({
-        url: `/favourites/get/${userId}`,
+        url: `/favorites/user/${userId}`,
       }),
     }),
 
     deleteFavourite: builder.mutation({
-      query: (id) => ({
-        url: `/favourites/delete/${id}`,
+      query: (body) => ({
+        url: `/favorites/delete`,
         method: 'DELETE',
+        body,
     }),
   }),
 
      addFavourite: builder.mutation({
        query: (body) => ({
-        url: `/favourites/add`,
+        url: `/favorites/add`,
         method: 'POST',
         body,
     }),
