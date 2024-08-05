@@ -38,8 +38,9 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
   const [likePost] = useLikePostMutation();
   const [unlikePost] = useUnlikePostMutation();
 
-  const { data: likePostData, isSuccess: isLikePostSuccess } = useGetLikesByPostIdQuery(postId);
+  const { data: likePostData } = useGetLikesByPostIdQuery(postId);
   const { data: userData } = useGetUserByIdQuery(userId);
+  const userLike = likePostData?.some((like: Like) => like.userId === user?.userId);
   const userName = userData?.userName;
 
   useEffect(() => {
@@ -48,10 +49,9 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
 
   useEffect(() => {
     if (likePostData) {
-      const userLike = likePostData.some((data: Like) => data.userId === user?.userId);
       setIsLiked(userLike ? true : false);
     }
-  }, [isLikePostSuccess]);
+  }, [userLike]);
 
   const handleLikeClick = async () => {
     const data = {
