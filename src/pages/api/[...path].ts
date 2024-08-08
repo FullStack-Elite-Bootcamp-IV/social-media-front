@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import httpProxy from 'http-proxy'
 import Cookies from 'cookies'
 import url from 'url'
@@ -16,8 +17,8 @@ export const config = {
 export default (req: NextApiRequest, res: NextApiResponse) => {
   return new Promise<void>((resolve, reject) => {
     const pathname = url.parse(req.url).pathname
-    const isLogin = pathname === '/api/login'
-    const isLogout = pathname === '/api/logout'
+    const isLoginPath = pathname === '/api/login'
+    const isLogoutPath = pathname === '/api/logout'
 
     const cookies = new Cookies(req, res)
     const accessToken = cookies.get('auth-token')
@@ -29,26 +30,6 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
     if (accessToken) {
       req.headers['Authorization'] = `Bearer ${accessToken}`
     }
-
-    if (isLogin) {
-      proxy.once('proxyRes', interceptLoginResponse)
-    }
-
-    if (isLogout) {
-      proxy.once('proxyRes', interceptLogoutResponse)
-    }
-
-    proxy.once('error', (err) => {
-      console.error('Proxy error:', err)
-      res.status(500).json({ message: 'Proxy error', error: err.message })
-      reject(err)
-    })
-
-    proxy.web(req, res, {
-      target: API_URL,
-      autoRewrite: false,
-      selfHandleResponse: isLogin,
-    })
 
     function interceptLogoutResponse(proxyRes: any, req: NextApiRequest, res: NextApiResponse) {
       const cookies = new Cookies(req, res)
@@ -87,5 +68,25 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
         }
       })
     }
+    if (isLoginPath) {
+      proxy.once('proxyRes', interceptLoginResponse)
+    }
+
+    if (isLogoutPath) {
+      proxy.once('proxyRes', interceptLogoutResponse)
+    }
+
+    proxy.once('error', (err) => {
+      console.error('Proxy error:', err)
+      res.status(500).json({ message: 'Proxy error', error: err.message })
+      reject(err)
+    })
+
+    proxy.web(req, res, {
+      target: API_URL,
+      autoRewrite: false,
+      selfHandleResponse: isLoginPath,
+    })
+
   })
 }
