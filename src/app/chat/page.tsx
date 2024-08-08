@@ -15,12 +15,14 @@ interface Message {
 
 let socket: undefined | Socket;
 
-function useChatSocket(chatId: string | null, setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
+function useChatSocket(chatId: string | null | undefined, setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
+    const {user} = useUser();
     useEffect(() => {
+        console.log(user)
+        console.log(user?.accessToken)
         if (typeof window === 'undefined' || !chatId) return;
-        console.log(localStorage.getItem('loginToken'));
-        socket = io('https://dwhj9dsl-5002.use2.devtunnels.ms/chat', {
-            auth: { token: localStorage.getItem('loginToken') },
+        socket = io('http://localhost:5002/chat', {
+            auth: { token: user?.accessToken },
         });
 
         socket.on('connect', () => console.log('Connected to server'));
@@ -42,10 +44,11 @@ function useChatSocket(chatId: string | null, setMessages: React.Dispatch<React.
 
 export default function Chat() {
     const chatId = useSearchParams()?.get('chatId');
-    if (!chatId) return redirect('/homepage');
     const [messages, setMessages] = useState<Message[]>([]);
-
     useChatSocket(chatId, setMessages);
+
+    if (!chatId) return redirect('/homepage');
+
 
     const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
