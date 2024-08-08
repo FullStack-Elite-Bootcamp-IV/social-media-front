@@ -35,10 +35,12 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
-      setUser(data.user);
+      const { user } = data;
+      const userToUse = { ...user, accessToken: data.accessToken };
+      setUser(userToUse);
       toast.success("Has iniciado sesión");
       router.push("/homepage");
-    }
+     }
 
     if (error) {
       toast.error("Error al iniciar sesión");
@@ -106,7 +108,7 @@ const Login = () => {
         </p>
       </div>
     </main>
-  ); 
+  );
 };
 
 export default Login;
