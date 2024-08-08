@@ -82,6 +82,7 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
           title: "New Liked",
           description: notificationContent
         });
+        console.log(notification)
       } else {
         await likePost(data);
         setInitialLikes(initialLikes + 1);
@@ -164,7 +165,7 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
         </section>
       </div>
 
-      {showComments && <Comments postId={postId} setShowComments={setShowComments} />}
+      {showComments && <Comments userId={userId} postId={postId} setShowComments={setShowComments}/>}
     </div>
   );
 };

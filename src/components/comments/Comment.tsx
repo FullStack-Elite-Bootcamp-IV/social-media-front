@@ -10,10 +10,13 @@ interface CommentProps {
     id: string;
     userId: string;
     content: string;
-    date: string;
+    createdAt: Date;
   };
   onDelete: () => void;
-  onEdit: (updatedContent: string) => void;
+  onEdit: (
+    commentId: string,
+    updatedContent: string,
+  ) => void;
 }
 
 const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
@@ -45,18 +48,18 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
       </div>
       <div className="flex-grow">
         <div className="font-bold text-gray-800 dark:text-blancoHueso mb-1">{comment.content}</div>
-        <div className="text-sm text-gray-500 dark:text-gray-300">{new Date(comment.date).toLocaleString()}</div>
+        <div className="text-sm text-gray-500 dark:text-gray-300">{new Date(comment.createdAt).toLocaleString()}</div>
         {isMyComment? <div>
           <button 
             onClick={onDelete} 
             className="mt-4 hover:bg-red-600 text-white py-1 px-3 rounded transition-colors duration-200">
             Delete
           </button>
-          <button 
-            onClick={() => onEdit("Updated content")} 
+          {/* <button 
+            onClick={() => (onEdit(commentId))} 
             className="mt-4 ml-2 hover:bg-blue-600 text-white py-1 px-3 rounded transition-colors duration-200">
             Edit
-          </button> 
+          </button>  */}
           </div> : 
           <div></div>}
       </div>

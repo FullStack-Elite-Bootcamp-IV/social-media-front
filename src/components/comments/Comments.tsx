@@ -1,4 +1,6 @@
-import { useState } from "react";
+'use client';
+
+import { useEffect, useState } from "react";
 import {
   useGetCommentsByPostIdQuery,
   useAddComentMutation,
@@ -7,8 +9,10 @@ import {
 } from "@/store/services/commentsApi";
 import Comment from "./Comment";
 import { useUser } from "@/context/UserContext";
+import { useCreateNotificationMutation } from "@/store/services/notificationsApi";
 
 interface CommentsProps {
+  userId: string;
   postId: string;
   setShowComments: Function;
 }
@@ -17,25 +21,51 @@ interface Comment {
   id: string; 
   userId: string; 
   content: string;
-  date: string;
+  createdAt: Date;
 }
 
-const Comments = ({ postId, setShowComments }: CommentsProps) => {
-  const [newComment, setNewComment] = useState("");
-  const { data: comments, isLoading } = useGetCommentsByPostIdQuery(postId);
-  const { user } = useUser();
+const Comments = ({ userId, postId, setShowComments }: CommentsProps) => {
   const [addComment] = useAddComentMutation();
   const [updateComment] = useUpdateCommentMutation();
   const [deleteComment] = useDeleteCommentMutation();
+  const [createNotification] = useCreateNotificationMutation();
+  
+  const [newComment, setNewComment] = useState("");
+  const [comments, setComments] = useState([]);
+  const { data: commentsData, isLoading, isSuccess } = useGetCommentsByPostIdQuery(postId);
+  const { user } = useUser();
+
+  const notificationContent = `${user?.userName} Has commented in your post`;
+
+  useEffect(() => {
+    if (isSuccess && commentsData) {
+      const sortedComments = commentsData?.slice().sort((a: Comment, b: Comment) => {
+        const dateA = new Date(a.createdAt);
+        const dateB = new Date(b.createdAt);
+        
+        return dateB.getTime() - dateA.getTime();
+      });
+  
+      setComments(sortedComments);
+    }
+  }, [isSuccess, commentsData]);
 
   const handleAddComment = async () => {
     try {
-      const myComment = addComment({
+      const myComment = await addComment({
         userId: user?.userId,
         postId: postId,
         content: newComment,
       });
-      console.log(myComment)
+      const notification = await createNotification({
+        emisorUser: user?.userId, 
+        receptorUser: userId, 
+        action: 'comments', 
+        title: "New Comment",
+        description: notificationContent
+      });
+      console.log(notification)
+      console.log("Comment info:", myComment);
       setNewComment("");
     } catch (error) {
       console.error("Failed to add comment", error);
@@ -44,7 +74,7 @@ const Comments = ({ postId, setShowComments }: CommentsProps) => {
 
   const handleDeleteComment = async (commentId: string) => {
     try {
-      await deleteComment({ postId, commentId }).unwrap();
+      await deleteComment(commentId);
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -53,10 +83,12 @@ const Comments = ({ postId, setShowComments }: CommentsProps) => {
   const handleEditComment = async (commentId: string, updatedContent: string) => {
     try {
       await updateComment({
-        postId,
-        commentId,
-        body: { content: updatedContent },
-      }).unwrap();
+        commentId: commentId,
+        body: {
+          content: updatedContent,
+          createdAt: new Date()
+        },
+      });
     } catch (error) {
       console.error("Error editing comment:", error);
     }
@@ -72,14 +104,14 @@ const Comments = ({ postId, setShowComments }: CommentsProps) => {
 
   return (
     <section className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-70">
-      <div className="bg-gray-70 w-1/2 h-5/6 ml-60 rounded-2xl p-4 text-darkVoid dark:bg-zinc-950 dark:text-white flex flex-col">
+      <div className="bg-gray-70 w-1/2 max-h-5/6 ml-60 rounded-2xl p-4 text-darkVoid dark:bg-zinc-950 dark:text-white flex flex-col">
         <div className="w-full flex flex-col overflow-hidden">
           <div className="flex justify-end mb-2">
             <button className="text-white text-xl" onClick={handleClose}>&times;</button>
           </div>
           <div className="overflow-y-auto scrollbar-hidden p-2">
-            {comments && comments.length > 0 ? (
-              comments.map((comment: Comment) => (
+            {comments && comments.length > 0 ? 
+              comments?.map((comment: Comment) => (
                 <Comment
                   key={comment.id}
                   comment={comment}
@@ -87,11 +119,11 @@ const Comments = ({ postId, setShowComments }: CommentsProps) => {
                   onEdit={(updatedContent: string) => handleEditComment(comment.id, updatedContent)}
                 />
               ))
-            ) : (
+             : 
               <div className="w-full flex items-center justify-center">
                 There are no comments yet. Add one
               </div>
-            )}
+            }
           </div>
           <div className="w-full flex items-center justify-center p-3 gap-6 mt-2">
             <input
