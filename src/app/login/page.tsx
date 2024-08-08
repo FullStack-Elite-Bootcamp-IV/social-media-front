@@ -35,6 +35,8 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess && data) {
+      console.log({ login, error, isSuccess, data });
+      console.log(data);
       const { user } = data;
       const userToUse = { ...user, accessToken: data.accessToken };
       setUser(userToUse);
