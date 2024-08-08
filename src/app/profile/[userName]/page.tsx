@@ -96,7 +96,7 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
                 >
                   Followed
                 </button>
-                {isOpenFollowers && <UserList title="Followings List" />}
+                {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
             <Link

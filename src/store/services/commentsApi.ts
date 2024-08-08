@@ -9,29 +9,29 @@ export const commentsApi = createApi ({
   endpoints: (builder) => ({
     getCommentsByPostId: builder.query({
       query: (postId) => ({
-        url: `/posts/${postId}/comments`
+        url: `/comments/comment/${postId}`
       })
     }),
 
     addComent: builder.mutation({
-      query: ({ postId, body }) => ({
-        url: `/posts/${postId}/comments`,
+      query: (body) => ({
+        url: `/comments/create`,
         method: 'POST',
         body,
       }),
     }),
 
     updateComment: builder.mutation({
-      query: ({ postId, body, commentId }) => ({
-        url: `/posts/${postId}/comments/${commentId}`,
+      query: ({ body, commentId }) => ({
+        url: `/comments/edit/${commentId}`,
         method: 'PATCH',
         body,
       }),
     }),
 
     deleteComment: builder.mutation({
-      query: ({ postId, commentId }) => ({
-        url: `/posts/${postId}/comments/${commentId}`,
+      query: (commentId) => ({
+        url: `/comments/delete/${commentId}`,
         method: 'DELETE'
       }),
     }),
