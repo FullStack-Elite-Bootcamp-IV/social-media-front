@@ -4,6 +4,7 @@ import { useUser } from "@/context/UserContext";
 import { useGetUserByIdQuery } from "@/store/services/usersApi";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface CommentProps {
   comment: {
@@ -39,10 +40,12 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
       <div 
         className="flex items-center cursor-pointer mr-4 w-full" 
         onClick={() => router.push(`/${userName}`)}>
-        <img 
-          src={user?.profileImage} 
+        <Image
+          src={user?.profileImage || "https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain"} 
           alt={`${userName}'s profile picture`} 
-          className="w-10 h-10 rounded-full object-cover mb-2"
+          className="rounded-full object-cover mb-2"
+          width={40}
+          height={40}
         />
         <span className="ml-2 font-bold text-gray-800 dark:text-blancoHueso">{user?.userName}</span>
       </div>

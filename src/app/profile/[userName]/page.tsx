@@ -8,6 +8,7 @@ import Link from "next/link";
 import UserList from "@/components/userlist/Userlist";
 import { useUser } from "@/context/UserContext";
 import { useGetUserWithPostsByUserNameQuery } from "@/store/services/usersApi";
+import Image from "next/image";
 
 interface PostData {
   description: string;
@@ -61,10 +62,12 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
             }}
           >
             <div className="absolute inset-0 flex justify-center items-center mt-20">
-              <img
+              <Image
                 className="rounded-full border-4 border-white w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 lg:w-48 lg:h-48"
                 src={data?.profileImage || defaultProfileImage}
                 alt="profile"
+                width={200}
+                height={200}
               />
             </div>
           </section>
