@@ -84,7 +84,6 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
           title: "New Liked",
           description: notificationContent
         });
-        console.log(notification)
       } else {
         await likePost(data);
         setInitialLikes(initialLikes + 1);
