@@ -58,11 +58,11 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
             className="mt-4 hover:bg-red-600 text-white py-1 px-3 rounded transition-colors duration-200">
             Delete
           </button>
-          {/* <button 
-            onClick={() => (onEdit(commentId))} 
+          <button 
+            onClick={() => (onEdit(comment.id, comment.content))} 
             className="mt-4 ml-2 hover:bg-blue-600 text-white py-1 px-3 rounded transition-colors duration-200">
             Edit
-          </button>  */}
+          </button> 
           </div> : 
           <div></div>}
       </div>

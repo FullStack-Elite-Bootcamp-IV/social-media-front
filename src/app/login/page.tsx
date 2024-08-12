@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useLoginMutation } from "@/store/services/authApi";
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 // The type of the form inputs is inferred from the schema
@@ -30,16 +30,16 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
+  const [isLoading2, setIsLoading2] = useState(false);
+
   // Llama al hook aquí
-  const [login, { isLoading, error, isSuccess, data }] = useLoginMutation();
+  const [login, { error, isSuccess, data }] = useLoginMutation();
 
   useEffect(() => {
     if (isSuccess && data) {
       const { user } = data;
       const userToUse = { ...user, accessToken: data.accessToken };
       setUser(userToUse);
-      toast.success("Has iniciado sesión");
-      router.push("/homepage");
      }
 
     if (error) {
@@ -49,8 +49,22 @@ const Login = () => {
   }, [isSuccess, data, error, router, setUser]);
 
   // Función de manejo del envío del formulario
-  const onSubmit = (data: LoginFormInputs) => {
-    login(data);
+  const onSubmit = async (data: LoginFormInputs) => {
+    setIsLoading2(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      const response = await login(data);
+      if (response?.data?.accessToken) {
+        toast.success("Has iniciado sesión");
+        router.push("/homepage");
+      } else {
+        toast.error("Credenciales incorrectas");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading2(false);
+    }
   };
 
   return (

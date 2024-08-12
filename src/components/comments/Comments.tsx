@@ -24,6 +24,14 @@ interface Comment {
   createdAt: Date;
 }
 
+interface NewComment {
+  postId: string;
+  id: string; 
+  userId: string; 
+  content: string;
+  createdAt: Date;
+}
+
 const Comments = ({ userId, postId, setShowComments }: CommentsProps) => {
   const [addComment] = useAddComentMutation();
   const [updateComment] = useUpdateCommentMutation();
@@ -45,14 +53,17 @@ const Comments = ({ userId, postId, setShowComments }: CommentsProps) => {
         
         return dateB.getTime() - dateA.getTime();
       });
+
+      console.log(sortedComments);
   
       setComments(sortedComments);
     }
   }, [isSuccess, commentsData]);
 
   const handleAddComment = async () => {
+    if (newComment.trim() === '') return;
     try {
-      const myComment = await addComment({
+      const { data } = await addComment({
         userId: user?.userId,
         postId: postId,
         content: newComment,
@@ -64,8 +75,7 @@ const Comments = ({ userId, postId, setShowComments }: CommentsProps) => {
         title: "New Comment",
         description: notificationContent
       });
-      console.log(notification)
-      console.log("Comment info:", myComment);
+      setComments([data as never, ...comments]);
       setNewComment("");
     } catch (error) {
       console.error("Failed to add comment", error);
@@ -75,6 +85,7 @@ const Comments = ({ userId, postId, setShowComments }: CommentsProps) => {
   const handleDeleteComment = async (commentId: string) => {
     try {
       await deleteComment(commentId);
+      setComments(comments.filter((comment: Comment) => comment.id !== commentId));
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -133,7 +144,7 @@ const Comments = ({ userId, postId, setShowComments }: CommentsProps) => {
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
             />
-            <button onClick={handleAddComment} className="bg-liquidLava text-white py-2 px-4 rounded">Send</button>
+            <button onClick={handleAddComment} className="bg-liquidLava text-white py-2 px-4 rounded">Comment</button>
           </div>
         </div>
       </div>
