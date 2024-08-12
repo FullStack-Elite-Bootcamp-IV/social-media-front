@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
 import Navbar from "@/components/navbar/Navbar";
 import Post from "@/components/post/Post";
-import Link from "next/link";
 import UserList from "@/components/userlist/Userlist";
 import { useUser } from "@/context/UserContext";
 import { useGetUserWithPostsByUserNameQuery } from "@/store/services/usersApi";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useDeleteFollowerMutation, useFollowersMutation, useGetFollowedQuery } from "@/store/services/followersApi";
+import { useCreateNotificationMutation } from "@/store/services/notificationsApi";
 
 interface PostData {
   description: string;
@@ -34,6 +36,16 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
   const { data, isSuccess } = useGetUserWithPostsByUserNameQuery(userName);
   const [posts, setPosts] = useState<PostData[]>();
 
+  const { data: followersData, isSuccess: isSuccessFollowers } = useGetFollowedQuery(user?.userId);
+  const [ followers ] = useFollowersMutation();
+  const [ deleteFollow ] = useDeleteFollowerMutation();
+  const [ createNotification ] = useCreateNotificationMutation();
+  const [follow, setFollow] = useState("Follow");
+  const notificationContent: string = `new Followeer`;
+
+  const pathname = usePathname();
+  const route = useRouter();
+
   useEffect(() => {
     if (isSuccess && data) {
       const processedPosts = data.userPost.map((post: PostData) => ({
@@ -44,10 +56,37 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
     }
   }, [isSuccess, data]);
 
+  useEffect(() => {
+    if (isSuccessFollowers && isSuccess) {
+      const isFollow = followersData?.some((follow: string) => {
+        return data?.userId === follow;
+      });
+      setFollow(isFollow ? "Unfollow" : "Follow");
+    }
+  }, [isSuccess, isSuccessFollowers]);
+
   posts?.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
 
   const defaultProfileImage =
     "https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain";
+
+  const setFollowState = () => {
+    if (follow === "Follow") {
+      followers({ followerId: user?.userId, followingId: data?.userId });
+      const notification = createNotification({
+        emisorUser: user?.userId, 
+        receptorUser: data?.userId, 
+        action: 'new_follow_request', 
+        title: "New Follower",
+        description: notificationContent
+      });
+      console.log(notification);
+      setFollow("Unfollow");
+    } else {
+      deleteFollow({ followerId: user?.userId, followingId: data?.userId });
+      setFollow("Follow");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
@@ -102,12 +141,23 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
                 {isOpenFollowers && <UserList title="Followeds List" />}
               </div>
             </div>
-            <Link
-              href={`/profile/${user?.userName}/edit`}
-              className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-liquidLava text-white rounded-md hover:bg-purple-800 transition duration-200"
-            >
-              <FaPencilAlt className="mr-2" /> Edit Profile
-            </Link>
+            {pathname === `/profile/${user?.userName}` && (
+              <button
+                onClick={() => route.push(`/profile/${user?.userName}/edit`)}
+                className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-liquidLava text-white rounded-md hover:bg-purple-800 transition duration-200"
+              >
+                <FaPencilAlt className="mr-2" /> Edit Profile
+              </button>
+            )}
+            {pathname !== `/profile/${user?.userName}` && (
+              <button
+                onClick={setFollowState}
+                className="mt-6 flex items-center justify-center px-4 py-2 text-base sm:text-lg bg-liquidLava text-white rounded-md hover:bg-purple-800 transition duration-200"
+              >
+                {follow}
+              </button>
+            )}
+            
           </div>
 
           <section className="text-white mb-8">

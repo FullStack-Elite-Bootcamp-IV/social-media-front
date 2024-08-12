@@ -1,5 +1,6 @@
 import { useGetUserByIdQuery } from "@/store/services/usersApi";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface ItemListProps {
   userId: string
@@ -12,7 +13,7 @@ const ItemList: React.FC<ItemListProps>  = ({ userId }) => {
   const profileImage = userData?.profileImage;
 
   const viewProfile = (userName: string) => {
-    router.push(`/${userName}`)
+    router.push(`/profile/${userName}`)
   }
 
   const defaultProfileImage = 'https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain';
@@ -20,10 +21,12 @@ const ItemList: React.FC<ItemListProps>  = ({ userId }) => {
   return (
     <button className="w-full bg-white p-3 rounded-lg flex items-center space-x-4" onClick={() => {viewProfile(userName)}}>
       <div className="rounded-full w-10 h-10 flex items-center justify-center">
-        <img
-          className="rounded-full border-2 w-10 h-10"
+        <Image
+          className="rounded-full border-2"
           src={profileImage || defaultProfileImage}
           alt="imagen perfíl"
+          width={40}
+          height={40}
         />
       </div>
       <div className="text-black font-bold">{userName}</div>

@@ -39,7 +39,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
     <div className="flex flex-wrap items-center p-4 bg-white dark:bg-darkVoid rounded-lg shadow-md mt-2">
       <div 
         className="flex items-center cursor-pointer mr-4 w-full" 
-        onClick={() => router.push(`/${userName}`)}>
+        onClick={() => router.push(`/profile/${userName}`)}>
         <Image
           src={user?.profileImage || "https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain"} 
           alt={`${userName}'s profile picture`} 
