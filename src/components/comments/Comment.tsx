@@ -47,7 +47,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
           width={40}
           height={40}
         />
-        <span className="ml-2 font-bold text-gray-800 dark:text-blancoHueso">{user?.userName}</span>
+        <span className="ml-2 font-bold text-gray-800 dark:text-blancoHueso">{userData?.userName}</span>
       </div>
       <div className="flex-grow">
         <div className="font-bold text-gray-800 dark:text-blancoHueso mb-1">{comment.content}</div>
