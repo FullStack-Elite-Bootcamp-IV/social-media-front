@@ -8,6 +8,8 @@ import { useUser } from '@/context/UserContext';
 import { useLikePostMutation, useUnlikePostMutation } from '@/store/services/postsApi';
 import { useGetLikesByPostIdQuery } from '@/store/services/likesApi';
 import { useCreateNotificationMutation } from '@/store/services/notificationsApi';
+import Image from "next/image";
+import Link from 'next/link';
 
 interface PostProps {
   userId: string;
@@ -118,11 +120,11 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
     <div className="border border-gray-700 p-4 m-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
-          <a href={ userName === user?.userName ? `/profile/${user?.userName}` : `/${userName}`}>
-            <h1 className="ml-2">
-              { userName || 'Usuario NN' }
-            </h1>
-          </a>
+          <Link href={`/profile/${userName}`}>
+            <h3 className="ml-2">
+              { userName || 'Loading...' }
+            </h3>
+          </Link>
         </div>
         <div className="text-black dark:text-white bg-white dark:bg-black px-2 py-1 rounded">
           {date.toDateString()}
@@ -131,7 +133,7 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
 
       {media && (
         <div className="text-black dark:text-white bg-white dark:bg-black rounded-lg mb-4 mx-auto flex items-center justify-center overflow-hidden w-fit self-center">
-          <img src={media} alt="Media content" className="h-full object-cover" />
+          <Image src={media} alt="Media content" className="h-full object-cover" width={500} height={500}/>
         </div>
       )}
 
