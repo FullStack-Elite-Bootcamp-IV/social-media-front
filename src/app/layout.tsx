@@ -3,6 +3,7 @@ import {Roboto_Mono} from "next/font/google";
 import "./globals.css";
 import {ReactNode} from "react";
 import {Providers} from "./providers";
+import Navbar from "@/components/navbar/Navbar";
 
 const Roboto = Roboto_Mono({subsets: ["latin"]});
 
@@ -20,6 +21,7 @@ export default function RootLayout({children}: RootLayoutProps) {
     <html lang="es">
     <body className={`${Roboto.className} dark:bg-darkVoid`}>
     <Providers>
+      <Navbar />
       {children}
     </Providers>
     </body>

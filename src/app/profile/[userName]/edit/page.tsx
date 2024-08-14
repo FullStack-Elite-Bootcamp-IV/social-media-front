@@ -1,6 +1,5 @@
 'use client';
 
-import Navbar from "../../../../components/navbar/Navbar";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useEditProfileMutation } from "@/store/services/editApi";
 import { useGetUserByUserNameQuery } from "@/store/services/usersApi";
@@ -41,7 +40,7 @@ const Edit = ({ params: { userName } }: { params: { userName: string } }) => {
       
       
     }
-  }, [isSuccess]);
+  }, [isSuccess, userName]);
 
   const onSubmitData: SubmitHandler<User> = async (data) => {
 
@@ -107,7 +106,6 @@ const age = parseInt(data.age as any, 10);
 
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
-        <Navbar />
       <main className="flex md:ml-64 min-h-screen">
           <form className="space-y-4 w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0" onSubmit={handleSubmit(onSubmitData)}>
             <h1 className="text-2xl dark:text-white text-black mb-6 text-left pt-4">

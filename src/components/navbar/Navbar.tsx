@@ -27,6 +27,7 @@ const Navbar: React.FC = () => {
 
   const [logout, { isSuccess: isLogout }] = useLogoutMutation();
   const router = useRouter();
+  const pathname = usePathname();
 
   const handleMenuToggle = () => {
     setIsOpen(!isOpen);
@@ -76,7 +77,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="fixed h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-20">
+    <div className={`${pathname === '/login' ? 'hidden' : pathname === '/register' ? 'hidden' : 'fixed'} h-auto w-screen bg-liquidLava text-blancoHueso flex flex-col md:h-screen md:w-64 z-20`}>
       <div className="flex items-center justify-between p-4">
         <Link href="/homepage">
           <h2 className="text-2xl font-bold">Nexo</h2>

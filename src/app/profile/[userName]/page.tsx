@@ -63,7 +63,7 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
       });
       setFollow(isFollow ? "Unfollow" : "Follow");
     }
-  }, [isSuccess, isSuccessFollowers]);
+  }, [isSuccessFollowers, isSuccess, followersData, data]);
 
   posts?.sort((a, b) => b.publicationDate.getTime() - a.publicationDate.getTime());
 
@@ -90,7 +90,6 @@ const Profile = ({ params: { userName } }: { params: { userName: string } }) => 
 
   return (
     <div className="min-h-screen bg-blancoHueso dark:bg-gray-900">
-      <Navbar />
       <main className="flex md:ml-64 min-h-screen">
         <div className="w-full px-4 md:px-8 lg:px-16 mt-10 md:mt-0">
           <section

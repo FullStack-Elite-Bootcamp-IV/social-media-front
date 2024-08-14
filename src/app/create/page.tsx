@@ -1,7 +1,6 @@
 'use client'
 
 import { FormEvent, useState } from "react";
-import Navbar from "../../components/navbar/Navbar";
 import React from 'react';
 import { z } from 'zod';
 import { postSchema } from "@/validations/createPostSchema";
@@ -75,7 +74,6 @@ const CreatePostPage = () => {
 
   return (
     <>
-      <Navbar />
       <main className="min-h-screen bg-blancoHueso dark:bg-slateGray flex items-center justify-center text-white px-5">
         <form onSubmit={handlePost} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
           <h1 className="text-4xl text-darkVoid dark:text-blancoHueso">CREATE A POST</h1>
@@ -119,14 +117,14 @@ const CreatePostPage = () => {
           <div className="flex justify-end">
             <button
               type="button"
-              className="text-darkVoid dark:text-blancoHueso px-2 focus:bg-dustyGray focus:rounded"
+              className="text-darkVoid dark:text-blancoHueso px-2 focus:bg-dustyGray focus:rounded hover:bg-ligthPurple hover:rounded-sm mx-2"
               onClick={() => setIsPublic(true)}
             >
               <h2>Public</h2>
             </button>
             <button
               type="button"
-              className="text-darkVoid dark:text-blancoHueso px-2 focus:bg-dustyGray focus:rounded"
+              className="text-darkVoid dark:text-blancoHueso px-2 focus:bg-dustyGray focus:rounded hover:bg-ligthPurple hover:rounded-sm"
               onClick={() => setIsPublic(false)}
             >
               <h2>Private</h2>
