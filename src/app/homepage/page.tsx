@@ -101,7 +101,7 @@ const HomePage: React.FC = () => {
         <button onClick={setPublices} className='dark:text-blancoHueso text-darkVoid hover:bg-gray-300 border border-gray-400 shadow-md rounded-lg px-6 py-3'>Public</button>
       </div>
       <main className="flex min-h-screen dark:bg-darkVoid">
-        <div className="app flex-1 ml-0 p-2 pt-16 md:ml-64 md:pt-4 sm:p-16">
+        <div className="flex-1 ml-0 p-2 pt-16 md:ml-64 md:pt-4 sm:p-16">
           {isLoading && <p className="text-white">Loading posts...</p>}
           {error && <p>Error loading posts.</p>}
           {Array.isArray(displayedPosts) && displayedPosts.map((post, index) => (

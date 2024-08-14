@@ -116,7 +116,7 @@ const Post: React.FC<PostProps> = ({ userId, updateDate, media, likes, comments,
   };
 
   return (
-    <div className="border border-gray-700 p-4 m-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg max-w-4xl mx-auto">
+    <div className="border border-gray-700 p-4 m-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white rounded-lg max-w-3xl mx-auto">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <Link href={`/profile/${userName}`}>

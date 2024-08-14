@@ -30,7 +30,7 @@ export default function SettingsForm() {
       toast.success("Profile updated successfully");
       router.push(`/login`);
     }
-  }, [isSuccess]);
+  }, [isSuccess, router]);
 
   const {
     register,
@@ -65,8 +65,7 @@ export default function SettingsForm() {
 
   return (
     <div>
-      <Navbar />
-      <div className="dark:bg-darkVoid dark:text-blancoHueso bg-blancoHueso text-darkVoid h-screen flex items-center justify-center">
+      <div className="md:ml-64 dark:bg-darkVoid dark:text-blancoHueso bg-blancoHueso text-darkVoid h-screen flex items-center justify-center">
         <div className="dark:bg-slateGray bg-blancoHueso p-8 rounded-lg shadow-lg w-full max-w-md">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold">SETTINGS</h1>

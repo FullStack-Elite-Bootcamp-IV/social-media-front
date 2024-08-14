@@ -25,6 +25,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
   const router = useRouter()
   const { data: userData, isSuccess } = useGetUserByIdQuery(comment.userId);
   const userName = userData?.userName;
+  console.log(userName)
   const [isMyComment, setIsMyComment] = useState(false);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
         setIsMyComment(true)
       }
     }
-  }, [isSuccess])
+  }, [isSuccess, userName, user]);
 
   return (
     <div className="flex flex-wrap items-center p-4 bg-white dark:bg-darkVoid rounded-lg shadow-md mt-2">
@@ -41,7 +42,7 @@ const Comment: React.FC<CommentProps> = ({ comment, onDelete, onEdit }) => {
         className="flex items-center cursor-pointer mr-4 w-full" 
         onClick={() => router.push(`/profile/${userName}`)}>
         <Image
-          src={user?.profileImage || "https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain"} 
+          src={userData?.profileImage || "https://th.bing.com/th/id/OIP.m5kS1irkbp6YT0EvLKhBzwAAAA?rs=1&pid=ImgDetMain"} 
           alt={`${userName}'s profile picture`} 
           className="rounded-full object-cover mb-2"
           width={40}

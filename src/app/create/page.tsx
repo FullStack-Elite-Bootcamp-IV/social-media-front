@@ -75,7 +75,7 @@ const CreatePostPage = () => {
   return (
     <>
       <main className="min-h-screen bg-blancoHueso dark:bg-slateGray flex items-center justify-center text-white px-5">
-        <form onSubmit={handlePost} className="border border-darkVoid bg-blancoHueso dark:bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
+        <form onSubmit={handlePost} className="md:ml-64 border border-darkVoid bg-blancoHueso dark:bg-darkVoid flex flex-col justify-between p-6 rounded-xl w-full max-w-xl min-h-[600px]">
           <h1 className="text-4xl text-darkVoid dark:text-blancoHueso">CREATE A POST</h1>
           
           <div className="mb-4">
